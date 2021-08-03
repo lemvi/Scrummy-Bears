@@ -6,3 +6,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+roles:
+  roleVolunteer:
+    role: "ROLE_VOLUNTEER"
+  roleIndividual:
+    role: "ROLE_INDIVIDUAL"
+  roleCompany:
+    role: "ROLE_COMPANY"
