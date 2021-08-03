@@ -1,8 +1,10 @@
 package academy.everyonecodes.java.controller;
 
+import academy.everyonecodes.java.data.LoginAttemptDTO;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.service.LoginService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +19,7 @@ public class LoginEndpoint {
 
 	// TODO: Whats really best to return here? Might be nothing since we redirect? Might be the new page? Not sure
 	@PostMapping
-	User loginUser() {
-		return loginService.loginUser();
+	User loginUser(@RequestBody LoginAttemptDTO loginAttemptDTO) {
+		return loginService.loginUser(loginAttemptDTO);
 	}
 }
