@@ -1,5 +1,6 @@
 package academy.everyonecodes.java.data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
@@ -11,7 +12,7 @@ public class UserDTO {
     private String firstNamePerson;
     private String lastNamePerson;
     private String company;
-    private Date dateOfBirth;
+    private LocalDateTime dateOfBirth;
     private String addressPLZ;
     private String addressCity;
     private String addressStreet;
@@ -52,10 +53,6 @@ public class UserDTO {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -88,11 +85,11 @@ public class UserDTO {
         this.company = company;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDateTime getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDateTime dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
