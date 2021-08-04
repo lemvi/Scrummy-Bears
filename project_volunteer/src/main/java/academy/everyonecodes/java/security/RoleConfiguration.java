@@ -20,12 +20,4 @@ public class RoleConfiguration {
     void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-
-    void setRoleIndividual(Role roleIndividual) {
-        this.roleIndividual = roleIndividual;
-    }
-
-    void setRoleCompany(Role roleCompany) {
-        this.roleCompany = roleCompany;
-    }
 }

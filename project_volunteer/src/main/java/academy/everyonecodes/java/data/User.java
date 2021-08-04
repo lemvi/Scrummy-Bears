@@ -43,18 +43,18 @@ public class User
     @Size(max=85, message = "Must have 1-85 characters")
     private String city;
 
-    @Size(min=1, max=85, message = "Must have 1-20 characters")
+    @Size(max=85, message = "Must have 1-85 characters")
     private String street;
 
     @Size(max=20, message = "Must have 1-20 characters")
     private String streetNumber;
 
     @NotEmpty
-    @Size(min=6, max=40, message = "Must have 1-40 characters")
+    @Size(min=6, max=40, message = "Must have 6-40 characters")
     @Email
     private String emailAddress;
 
-    @Size(min=3, max=20, message = "Must have 1-20 characters")
+    @Size(min=3, max=20, message = "Must have 3-20 characters")
     private String telephoneNumber;
 
     @Size(max=1000, message = "Maximum of 1000 characters")
@@ -177,23 +177,23 @@ public class User
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.username = username.trim();
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = password.trim();
     }
 
     public void setFirstNamePerson(String firstNamePerson) {
-        this.firstNamePerson = firstNamePerson;
+        this.firstNamePerson = firstNamePerson.trim();
     }
 
     public void setLastNamePerson(String lastNamePerson) {
-        this.lastNamePerson = lastNamePerson;
+        this.lastNamePerson = lastNamePerson.trim();
     }
 
     public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+        this.companyName = companyName.trim();
     }
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
@@ -201,56 +201,35 @@ public class User
     }
 
     public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
+        this.postalCode = postalCode.trim();
     }
 
     public void setCity(String city) {
-        this.city = city;
+        this.city = city.trim();
     }
 
     public void setStreet(String street) {
-        this.street = street;
+        this.street = street.trim();
     }
 
     public void setStreetNumber(String streetNumber) {
-        this.streetNumber = streetNumber;
+        this.streetNumber = streetNumber.trim();
     }
 
     public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+        this.emailAddress = emailAddress.trim();
     }
 
     public void setTelephoneNumber(String telephoneNumber) {
-        this.telephoneNumber = telephoneNumber;
+        this.telephoneNumber = telephoneNumber.trim();
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = description.trim();
     }
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", firstNamePerson='" + firstNamePerson + '\'' +
-                ", lastNamePerson='" + lastNamePerson + '\'' +
-                ", companyName='" + companyName + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
-                ", postalCode='" + postalCode + '\'' +
-                ", city='" + city + '\'' +
-                ", street='" + street + '\'' +
-                ", streetNumber='" + streetNumber + '\'' +
-                ", emailAddress='" + emailAddress + '\'' +
-                ", telephoneNumber='" + telephoneNumber + '\'' +
-                ", description='" + description + '\'' +
-                ", roles=" + roles +
-                '}';
     }
 
     @Override
