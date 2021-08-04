@@ -1,7 +1,9 @@
 package academy.everyonecodes.java.data;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
@@ -19,7 +21,7 @@ public class User
     private String username;            // possibilities min./max., no special chars
 
     @NotEmpty
-    @Size(min=1, max=30, message = "Must have 1-30 characters")
+    @Size(min=1, max=100, message = "Must have 1-100 characters")
     private String password;
 
     @NotEmpty
@@ -33,19 +35,18 @@ public class User
     @Size(min=1, max=30, message = "Must have 1-30 characters")
     private String companyName;
 
-    @Size(min=10,max=10, message = "Must have format: DD/MM/YYYY")
     private LocalDate dateOfBirth;
 
-    @Size(min=1, max=10, message = "Must have 1-10 characters")
+    @Size(max=10, message = "Must have 1-10 characters")
     private String postalCode;
 
-    @Size(min=1, max=85, message = "Must have 1-85 characters")
+    @Size(max=85, message = "Must have 1-85 characters")
     private String city;
 
     @Size(min=1, max=85, message = "Must have 1-20 characters")
     private String street;
 
-    @Size(min=1, max=20, message = "Must have 1-20 characters")
+    @Size(max=20, message = "Must have 1-20 characters")
     private String streetNumber;
 
     @NotEmpty
@@ -71,6 +72,22 @@ public class User
         this.firstNamePerson = firstNamePerson;
         this.lastNamePerson = lastNamePerson;
         this.companyName = companyName;
+        this.dateOfBirth = dateOfBirth;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.street = street;
+        this.streetNumber = streetNumber;
+        this.emailAddress = emailAddress;
+        this.telephoneNumber = telephoneNumber;
+        this.description = description;
+        this.roles = roles;
+    }
+
+    public User(String username, String password, String firstNamePerson, String lastNamePerson, LocalDate dateOfBirth, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles) {
+        this.username = username;
+        this.password = password;
+        this.firstNamePerson = firstNamePerson;
+        this.lastNamePerson = lastNamePerson;
         this.dateOfBirth = dateOfBirth;
         this.postalCode = postalCode;
         this.city = city;
@@ -213,6 +230,27 @@ public class User
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstNamePerson='" + firstNamePerson + '\'' +
+                ", lastNamePerson='" + lastNamePerson + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", postalCode='" + postalCode + '\'' +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", streetNumber='" + streetNumber + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", telephoneNumber='" + telephoneNumber + '\'' +
+                ", description='" + description + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 
     @Override

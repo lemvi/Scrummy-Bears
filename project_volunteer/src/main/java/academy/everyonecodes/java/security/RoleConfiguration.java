@@ -5,30 +5,20 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Set;
+
 @Configuration
-@ConfigurationProperties("roles")
+@ConfigurationProperties("security")
 public class RoleConfiguration {
-    private Role roleVolunteer;
-    private Role roleIndividual;
-    private Role roleCompany;
+    private Set<Role> roles;
 
     @Bean
-    Role roleVolunteer() {
-        return roleVolunteer;
+    Set<Role> roles() {
+        return roles;
     }
 
-    @Bean
-    Role roleIndividual() {
-        return roleIndividual;
-    }
-
-    @Bean
-    Role roleCompany() {
-        return roleCompany;
-    }
-
-    void setRoleVolunteer(Role roleVolunteer) {
-        this.roleVolunteer = roleVolunteer;
+    void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     void setRoleIndividual(Role roleIndividual) {
