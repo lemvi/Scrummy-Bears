@@ -1,51 +1,51 @@
 package academy.everyonecodes.java.data;
 
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 
 public class UserDTO {
     private String username;
     private String password;
-    private Set<String> roles;
     private String firstNamePerson;
     private String lastNamePerson;
-    private String company;
-    private LocalDateTime dateOfBirth;
-    private String addressPLZ;
-    private String addressCity;
-    private String addressStreet;
-    private String addressStreetNumber;
+    private String companyName;
+    private LocalDate dateOfBirth;
+    private String postalCode;
+    private String city;
+    private String street;
+    private String streetNumber;
     private String emailAddress;
     private String telephoneNumber;
     private String description;
+    private Set<Role> roles;
+
 
     public UserDTO() {
     }
 
-    public UserDTO(String username, String password, Set<String> roles, String firstNamePerson, String lastNamePerson, String company, Date dateOfBirth, String addressPLZ, String addressCity, String addressStreet, String addressStreetNumber, String emailAddress, String telephoneNumber, String description) {
+    public UserDTO(String username, String password, String firstNamePerson, String lastNamePerson, String companyName, LocalDate dateOfBirth, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles) {
         this.username = username;
         this.password = password;
         this.roles = roles;
         this.firstNamePerson = firstNamePerson;
         this.lastNamePerson = lastNamePerson;
-        this.company = company;
+        this.companyName = companyName;
         this.dateOfBirth = dateOfBirth;
-        this.addressPLZ = addressPLZ;
-        this.addressCity = addressCity;
-        this.addressStreet = addressStreet;
-        this.addressStreetNumber = addressStreetNumber;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.street = street;
+        this.streetNumber = streetNumber;
         this.emailAddress = emailAddress;
         this.telephoneNumber = telephoneNumber;
         this.description = description;
     }
 
-    public Set<String> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<String> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
@@ -77,52 +77,52 @@ public class UserDTO {
         this.lastNamePerson = lastNamePerson;
     }
 
-    public String getCompany() {
-        return company;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setCompanyName(String company) {
+        this.companyName = company;
     }
 
-    public LocalDateTime getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDateTime dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getAddressPLZ() {
-        return addressPLZ;
+    public String getPostalCode() {
+        return postalCode;
     }
 
-    public void setAddressPLZ(String addressPLZ) {
-        this.addressPLZ = addressPLZ;
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
-    public String getAddressCity() {
-        return addressCity;
+    public String getCity() {
+        return city;
     }
 
-    public void setAddressCity(String addressCity) {
-        this.addressCity = addressCity;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getAddressStreet() {
-        return addressStreet;
+    public String getStreet() {
+        return street;
     }
 
-    public void setAddressStreet(String addressStreet) {
-        this.addressStreet = addressStreet;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
-    public String getAddressStreetNumber() {
-        return addressStreetNumber;
+    public String getStreetNumber() {
+        return streetNumber;
     }
 
-    public void setAddressStreetNumber(String addressStreetNumber) {
-        this.addressStreetNumber = addressStreetNumber;
+    public void setStreetNumber(String streetNumber) {
+        this.streetNumber = streetNumber;
     }
 
     public String getEmailAddress() {
@@ -154,11 +154,11 @@ public class UserDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserDTO userDTO = (UserDTO) o;
-        return Objects.equals(username, userDTO.username) && Objects.equals(password, userDTO.password) && Objects.equals(roles, userDTO.roles) && Objects.equals(firstNamePerson, userDTO.firstNamePerson) && Objects.equals(lastNamePerson, userDTO.lastNamePerson) && Objects.equals(company, userDTO.company) && Objects.equals(dateOfBirth, userDTO.dateOfBirth) && Objects.equals(addressPLZ, userDTO.addressPLZ) && Objects.equals(addressCity, userDTO.addressCity) && Objects.equals(addressStreet, userDTO.addressStreet) && Objects.equals(addressStreetNumber, userDTO.addressStreetNumber) && Objects.equals(emailAddress, userDTO.emailAddress) && Objects.equals(telephoneNumber, userDTO.telephoneNumber) && Objects.equals(description, userDTO.description);
+        return Objects.equals(username, userDTO.username) && Objects.equals(password, userDTO.password) && Objects.equals(firstNamePerson, userDTO.firstNamePerson) && Objects.equals(lastNamePerson, userDTO.lastNamePerson) && Objects.equals(companyName, userDTO.companyName) && Objects.equals(dateOfBirth, userDTO.dateOfBirth) && Objects.equals(postalCode, userDTO.postalCode) && Objects.equals(city, userDTO.city) && Objects.equals(street, userDTO.street) && Objects.equals(streetNumber, userDTO.streetNumber) && Objects.equals(emailAddress, userDTO.emailAddress) && Objects.equals(telephoneNumber, userDTO.telephoneNumber) && Objects.equals(description, userDTO.description) && Objects.equals(roles, userDTO.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, password, roles, firstNamePerson, lastNamePerson, company, dateOfBirth, addressPLZ, addressCity, addressStreet, addressStreetNumber, emailAddress, telephoneNumber, description);
+        return Objects.hash(username, password, firstNamePerson, lastNamePerson, companyName, dateOfBirth, postalCode, city, street, streetNumber, emailAddress, telephoneNumber, description, roles);
     }
 }

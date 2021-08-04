@@ -1,6 +1,6 @@
 package academy.everyonecodes.java;
 
-import academy.everyonecodes.java.data.User;
+
 import academy.everyonecodes.java.data.UserDTO;
 import academy.everyonecodes.java.service.ViewerEditorService;
 import org.junit.jupiter.api.Test;
@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 
@@ -26,30 +27,29 @@ public class ViewerEditorEndpointTest {
         String input = "test";
         String url = "/account/";
 
-        UserDTO userdto = new UserDTO("test", "test", Set.of("test"), "test", "test", "test","0000.00.00", "test", "test", "test", "test", "test", "test", "test")
+        UserDTO userdto = new UserDTO("test", "test","test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
 
         Mockito.when(viewerEditorService.getAccountInfo(input)).thenReturn(Optional.of(userdto));
         template.getForObject(url + input, UserDTO.class);
-        Mockito.verify(viewerEditorService).editAccountInfo(input, userdto);
+        Mockito.verify(viewerEditorService).getAccountInfo(input);
+
     }
     @Test
     void getAccountInfo_notFound_test() {
         String input = "test";
         String url = "/account/";
 
-        UserDTO userdto = new UserDTO("test", "test", Set.of("test"), "test", "test", "test","0000.00.00", "test", "test", "test", "test", "test", "test", "test")
 
         Mockito.when(viewerEditorService.getAccountInfo(input)).thenReturn(Optional.empty());
         template.getForObject(url + input, UserDTO.class);
-        Mockito.verify(viewerEditorService).editAccountInfo(input, userdto);
+        Mockito.verify(viewerEditorService).getAccountInfo(input);
     }
 
     @Test
     void editAccountInfo_found_test() {
         String input = "test";
         String url = "/account/";
-       //User user = new User("test", "test", Set.of("test"), "test", "test", "test", "0000.00.00", "test", "test", "test", "test", "test", "test", "test")
-        UserDTO userdto = new UserDTO("test", "test", Set.of("test"), "test", "test", "test","0000.00.00", "test", "test", "test", "test", "test", "test", "test")
+        UserDTO userdto = new UserDTO("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
 
         Mockito.when(viewerEditorService.editAccountInfo(input, userdto)).thenReturn(Optional.of(userdto));
         template.postForObject(url + input, userdto, UserDTO.class);
@@ -58,9 +58,10 @@ public class ViewerEditorEndpointTest {
     @Test
     void editAccountInfo_notFound_test() {
         String input = "test";
-        UserDTO userdto = new UserDTO("test", "test", Set.of("test"), "test", "test", "test","0000.00.00", "test", "test", "test", "test", "test", "test", "test")
-
+        String url = "/account/";
+        UserDTO userdto = new UserDTO("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test",Set.of());
         Mockito.when(viewerEditorService.editAccountInfo(input, userdto)).thenReturn(Optional.empty());
+        template.postForObject(url + input, userdto, UserDTO.class);
 
         Mockito.verify(viewerEditorService).editAccountInfo(input, userdto);
     }

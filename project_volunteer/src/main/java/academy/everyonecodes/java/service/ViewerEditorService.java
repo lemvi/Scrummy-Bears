@@ -2,6 +2,7 @@ package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.UserDTO;
+import academy.everyonecodes.java.data.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -24,9 +25,14 @@ public class ViewerEditorService {
         Optional<User> oUser = userRepository.findByUsername(username);
         if (oUser.isPresent() && userDTO.getUsername().equals(username)) {
             User userEdited = userTranslator.translateToUser(userDTO);
+            User userDB = oUser.get();
+            userEdited.setId(userDB.getId());
             User user = userRepository.save(userEdited);
-            return Optional.of(userTranslator.translateToDTO(user));
+            return  Optional.of(userTranslator.translateToDTO(user));
         }
         return Optional.empty();
+    }
+    public UserDTO post(UserDTO userDTO) {
+        return userTranslator.translateToDTO(userRepository.save(userTranslator.translateToUser(userDTO)));
     }
 }

@@ -6,6 +6,10 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
+
 @Entity
 public class User
 {
@@ -33,7 +37,9 @@ public class User
     @Size(min=1, max=30, message = "Must have 1-30 characters")
     private String companyName;
 
-    @Size(min=10,max=10, message = "Must have format: DD/MM/YYYY")
+    //@Size(min=10,max=10, message = "Must have format: DD/MM/YYYY")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateOfBirth;
 
     @Size(min=1, max=10, message = "Must have 1-10 characters")
