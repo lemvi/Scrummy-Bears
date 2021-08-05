@@ -1,9 +1,13 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.*;
+import academy.everyonecodes.java.service.email.EmailServiceImpl;
+import org.hibernate.query.criteria.internal.expression.function.AggregationFunction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
@@ -11,8 +15,8 @@ import java.util.Optional;
 @Transactional
 public class LoginService {
 
-	// TODO: Replace with Value from yml file
-	public static final int MAX_FAILED_ATTEMPTS = 5;
+	@Value("${constants.how-many-failed-logins-cause-email-warning}")
+	private int MAX_FAILED_ATTEMPTS;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -20,13 +24,15 @@ public class LoginService {
 	@Autowired
 	private InvalidLoginCountRepository invalidLoginCountRepository;
 
+	@Autowired
+	private EmailServiceImpl emailService;
+
 	public void increaseFailedAttempts(String username) {
-		System.out.println("Trying to find user");
 		Optional<User> optUser = userRepository.findByUsername(username);
 		if (optUser.isPresent()) {
+			// Initializing invalidLoginCount to be able to change it in loop later
 			InvalidLoginCount invalidLoginCount = null;
 
-			System.out.println("User found");
 			User user = optUser.get();
 			Optional<InvalidLoginCount> optInvalidLoginCount = invalidLoginCountRepository.findById(user.getId());
 
@@ -35,21 +41,25 @@ public class LoginService {
 			} else {
 				invalidLoginCount = optInvalidLoginCount.get();
 			}
-			increaseFailedAttempts(invalidLoginCount);
+
+			int newInvalidAttempts = invalidLoginCount.getInvalidAttempts() + 1;
+			if (newInvalidAttempts == 5) {
+				// TODO: Check What to do with exception
+				try {
+					sendTooManyFailedLoginAttemptsEmail(user.getEmailAddress());
+				} catch (MessagingException e) {
+					e.printStackTrace();
+				}
+			}
+
+			invalidLoginCount.setInvalidAttempts(newInvalidAttempts);
+			invalidLoginCountRepository.save(invalidLoginCount);
 		}
-	}
-
-	public void increaseFailedAttempts(InvalidLoginCount invalidLoginCount) {
-		// TODO: Remove following line after testing
-		System.out.println("Increased Failed Attempts");
-
-		invalidLoginCount.setInvalidAttempts(invalidLoginCount.getInvalidAttempts() + 1);
-		invalidLoginCountRepository.save(invalidLoginCount);
 	}
 
 	public void resetFailedAttemptsIfNecessary() {
 		// TODO: Link with logged in User
-		//TODO: Remove following line after testing
+		// TODO: Remove following line after testing
 		System.out.println("Checking Login attempts and resetting.");
 	}
 
@@ -61,9 +71,8 @@ public class LoginService {
 		invalidLoginCountRepository.save(invalidLoginCount);
 	}
 
-	public void sendTooManyFailedLoginAttemptsEmail() {
-		// TODO: Replace with actual Email
-		System.out.println("Sent Email");
+	private void sendTooManyFailedLoginAttemptsEmail(String emailAdress) throws MessagingException {
+		emailService.sendMessageWithAttachment(emailAdress);
 	}
 
 	private InvalidLoginCount createInvalidLoginCount(User user) {

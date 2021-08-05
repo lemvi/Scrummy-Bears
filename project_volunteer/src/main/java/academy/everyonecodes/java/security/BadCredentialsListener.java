@@ -18,14 +18,12 @@ public class BadCredentialsListener implements ApplicationListener<Authenticatio
 	@Override
 	public void onApplicationEvent(AuthenticationFailureBadCredentialsEvent event) {
 		Object userName = event.getAuthentication().getPrincipal();
+
+		// TODO: Potentially Remove Log
 		Object credentials = event.getAuthentication().getCredentials();
 		LOG.debug("Failed login using USERNAME [" + userName + "]");
 		LOG.debug("Failed login using PASSWORD [" + credentials + "]");
 
-		//TODO: Remove printed Strings after testing is complete
-		System.out.println("Username: " + userName + "\n" +
-							"Credentials: " + credentials);
-		System.out.println(userName.toString());
 		loginService.increaseFailedAttempts(userName.toString());
 	}
 }
