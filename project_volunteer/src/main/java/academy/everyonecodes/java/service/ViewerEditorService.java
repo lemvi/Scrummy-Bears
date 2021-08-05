@@ -10,29 +10,29 @@ import java.util.Optional;
 @Service
 public class ViewerEditorService {
     private final UserRepository userRepository;
-    private final UserTranslator userTranslator;
+    private final UserToUserDTOTranslator userToUserDTOTranslator;
 
-    public ViewerEditorService(UserRepository userRepository, UserTranslator userTranslator) {
+    public ViewerEditorService(UserRepository userRepository, UserToUserDTOTranslator userToUserDTOTranslator) {
         this.userRepository = userRepository;
-        this.userTranslator = userTranslator;
+        this.userToUserDTOTranslator = userToUserDTOTranslator;
     }
 
     public Optional<UserDTO> getAccountInfo(String username) {
         Optional<User> user = userRepository.findByUsername(username);
-        return user.map(userTranslator::translateToDTO);
+        return user.map(userToUserDTOTranslator::translateToDTO);
     }
     public Optional<UserDTO> editAccountInfo(String username, UserDTO userDTO) {
         Optional<User> oUser = userRepository.findByUsername(username);
         if (oUser.isPresent() && userDTO.getUsername().equals(username)) {
-            User userEdited = userTranslator.translateToUser(userDTO);
+            User userEdited = userToUserDTOTranslator.translateToUser(userDTO);
             User userDB = oUser.get();
             userEdited.setId(userDB.getId());
             User user = userRepository.save(userEdited);
-            return  Optional.of(userTranslator.translateToDTO(user));
+            return  Optional.of(userToUserDTOTranslator.translateToDTO(user));
         }
         return Optional.empty();
     }
     public UserDTO post(UserDTO userDTO) {
-        return userTranslator.translateToDTO(userRepository.save(userTranslator.translateToUser(userDTO)));
+        return userToUserDTOTranslator.translateToDTO(userRepository.save(userToUserDTOTranslator.translateToUser(userDTO)));
     }
 }

@@ -25,10 +25,5 @@ public class ViewerEditorEndpoint {
     UserDTO getAccountInfo(@PathVariable String username) {
         return viewerEditorService.getAccountInfo(username).orElse(null);
     }
-
-    @PostMapping("/{username}")
-    UserDTO post(@PathVariable String username, @RequestBody UserDTO userDTO) {
-        return viewerEditorService.post(userDTO);
-    }
 }
 

@@ -50,9 +50,8 @@ public class ViewerEditorEndpointTest {
         String input = "test";
         String url = "/account/";
         UserDTO userdto = new UserDTO("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
-
         Mockito.when(viewerEditorService.editAccountInfo(input, userdto)).thenReturn(Optional.of(userdto));
-        template.postForObject(url + input, userdto, UserDTO.class);
+        template.put(url + input, userdto);
         Mockito.verify(viewerEditorService).editAccountInfo(input, userdto);
     }
     @Test
@@ -61,7 +60,7 @@ public class ViewerEditorEndpointTest {
         String url = "/account/";
         UserDTO userdto = new UserDTO("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test",Set.of());
         Mockito.when(viewerEditorService.editAccountInfo(input, userdto)).thenReturn(Optional.empty());
-        template.postForObject(url + input, userdto, UserDTO.class);
+        template.put(url + input, userdto);
 
         Mockito.verify(viewerEditorService).editAccountInfo(input, userdto);
     }

@@ -1,9 +1,8 @@
 package academy.everyonecodes.java;
 
-import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.UserDTO;
-import academy.everyonecodes.java.service.UserTranslator;
+import academy.everyonecodes.java.service.UserToUserDTOTranslator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -16,16 +15,16 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class UserTranslatorTest {
+public class UserToUserDTOTranslatorTest {
     @Autowired
-    UserTranslator userTranslator;
+    UserToUserDTOTranslator userToUserDTOTranslator;
 
 
     @ParameterizedTest
     @MethodSource("inputData")
     void userToDTO_test(User input, UserDTO expected) {
 
-        UserDTO result = userTranslator.translateToDTO(input);
+        UserDTO result = userToUserDTOTranslator.translateToDTO(input);
         Assertions.assertEquals(expected, result);
     }
     private static Stream<Arguments> inputData() {
@@ -39,7 +38,7 @@ public class UserTranslatorTest {
     @MethodSource("inputDataTwo")
     void DTOToUser_test(UserDTO input, User expected) {
 
-        User result = userTranslator.translateToUser(input);
+        User result = userToUserDTOTranslator.translateToUser(input);
         Assertions.assertEquals(expected, result);
     }
     private static Stream<Arguments> inputDataTwo() {

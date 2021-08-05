@@ -5,7 +5,7 @@ import academy.everyonecodes.java.data.UserDTO;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserTranslator {
+public class UserToUserDTOTranslator {
 
     public User translateToUser(UserDTO dto) {
         return new User(dto.getUsername(), dto.getPassword(),dto.getFirstNamePerson(), dto.getLastNamePerson(), dto.getCompanyName(), dto.getDateOfBirth(), dto.getPostalCode(), dto.getCity(), dto.getStreet(), dto.getStreetNumber(), dto.getEmailAddress(), dto.getTelephoneNumber(), dto.getDescription(), dto.getRoles());
