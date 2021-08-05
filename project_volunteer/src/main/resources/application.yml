@@ -13,3 +13,17 @@ roles:
     role: "ROLE_INDIVIDUAL"
   roleCompany:
     role: "ROLE_COMPANY"
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: scrummybears01@gmail.com
+    password: '#ScrumProject0821!'
+    #transport.protocol: smtp
+    #debug: true
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+    subject: incorrect password for 5 times
+    text: Was this you? Someone tried to login with an incorrect password for 5 times. Please reset your Password.
+    pathToAttachment: https://drive.google.com/file/d/12Gbkt6gz57jbRituWtMRAwZd25OMUF6a/view?usp=sharing
