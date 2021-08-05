@@ -10,6 +10,7 @@ import javax.mail.MessagingException;
 @SpringBootApplication
 public class ProjectVolunteerApplication
 {
+
 	/*
 	private static EmailService emailServiceImpl;
 
@@ -19,10 +20,12 @@ public class ProjectVolunteerApplication
 
 	 */
 
-	public static void main(String[] args) throws MessagingException {
+
+
+	public static void main(String[] args) /*throws MessagingException*/ {
 		SpringApplication.run(ProjectVolunteerApplication.class, args);
 
 		//emailServiceImpl.sendSimpleMessage("scrummybears08@gmail.com");
-		//emailServiceImpl.sendMessageWithAttachment("scrummybears08@gmail.com");
+		//emailServiceImpl.sendMessageWithAttachment("pundito7@gmail.com");
 	}
 }
