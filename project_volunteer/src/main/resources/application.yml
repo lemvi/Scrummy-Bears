@@ -17,6 +17,8 @@ spring:
       starttls.enable: true
     debug: true
 
+constants:
+  how-many-failed-logins-cause-email-warning: 5
 
 message:
   subject: Incorrect password for 5 times

@@ -1,6 +1,9 @@
 package academy.everyonecodes.java.security;
 
 import academy.everyonecodes.java.data.UserRepository;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
@@ -44,5 +48,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .map(UserPrincipal::new)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
     }
-
 }
