@@ -58,7 +58,7 @@ public class EmailServiceImpl implements EmailService {
         File file = new File(pathToAttachment);
         FileSystemResource fileSystemResource = new FileSystemResource(file);
 
-        helper.addAttachment("Logo Scrummy Bears", file);
+        helper.addAttachment("Logo Scrummy Bears.jpg", file);
 
         emailSender.send(message);
     }
