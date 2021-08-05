@@ -6,6 +6,25 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: scrummybears08@gmail.com
+    password: ScrumProject0821!#
+    transport.protocol: smtp
+    smtp:
+      auth: true
+      starttls.enable: true
+    debug: true
+
+
+message:
+  subject: Incorrect password for 5 times
+  text: Was this you? Someone tried to login with an incorrect password for 5 times. Please reset your Password.
+  pathToAttachment: project_volunteer/src/main/resources/Scrummy Bears Logo.jpg
+
+  #https://drive.google.com/file/d/1_0k1HyesHZC1R6oEZ2q3MY5FiaMhKPie/view?usp=sharing
+
 roles:
   roleVolunteer:
     role: "ROLE_VOLUNTEER"
@@ -14,16 +33,3 @@ roles:
   roleCompany:
     role: "ROLE_COMPANY"
 
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: scrummybears01@gmail.com
-    password: '#ScrumProject0821!'
-    #transport.protocol: smtp
-    #debug: true
-    properties.mail.smtp:
-      auth: true
-      starttls.enable: true
-    subject: incorrect password for 5 times
-    text: Was this you? Someone tried to login with an incorrect password for 5 times. Please reset your Password.
-    pathToAttachment: https://drive.google.com/file/d/12Gbkt6gz57jbRituWtMRAwZd25OMUF6a/view?usp=sharing
