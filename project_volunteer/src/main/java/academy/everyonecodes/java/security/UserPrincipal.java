@@ -25,6 +25,10 @@ public class UserPrincipal implements UserDetails {
                 String[authorities.size()]));
     }
 
+    public User getUser() {
+        return user;
+    }
+
     @Override
     public String getPassword() {
         return user.getPassword();

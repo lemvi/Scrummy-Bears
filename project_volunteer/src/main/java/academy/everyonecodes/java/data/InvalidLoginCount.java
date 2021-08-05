@@ -6,16 +6,21 @@ import javax.persistence.*;
 public class InvalidLoginCount {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@OneToOne(fetch = FetchType.LAZY)
+	@MapsId
 	private User user;
 
 	private int invalidAttempts;
 
 
 	InvalidLoginCount() {}
+
+	public InvalidLoginCount(User user, int invalidAttempts) {
+		this.user = user;
+		this.invalidAttempts = invalidAttempts;
+	}
 
 
 	public Long getId() {
@@ -28,5 +33,9 @@ public class InvalidLoginCount {
 
 	public int getInvalidAttempts() {
 		return invalidAttempts;
+	}
+
+	public void setInvalidAttempts(int invalidAttempts) {
+		this.invalidAttempts = invalidAttempts;
 	}
 }

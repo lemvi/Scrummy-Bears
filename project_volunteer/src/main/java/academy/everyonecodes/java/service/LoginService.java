@@ -1,11 +1,11 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.LoginAttemptDTO;
-import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -17,21 +17,56 @@ public class LoginService {
 	@Autowired
 	private UserRepository userRepository;
 
-	public void increaseFailedAttempts(User user) {
-		int newFailAttempts = user.getFailedAttempt() + 1;
-		userRepository.updateFailedAttempts(newFailAttempts, user.getEmail());
+	@Autowired
+	private InvalidLoginCountRepository invalidLoginCountRepository;
+
+	public void increaseFailedAttempts(String username) {
+		System.out.println("Trying to find user");
+		Optional<User> optUser = userRepository.findByUsername(username);
+		if (optUser.isPresent()) {
+			InvalidLoginCount invalidLoginCount = null;
+
+			System.out.println("User found");
+			User user = optUser.get();
+			Optional<InvalidLoginCount> optInvalidLoginCount = invalidLoginCountRepository.findById(user.getId());
+
+			if (optInvalidLoginCount.isEmpty()) {
+				invalidLoginCount = createInvalidLoginCount(user);
+			} else {
+				invalidLoginCount = optInvalidLoginCount.get();
+			}
+			increaseFailedAttempts(invalidLoginCount);
+		}
 	}
 
-	public void resetFailedAttempts(String email) {
-		userRepository.updateFailedAttempts(0, email);
+	public void increaseFailedAttempts(InvalidLoginCount invalidLoginCount) {
+		// TODO: Remove following line after testing
+		System.out.println("Increased Failed Attempts");
+
+		invalidLoginCount.setInvalidAttempts(invalidLoginCount.getInvalidAttempts() + 1);
+		invalidLoginCountRepository.save(invalidLoginCount);
 	}
 
-	public void sendLoginAbuseEmail() {
-
+	public void resetFailedAttemptsIfNecessary() {
+		// TODO: Link with logged in User
+		//TODO: Remove following line after testing
+		System.out.println("Checking Login attempts and resetting.");
 	}
 
-	// TODO: Delete dependency on Dummy method
-	public User loginUser(LoginAttemptDTO loginAttemptDTO) {
-		return null;
+	private void resetFailedAttempts(InvalidLoginCount invalidLoginCount) {
+		// TODO: Remove following line after testing
+		System.out.println("Reset Failed Attempts");
+
+		invalidLoginCount.setInvalidAttempts(0);
+		invalidLoginCountRepository.save(invalidLoginCount);
+	}
+
+	public void sendTooManyFailedLoginAttemptsEmail() {
+		// TODO: Replace with actual Email
+		System.out.println("Sent Email");
+	}
+
+	private InvalidLoginCount createInvalidLoginCount(User user) {
+		return invalidLoginCountRepository.save(new InvalidLoginCount(user, 0));
 	}
 }
