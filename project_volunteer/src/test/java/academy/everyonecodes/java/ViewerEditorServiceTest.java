@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
@@ -27,6 +28,8 @@ public class ViewerEditorServiceTest {
     UserToUserDTOTranslator userToUserDTOTranslator;
     @MockBean
     UserRepository userRepository;
+    @MockBean
+    Principal principal;
 
     @Test
     void getAccountInfo_found_usernameISEqual_test() {
@@ -36,9 +39,11 @@ public class ViewerEditorServiceTest {
 
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
         Mockito.when(userToUserDTOTranslator.translateToDTO(user)).thenReturn(userdto);
-        Optional<UserDTO> oUserDTO = viewerEditorService.getAccountInfo(input);
+        Mockito.when(principal.getName()).thenReturn(input);
+        Optional<UserDTO> oUserDTO = viewerEditorService.getAccountInfo(input, principal);
 
-        Assertions.assertEquals(oUserDTO, Optional.of(userdto));
+       Assertions.assertEquals(oUserDTO, Optional.of(userdto));
+       Mockito.verify(principal).getName();
         Mockito.verify(userRepository).findByUsername(input);
         Mockito.verify(userToUserDTOTranslator).translateToDTO(user);
     }
@@ -46,8 +51,9 @@ public class ViewerEditorServiceTest {
     void getAccountInfo_notFound_test() {
         String input = "test";
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.empty());
+        Mockito.when(principal.getName()).thenReturn(input);
 
-        viewerEditorService.getAccountInfo(input);
+        viewerEditorService.getAccountInfo(input, principal);
         Mockito.verify(userRepository).findByUsername(input);
         Mockito.verifyNoInteractions(userToUserDTOTranslator);
     }
@@ -60,10 +66,12 @@ public class ViewerEditorServiceTest {
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
         Mockito.when(userToUserDTOTranslator.translateToUser(userdto)).thenReturn(user);
         Mockito.when(userToUserDTOTranslator.translateToDTO(user)).thenReturn(userdto);
+        Mockito.when(principal.getName()).thenReturn(input);
+
 
         Mockito.when(userRepository.save(user)).thenReturn(user);
 
-       // viewerEditorService.editAccountInfo(input, userdto);
+        viewerEditorService.editAccountInfo(input, userdto, principal);
         Mockito.verify(userRepository).findByUsername(input);
         Mockito.verify(userToUserDTOTranslator).translateToUser(userdto);
         Mockito.verify(userToUserDTOTranslator).translateToDTO(user);
@@ -74,9 +82,10 @@ public class ViewerEditorServiceTest {
         String input = "test";
         UserDTO userdto = new UserDTO("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.empty());
+        Mockito.when(principal.getName()).thenReturn(input);
 
 
-        //viewerEditorService.editAccountInfo(input, userdto);
+        viewerEditorService.editAccountInfo(input, userdto, principal);
 
         Mockito.verify(userRepository).findByUsername(input);
         Mockito.verifyNoInteractions(userToUserDTOTranslator);
@@ -89,7 +98,10 @@ public class ViewerEditorServiceTest {
         User user = new User("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
 
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
-        //viewerEditorService.editAccountInfo(input, userFalseUsername);
+        Mockito.when(principal.getName()).thenReturn(input);
+
+
+        viewerEditorService.editAccountInfo(input, userFalseUsername, principal);
 
         Mockito.verify(userRepository).findByUsername(input);
         Mockito.verifyNoInteractions(userToUserDTOTranslator);

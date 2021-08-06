@@ -26,8 +26,11 @@ public class ViewerEditorEndpoint {
     }
     @GetMapping("/{username}")
     @Secured({"ROLE_VOLUNTEER", "ROLE_INDIVIDUAL", "ROLE_COMPANY"})
-    UserDTO getAccountInfo(@PathVariable String username) {
-        return viewerEditorService.getAccountInfo(username).orElse(null);
+    UserDTO getAccountInfo(@PathVariable String username, Principal principal) {
+        if (username.equals(principal.getName())) {
+            return viewerEditorService.getAccountInfo(username, principal).orElse(null);
+        }
+        return null;
     }
 }
 

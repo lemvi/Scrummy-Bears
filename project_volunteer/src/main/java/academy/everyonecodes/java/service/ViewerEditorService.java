@@ -21,17 +21,20 @@ public class ViewerEditorService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Optional<UserDTO> getAccountInfo(String username) {
+    public Optional<UserDTO> getAccountInfo(String username, Principal principal) {
         Optional<User> user = userRepository.findByUsername(username);
-        return user.map(userToUserDTOTranslator::translateToDTO);
+        if (user.isPresent() && username.equals(principal.getName())) {
+            return user.map(userToUserDTOTranslator::translateToDTO);
+        }
+        return Optional.empty();
     }
     public Optional<UserDTO> editAccountInfo(String username, UserDTO userDTO, Principal principal) {
         Optional<User> oUser = userRepository.findByUsername(username);
-        if (oUser.isPresent() && userDTO.getUsername().equals(username) &&username.equals(principal.getName())) {
+        if (oUser.isPresent() && userDTO.getUsername().equals(username) && username.equals(principal.getName())) {
             User userEdited = userToUserDTOTranslator.translateToUser(userDTO);
             User userDB = oUser.get();
             userEdited.setId(userDB.getId());
-            passwordEncoder.encode(userEdited.getPassword());
+            userEdited.setPassword(passwordEncoder.encode(userEdited.getPassword()));
             User user = userRepository.save(userEdited);
             return  Optional.of(userToUserDTOTranslator.translateToDTO(user));
         }
