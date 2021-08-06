@@ -7,7 +7,6 @@ import java.util.Optional;
 
 public class ProfileDTO
 {
-    private Long id;
     private String username;
     private String fullName;
     private String companyName;
@@ -25,16 +24,6 @@ public class ProfileDTO
         this.companyName = companyName;
         this.age = age;
         this.description = description;
-    }
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
     }
 
     public String getUsername()
@@ -93,12 +82,12 @@ public class ProfileDTO
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProfileDTO that = (ProfileDTO) o;
-        return Objects.equals(id, that.id) && Objects.equals(username, that.username) && Objects.equals(fullName, that.fullName) && Objects.equals(companyName, that.companyName) && Objects.equals(age, that.age) && Objects.equals(description, that.description);
+        return Objects.equals(username, that.username) && Objects.equals(fullName, that.fullName) && Objects.equals(companyName, that.companyName) && Objects.equals(age, that.age) && Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(id, username, fullName, companyName, age, description);
+        return Objects.hash(username, fullName, companyName, age, description);
     }
 }
