@@ -2,8 +2,10 @@ package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.ProfileDTO;
 import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +21,9 @@ class ProfileDTOServiceTest
 
     @MockBean
     private UserToProfileDTOTranslator userToProfileDTOTranslator;
+
+    @MockBean
+    private UserRepository userRepository;
 
 
     @Test
@@ -39,10 +44,12 @@ class ProfileDTOServiceTest
                 LocalDate.of(2021, 8, 2),
                 "description"
         );
+        Mockito.when(userRepository.findByUsername("name"))
+                .thenReturn(java.util.Optional.of(user));
         Mockito.when(userToProfileDTOTranslator.toDTO(user))
                 .thenReturn(profileDTO);
         var expected = profileDTO;
-        var actual = profileDTOService.get(user);
+        var actual = profileDTOService.get("name");
 
         Assertions.assertEquals(expected, actual);
     }

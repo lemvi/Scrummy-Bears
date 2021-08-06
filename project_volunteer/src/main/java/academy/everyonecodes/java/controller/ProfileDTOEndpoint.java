@@ -4,13 +4,10 @@ import academy.everyonecodes.java.data.ProfileDTO;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.service.ProfileDTOService;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/profile") // TODO: URL ok?
+@RequestMapping("/profile")
 public class ProfileDTOEndpoint
 {
     private final ProfileDTOService profileDTOService;
@@ -20,10 +17,10 @@ public class ProfileDTOEndpoint
         this.profileDTOService = profileDTOService;
     }
 
-    @GetMapping // TODO: Return type?
+    @GetMapping("/{username}")
     @Secured({"ROLE_VOLUNTEER", "ROLE_INDIVIDUAL", "ROLE_COMPANY"})
-    public ProfileDTO get(@RequestBody User user)
+    public ProfileDTO get(@PathVariable String username)
     {
-        return profileDTOService.get(user);
+        return profileDTOService.get(username);
     }
 }
