@@ -27,13 +27,15 @@ public class UserService {
 
     public User save(User user) {
         user.setPassword(encryptPasswordFromUser(user));
-        if (user.getRoles() != null) {
-            Set<Role> roles = user.getRoles().stream()
-                    .map(Role::getRole)
-                    .map(roleService::findByRole)
-                    .collect(Collectors.toSet());
-            user.setRoles(roles);
-        }
+        if (user.getRoles() == null)
+            return null;
+        Set<Role> roles = user.getRoles().stream()
+                .map(Role::getRole)
+                .map(roleService::findByRole)
+                .collect(Collectors.toSet());
+        if (roles.contains(null))
+            return null;
+        user.setRoles(roles);
         return userRepository.save(user);
     }
 

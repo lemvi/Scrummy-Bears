@@ -37,7 +37,7 @@ public class User
 
     private LocalDate dateOfBirth;
 
-    @Size(max=10, message = "Must have 1-10 characters")
+    @Size(max=10, message = "Must have 10 characters")
     private String postalCode;
 
     @Size(max=85, message = "Must have 1-85 characters")
@@ -61,6 +61,7 @@ public class User
     private String description;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @NotEmpty
     private Set<Role> roles;
 
     public User() {
@@ -106,6 +107,15 @@ public class User
         this.companyName = companyName;
         this.dateOfBirth = dateOfBirth;
         this.description = description;
+    }
+
+    public User(String username, String password, String firstNamePerson, String lastNamePerson, String emailAddress, Set<Role> roles) {
+        this.username = username;
+        this.password = password;
+        this.firstNamePerson = firstNamePerson;
+        this.lastNamePerson = lastNamePerson;
+        this.emailAddress = emailAddress;
+        this.roles = roles;
     }
 
     public User(LocalDate dateOfBirth) {
