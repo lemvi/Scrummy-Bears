@@ -11,16 +11,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
-import javax.validation.ConstraintViolation;
+
+import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class UserServiceTest {
@@ -39,8 +38,28 @@ class UserServiceTest {
     @MockBean
     private PasswordEncoder passwordEncoder;
 
+    @ParameterizedTest
+    @MethodSource("getParams")
+    void saveTest(User input) {
+        when(passwordEncoder.encode(input.getPassword()))
+                .thenReturn("encrypted");
+        when(repository.save(input))
+                .thenReturn(input);
+        assertThrows(ConstraintViolationException.class, () -> userService.save(input));
+    }
 
-
-
+    static Stream<Arguments> getParams() {
+        return Stream.of(
+                Arguments.of(
+                        new User(
+                                "",
+                                "123456",
+                                "first",
+                                "second",
+                                "user@email.com",
+                                Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_INDIVIDUAL"))
+                        )
+                ));
+    }
 }
 

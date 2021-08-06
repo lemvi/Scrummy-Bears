@@ -5,7 +5,9 @@ import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,7 +18,6 @@ public class UserService {
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
-
     public UserService(UserRepository userRepository,
                        RoleService roleService,
                        PasswordEncoder passwordEncoder) {
@@ -25,7 +26,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User save(User user) {
+    public User save(@Valid User user) {
         user.setPassword(encryptPasswordFromUser(user));
         if (user.getRoles() == null)
             return null;
@@ -39,7 +40,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    private String encryptPasswordFromUser(User user) {
+    private String encryptPasswordFromUser(@Valid User user) {
         return passwordEncoder.encode(user.getPassword());
     }
 }

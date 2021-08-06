@@ -3,6 +3,7 @@ package academy.everyonecodes.java.controller;
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.service.UserService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.time.LocalDate;
@@ -43,16 +45,15 @@ class UserEndpointTest {
         //Set<ConstraintViolation<User>> violations = validator.validate(input);
         //System.out.println(violations);
         //if (violations.isEmpty())
-        //when(userService.save(input)).thenReturn(input); // TODO ACHTUNG!
+        when(userService.save(input)).thenReturn(input);
 
         var statusCode = restTemplate.postForEntity("/register", input, User.class).getStatusCode().toString();
 
+        System.out.println(statusCode);
         //String expectedStatusCode = "400 BAD_REQUEST";
-
+        Assertions.assertThrows(ConstraintViolationException.class, () -> userService.save(input));
         System.out.println("actual: " + statusCode + "\n expected: " + expectedStatusCode);
         //assertEquals(violationCount, violations.size());
-        assertTrue(expectedStatusCode.equalsIgnoreCase(statusCode));
-
 /*
         if (expectedStatusCode) {
             verify(userService).save(input);
@@ -63,21 +64,20 @@ class UserEndpointTest {
     }
 
     static Stream<Arguments> getParams() {
-        Set<Role> rolesVolunteer = new HashSet<>();
-        rolesVolunteer.add(new Role("ROLE_VOLUNTEER"));
+        //Set<Role> rolesVolunteer = new HashSet<>();
+        //rolesVolunteer.add(new Role("ROLE_VOLUNTEER"));
         return Stream.of(
                 Arguments.of( //1 valid user
                         new User(
-                                "username",
-                                "password",
-                                "firstName",
-                                "lastName",
-                                "email@email.com",
-                                Set.of(new Role("ROLE_VOLUNTEER"))
+                                "TheLegend29",
+                                "123456",
+                                "first",
+                                "second",
+                                "user@email.com",
+                                Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_INDIVIDUAL"))
                         ),
-                        "200 OK",
-                        0
-                ),
+                        "200 OK"
+                ));/*,
                 Arguments.of( //2 empty user
                         new User(), false, 6
                 ),
@@ -185,6 +185,6 @@ class UserEndpointTest {
                                 rolesVolunteer
                         ), "400 BAD_REQUEST", 2
                 )
-        );
+        );*/
     }
 }
