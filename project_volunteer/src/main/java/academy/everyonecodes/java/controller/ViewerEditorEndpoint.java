@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @RestController
@@ -19,8 +20,8 @@ public class ViewerEditorEndpoint {
 
     @PutMapping("/{username}")
     @Secured({"ROLE_VOLUNTEER", "ROLE_INDIVIDUAL", "ROLE_COMPANY"})
-    UserDTO editAccountInfo(@PathVariable String username, @RequestBody UserDTO userDTO) {
-        Optional<UserDTO> oUser= viewerEditorService.editAccountInfo(username, userDTO);
+    UserDTO editAccountInfo(@PathVariable String username, @RequestBody UserDTO userDTO, Principal principal) {
+        Optional<UserDTO> oUser= viewerEditorService.editAccountInfo(username, userDTO, principal);
         return oUser.orElse(null);
     }
     @GetMapping("/{username}")

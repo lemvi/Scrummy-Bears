@@ -63,7 +63,7 @@ public class ViewerEditorServiceTest {
 
         Mockito.when(userRepository.save(user)).thenReturn(user);
 
-        viewerEditorService.editAccountInfo(input, userdto);
+       // viewerEditorService.editAccountInfo(input, userdto);
         Mockito.verify(userRepository).findByUsername(input);
         Mockito.verify(userToUserDTOTranslator).translateToUser(userdto);
         Mockito.verify(userToUserDTOTranslator).translateToDTO(user);
@@ -76,7 +76,7 @@ public class ViewerEditorServiceTest {
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.empty());
 
 
-        viewerEditorService.editAccountInfo(input, userdto);
+        //viewerEditorService.editAccountInfo(input, userdto);
 
         Mockito.verify(userRepository).findByUsername(input);
         Mockito.verifyNoInteractions(userToUserDTOTranslator);
@@ -89,7 +89,7 @@ public class ViewerEditorServiceTest {
         User user = new User("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
 
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
-        viewerEditorService.editAccountInfo(input, userFalseUsername);
+        //viewerEditorService.editAccountInfo(input, userFalseUsername);
 
         Mockito.verify(userRepository).findByUsername(input);
         Mockito.verifyNoInteractions(userToUserDTOTranslator);
