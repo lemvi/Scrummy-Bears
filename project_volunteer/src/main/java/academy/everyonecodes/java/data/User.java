@@ -4,10 +4,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Null;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
@@ -36,9 +33,10 @@ public class User
     @Size(min=1, max=30, message = "Must have 1-30 characters")
     private String lastNamePerson;
 
-    @Size(min=1, max=30, message = "Must have 1-30 characters")
+    @Size(max=30, message = "Must have 1-30 characters")
     private String companyName;
 
+    @Past
     private LocalDate dateOfBirth;
 
     @Size(max=10, message = "Must have a maximum of 10 characters")
@@ -191,23 +189,23 @@ public class User
     }
 
     public void setUsername(String username) {
-        this.username = username.trim();
+        this.username = username;
     }
 
     public void setPassword(String password) {
-        this.password = password.trim();
+        this.password = password;
     }
 
     public void setFirstNamePerson(String firstNamePerson) {
-        this.firstNamePerson = firstNamePerson.trim();
+        this.firstNamePerson = firstNamePerson;
     }
 
     public void setLastNamePerson(String lastNamePerson) {
-        this.lastNamePerson = lastNamePerson.trim();
+        this.lastNamePerson = lastNamePerson;
     }
 
     public void setCompanyName(String companyName) {
-        this.companyName = companyName.trim();
+        this.companyName = companyName;
     }
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
@@ -215,31 +213,31 @@ public class User
     }
 
     public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode.trim();
+        this.postalCode = postalCode;
     }
 
     public void setCity(String city) {
-        this.city = city.trim();
+        this.city = city;
     }
 
     public void setStreet(String street) {
-        this.street = street.trim();
+        this.street = street;
     }
 
     public void setStreetNumber(String streetNumber) {
-        this.streetNumber = streetNumber.trim();
+        this.streetNumber = streetNumber;
     }
 
     public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress.trim();
+        this.emailAddress = emailAddress;
     }
 
     public void setTelephoneNumber(String telephoneNumber) {
-        this.telephoneNumber = telephoneNumber.trim();
+        this.telephoneNumber = telephoneNumber;
     }
 
     public void setDescription(String description) {
-        this.description = description.trim();
+        this.description = description;
     }
 
     public void setRoles(Set<Role> roles) {

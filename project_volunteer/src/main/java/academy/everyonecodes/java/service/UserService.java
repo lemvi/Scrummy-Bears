@@ -7,7 +7,6 @@ import academy.everyonecodes.java.data.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,8 +27,10 @@ public class UserService {
         this.individualVolunteerDTOTranslator = individualVolunteerDTOTranslator;
     }
 
-    public User translateDtoAndSaveUser(IndividualVolunteerDTO individualVolunteerDTO) {
-        return save(individualVolunteerDTOTranslator.translateDTOtoUser(individualVolunteerDTO));
+    public User translateIndividualVolunteerDtoAndSaveUser(IndividualVolunteerDTO individualVolunteerDTO) {
+        User user = individualVolunteerDTOTranslator.translateDTOtoUser(individualVolunteerDTO);
+        filterUserRolesForIndividualAndOrVolunteer(user);
+        return save(user);
     }
 
     public User save(User user) {
@@ -46,7 +47,18 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    private String encryptPasswordFromUser(@Valid User user) {
+    private String encryptPasswordFromUser(User user) {
         return passwordEncoder.encode(user.getPassword());
+    }
+
+    private User filterUserRolesForIndividualAndOrVolunteer(User user) {
+        Set<Role> roles = user.getRoles();
+        roles.stream()
+                .map(role -> role.getRole())
+                .filter(s -> s.equals("ROLE_INDIVIDUAL") || s.equals("ROLE_VOLUNTEER"))
+                .map(roleService::findByRole)
+                .collect(Collectors.toSet());
+        user.setRoles(roles);
+        return user;
     }
 }
