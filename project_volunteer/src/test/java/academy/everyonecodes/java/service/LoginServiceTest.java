@@ -4,20 +4,24 @@ import academy.everyonecodes.java.data.InvalidLoginCount;
 import academy.everyonecodes.java.data.InvalidLoginCountRepository;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.UserRepository;
-import academy.everyonecodes.java.security.BadCredentialsListener;
+import academy.everyonecodes.java.security.UserPrincipal;
 import academy.everyonecodes.java.service.email.EmailServiceImpl;
-import com.sun.mail.util.MailConnectException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
+import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.mail.MessagingException;
+import java.util.Collection;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class LoginServiceTest {
@@ -34,25 +38,113 @@ class LoginServiceTest {
 	@MockBean
 	EmailServiceImpl emailService;
 
-	@MockBean
-	BadCredentialsListener badCredentialsListener;
-
 	@Autowired
 	LoginService loginService;
 
+
+	// Test Classes for Failed Authentication
+	Authentication testFailedAuthentication = new Authentication() {
+		@Override
+		public Collection<? extends GrantedAuthority> getAuthorities() {
+			return null;
+		}
+
+		@Override
+		public Object getCredentials() {
+			return null;
+		}
+
+		@Override
+		public Object getDetails() {
+			return null;
+		}
+
+		@Override
+		public Object getPrincipal() {
+			return "Testy";
+		}
+
+		@Override
+		public boolean isAuthenticated() {
+			return false;
+		}
+
+		@Override
+		public void setAuthenticated(boolean b) throws IllegalArgumentException {
+
+		}
+
+		@Override
+		public String getName() {
+			return null;
+		}
+	};
+
+	AuthenticationException authenticationException = new BadCredentialsException("Test Fail Message");
+
+	AuthenticationFailureBadCredentialsEvent authenticationFailureBadCredentialsEvent = new AuthenticationFailureBadCredentialsEvent(testFailedAuthentication, authenticationException);
+
+
+	// Test Classes for Successful Authentication
+	Authentication testSuccessAuthentication = new Authentication() {
+		@Override
+		public Collection<? extends GrantedAuthority> getAuthorities() {
+			return null;
+		}
+
+		@Override
+		public Object getCredentials() {
+			return null;
+		}
+
+		@Override
+		public Object getDetails() {
+			return null;
+		}
+
+		@Override
+		public Object getPrincipal() {
+			return new UserPrincipal(new User("Testy", "testPassword", null, null, null, null, null, null, null, null, "test@testmail.com", null, null, null));
+		}
+
+		@Override
+		public boolean isAuthenticated() {
+			return false;
+		}
+
+		@Override
+		public void setAuthenticated(boolean b) throws IllegalArgumentException {
+
+		}
+
+		@Override
+		public String getName() {
+			return null;
+		}
+	};
+
+	AuthenticationSuccessEvent authenticationSuccessEvent = new AuthenticationSuccessEvent(testSuccessAuthentication);
+
+
+
 	@Test
-	void increaseFailedAttempts_UserNotFound() {
+	void runFailedAuthenticationProcedure_UserNotFound() {
+
+		// Test Logic
 		Mockito.when(userRepository.findByUsername("Testy")).thenReturn(Optional.empty());
 
-		loginService.increaseFailedAttempts("Testy");
+		loginService.runFailedAuthenticationProcedure(authenticationFailureBadCredentialsEvent);
 
 		Mockito.verify(userRepository).findByUsername("Testy");
 		Mockito.verifyNoMoreInteractions(userRepository);
-		Mockito.verifyNoInteractions(invalidLoginCountRepository, emailService, badCredentialsListener);
+		Mockito.verifyNoInteractions(invalidLoginCountRepository, emailService);
 	}
 
+
+
 	@Test
-	void increaseFailedAttempts_UserFound_NoInvalidLoginCounter() {
+	void runFailedAuthenticationProcedure_UserFound_NoInvalidLoginCounter() {
+
 		User testUser = new User();
 		testUser.setId(1L);
 		testUser.setUsername("Testy");
@@ -61,11 +153,13 @@ class LoginServiceTest {
 
 		InvalidLoginCount testInvalidLoginCount = new InvalidLoginCount(testUser, 0);
 
+
+		// Test Logic
 		Mockito.when(userRepository.findByUsername("Testy")).thenReturn(Optional.of(testUser));
 		Mockito.when(invalidLoginCountRepository.findById(1L)).thenReturn(Optional.empty());
 		Mockito.when(invalidLoginCountRepository.save(testInvalidLoginCount)).thenReturn(testInvalidLoginCount);
 
-		loginService.increaseFailedAttempts("Testy");
+		loginService.runFailedAuthenticationProcedure(authenticationFailureBadCredentialsEvent);
 
 		Mockito.verify(userRepository).findByUsername("Testy");
 		Mockito.verify(invalidLoginCountRepository).findById(1L);
@@ -73,11 +167,14 @@ class LoginServiceTest {
 		Mockito.verify(invalidLoginCountRepository).save(new InvalidLoginCount(testUser, 1));
 
 		Mockito.verifyNoMoreInteractions(invalidLoginCountRepository, userRepository);
-		Mockito.verifyNoInteractions(emailService, badCredentialsListener);
+		Mockito.verifyNoInteractions(emailService);
 	}
 
+
+
 	@Test
-	void increaseFailedAttempts_UserFound_FoundInvalidLoginCounter_DoesNotReach5() {
+	void runFailedAuthenticationProcedure_UserFound_FoundInvalidLoginCounter_DoesNotReach5() {
+
 		User testUser = new User();
 		testUser.setId(1L);
 		testUser.setUsername("Testy");
@@ -85,21 +182,25 @@ class LoginServiceTest {
 
 		InvalidLoginCount testInvalidLoginCount = new InvalidLoginCount(testUser, 3);
 
+
+		// Test Logic
 		Mockito.when(userRepository.findByUsername("Testy")).thenReturn(Optional.of(testUser));
 		Mockito.when(invalidLoginCountRepository.findById(1L)).thenReturn(Optional.of(testInvalidLoginCount));
 
-		loginService.increaseFailedAttempts("Testy");
+		loginService.runFailedAuthenticationProcedure(authenticationFailureBadCredentialsEvent);
 
 		Mockito.verify(userRepository).findByUsername("Testy");
 		Mockito.verify(invalidLoginCountRepository).findById(1L);
 		Mockito.verify(invalidLoginCountRepository).save(new InvalidLoginCount(testUser, 4));
 
 		Mockito.verifyNoMoreInteractions(invalidLoginCountRepository, userRepository);
-		Mockito.verifyNoInteractions(emailService, badCredentialsListener);
+		Mockito.verifyNoInteractions(emailService);
 	}
 
+
+
 	@Test
-	void increaseFailedAttempts_UserFound_FoundInvalidLoginCounter_Reaches5() {
+	void runFailedAuthenticationProcedure_UserFound_FoundInvalidLoginCounter_Reaches5() {
 		User testUser = new User();
 		testUser.setId(1L);
 		testUser.setUsername("Testy");
@@ -108,10 +209,12 @@ class LoginServiceTest {
 
 		InvalidLoginCount testInvalidLoginCount = new InvalidLoginCount(testUser, 4);
 
+
+		// Test Logic
 		Mockito.when(userRepository.findByUsername("Testy")).thenReturn(Optional.of(testUser));
 		Mockito.when(invalidLoginCountRepository.findById(1L)).thenReturn(Optional.of(testInvalidLoginCount));
 
-		loginService.increaseFailedAttempts("Testy");
+		loginService.runFailedAuthenticationProcedure(authenticationFailureBadCredentialsEvent);
 
 		Mockito.verify(userRepository).findByUsername("Testy");
 		Mockito.verify(invalidLoginCountRepository).findById(1L);
@@ -124,10 +227,81 @@ class LoginServiceTest {
 		}
 
 		Mockito.verifyNoMoreInteractions(invalidLoginCountRepository, userRepository);
-		Mockito.verifyNoInteractions(badCredentialsListener);
+	}
+
+
+
+	@Test
+	void resetFailedAttemptsIfNecessary_ResetNecessary() {
+		User testUser = new User();
+		testUser.setId(1L);
+		testUser.setUsername("Testy");
+		testUser.setPassword("test");
+		testUser.setEmailAddress("test@testmail.com");
+
+		InvalidLoginCount testInvalidLoginCount = new InvalidLoginCount(testUser, 4);
+		InvalidLoginCount testInvalidLoginCountReset = new InvalidLoginCount(testUser, 0);
+
+
+		// Test Logic
+		Mockito.when(userRepository.findByUsername("Testy")).thenReturn(Optional.of(testUser));
+		Mockito.when(invalidLoginCountRepository.findById(1L)).thenReturn(Optional.of(testInvalidLoginCount));
+		Mockito.when(invalidLoginCountRepository.save(new InvalidLoginCount(testUser, 0))).thenReturn(testInvalidLoginCountReset);
+
+		loginService.runSuccessfulAuthenticationProcedure(authenticationSuccessEvent);
+
+		Mockito.verify(userRepository).findByUsername("Testy");
+		Mockito.verify(invalidLoginCountRepository).findById(1L);
+		Mockito.verify(invalidLoginCountRepository).save(new InvalidLoginCount(testUser, 0));
+
+		Mockito.verifyNoMoreInteractions(userRepository, invalidLoginCountRepository);
 	}
 
 	@Test
-	void resetFailedAttemptsIfNecessary() {
+	void resetFailedAttemptsIfNecessary_ResetNotNecessary_NoLoginCount() {
+		User testUser = new User();
+		testUser.setId(1L);
+		testUser.setUsername("Testy");
+		testUser.setPassword("test");
+		testUser.setEmailAddress("test@testmail.com");
+
+		InvalidLoginCount testInvalidLoginCount = new InvalidLoginCount(testUser, 0);
+
+
+		// Test Logic
+		Mockito.when(userRepository.findByUsername("Testy")).thenReturn(Optional.of(testUser));
+		Mockito.when(invalidLoginCountRepository.findById(1L)).thenReturn(Optional.empty());
+		Mockito.when(invalidLoginCountRepository.save(new InvalidLoginCount(testUser, 0))).thenReturn(testInvalidLoginCount);
+
+		loginService.runSuccessfulAuthenticationProcedure(authenticationSuccessEvent);
+
+		Mockito.verify(userRepository).findByUsername("Testy");
+		Mockito.verify(invalidLoginCountRepository).findById(1L);
+		Mockito.verify(invalidLoginCountRepository).save(new InvalidLoginCount(testUser, 0));
+
+		Mockito.verifyNoMoreInteractions(userRepository, invalidLoginCountRepository);
+	}
+
+	@Test
+	void resetFailedAttemptsIfNecessary_ResetNotNecessary_LoginCountIsZero() {
+		User testUser = new User();
+		testUser.setId(1L);
+		testUser.setUsername("Testy");
+		testUser.setPassword("test");
+		testUser.setEmailAddress("test@testmail.com");
+
+		InvalidLoginCount testInvalidLoginCount = new InvalidLoginCount(testUser, 0);
+
+
+		// Test Logic
+		Mockito.when(userRepository.findByUsername("Testy")).thenReturn(Optional.of(testUser));
+		Mockito.when(invalidLoginCountRepository.findById(1L)).thenReturn(Optional.of(testInvalidLoginCount));
+
+		loginService.runSuccessfulAuthenticationProcedure(authenticationSuccessEvent);
+
+		Mockito.verify(userRepository).findByUsername("Testy");
+		Mockito.verify(invalidLoginCountRepository).findById(1L);
+
+		Mockito.verifyNoMoreInteractions(userRepository, invalidLoginCountRepository);
 	}
 }
