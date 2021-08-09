@@ -71,6 +71,12 @@
 			<artifactId>greenmail-junit4</artifactId>
 			<version>1.6.4</version>
 			<scope>test</scope>
+			<!-- https://mvnrepository.com/artifact/org.camunda.bpm.extension/camunda-bpm-mail-core -->
+		</dependency>
+		<dependency>
+			<groupId>org.camunda.bpm.extension</groupId>
+			<artifactId>camunda-bpm-mail-core</artifactId>
+			<version>1.3.0</version>
 		</dependency>
 
 	</dependencies>

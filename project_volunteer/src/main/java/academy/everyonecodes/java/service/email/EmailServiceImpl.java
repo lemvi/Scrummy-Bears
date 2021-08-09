@@ -46,8 +46,8 @@ public class EmailServiceImpl implements EmailService {
     //not sure about the exception IntelliJ provided here. https://www.baeldung.com/spring-email: says to maybe catch SendFailedException ??
     @Override
     public void sendMessageWithAttachment(String to) throws MessagingException {
-        MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        MimeMessage mimeMessage = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
         //helper.setFrom("scrummybears08@gmail.com");
         helper.setTo(to);
@@ -60,6 +60,6 @@ public class EmailServiceImpl implements EmailService {
 
         helper.addAttachment("Logo Scrummy Bears.jpg", file);
 
-        emailSender.send(message);
+        emailSender.send(mimeMessage);
     }
 }
