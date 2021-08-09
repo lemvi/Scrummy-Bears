@@ -10,6 +10,7 @@ public class LoginEndpoint {
 
 	@GetMapping
 	public String getMessage() {
-		return "It worked";
+		// TODO: Call Method to show your own profile
+		return "You were logged in";
 	}
 }
