@@ -48,9 +48,6 @@ public class LoginService {
 		if (userPrincipal != null) {
 			String username = userPrincipal.getUsername();
 
-			// TODO: Remove after Testing
-			System.out.println(username + " has successfully logged in!");
-
 			resetFailedAttemptsIfNecessary(username);
 
 			LOG_LOGIN_SUCCESS.debug(username + " has successfully logged in!");
@@ -98,9 +95,6 @@ public class LoginService {
 	}
 
 	private void resetFailedAttemptsIfNecessary(String username) {
-		// TODO: Remove following line after testing
-		System.out.println("Checking Login attempts and resetting.");
-
 		Optional<User> optUser = userRepository.findByUsername(username);
 		if (optUser.isPresent()) {
 			User user = optUser.get();
@@ -112,9 +106,6 @@ public class LoginService {
 	}
 
 	private void resetFailedAttempts(InvalidLoginCount invalidLoginCount) {
-		// TODO: Remove following line after testing
-		System.out.println("Reset Failed Attempts");
-
 		invalidLoginCount.setInvalidAttempts(0);
 		invalidLoginCountRepository.save(invalidLoginCount);
 	}
