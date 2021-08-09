@@ -1,8 +1,12 @@
 package academy.everyonecodes.java.data;
 
+import org.hibernate.validator.constraints.Length;
+import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -18,7 +22,7 @@ public class User
     @Column(unique = true)
     @NotEmpty
     @Size(min=1, max=30, message = "Must have 1-30 characters")
-    private String username;            // possibilities min./max., no special chars
+    private String username;
 
     @NotEmpty
     @Size(min=1, max=100, message = "Must have 1-100 characters")
@@ -37,7 +41,7 @@ public class User
 
     private LocalDate dateOfBirth;
 
-    @Size(max=10, message = "Must have 10 characters")
+    @Size(max=10, message = "Must have a maximum of 10 characters")
     private String postalCode;
 
     @Size(max=85, message = "Must have 1-85 characters")
