@@ -3,28 +3,25 @@ package academy.everyonecodes.java;
 
 import academy.everyonecodes.java.data.UserDTO;
 import academy.everyonecodes.java.service.ViewerEditorService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.util.Assert;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.Optional;
 import java.util.Set;
+
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+//TODO: Did not work, needs more research how to test a secured Endpoint & with Principal.
 /*
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+
 public class ViewerEditorEndpointTest {
+
     @Autowired
     TestRestTemplate template;
     @MockBean
@@ -32,25 +29,26 @@ public class ViewerEditorEndpointTest {
     @MockBean
     Principal principal;
 
-    @Test
-    void getAccountInfo_found_test() {
-        String input = "test";
+
+
+
+        @Test
+        @WithMockUser(username = "test", password = "test", authorities = "ROLE_INDIVIDUAL")
+        void getAccountInfo_found_test() {
+            String input = "test";
         String url = "/account/";
-
         UserDTO userdto = new UserDTO("test", "test","test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
-
-        //Principal mockPrincipal = Mockito.mock(Principal.class);
-        Mockito.when(principal.getName()).thenReturn(input);
+        //Principal principal = Mockito.mock(Principal.class);
+        //Mockito.when(principal.getName()).thenReturn(input);
         //Mockito.when(viewerEditorService.getAccountInfo(input, principal)).thenReturn(Optional.of(userdto));
-
         template.getForObject(url + input, UserDTO.class);
-
-        Mockito.verify(principal).getName();
-        Mockito.verify(viewerEditorService).getAccountInfo(input, principal);
+        //Mockito.verify(principal).getName();
+        Mockito.verify(viewerEditorService).getAccountInfo(input);
 
 
     }
     @Test
+    @WithMockUser(username = "test", password = "test", authorities = "ROLE_INDIVIDUAL")
     void getAccountInfo_notFound_test() {
         String input = "test";
         String url = "/account/";
@@ -65,16 +63,17 @@ public class ViewerEditorEndpointTest {
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test", roles = {"INDIVIDUAL"})
     void editAccountInfo_found_test() {
         String input = "test";
         String url = "/account/";
         UserDTO userdto = new UserDTO("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
-        Mockito.when(principal.getName()).thenReturn(input);
-        Mockito.when(viewerEditorService.editAccountInfo(input, userdto, principal)).thenReturn(Optional.of(userdto));
+        //Mockito.when(principal.getName()).thenReturn(input);
+        //Mockito.when(viewerEditorService.editAccountInfo(input, userdto, principal)).thenReturn(Optional.of(userdto));
         template.put(url + input, userdto);
-        Mockito.verify(principal).getName();
-        Mockito.verify(viewerEditorService).editAccountInfo(input, userdto, principal);
-    }
+        //Mockito.verify(principal).getName();
+        Mockito.verify(viewerEditorService).editAccountInfo(input, userdto);
+    }/*
     @Test
     void editAccountInfo_notFound_test() {
         String input = "test";

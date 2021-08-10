@@ -3,6 +3,7 @@ package academy.everyonecodes.java.service;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.UserDTO;
 import academy.everyonecodes.java.data.UserRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,7 @@ public class ViewerEditorService {
             userEdited.setId(userDB.getId());
             userEdited.setPassword(passwordEncoder.encode(userEdited.getPassword()));
             User user = userRepository.save(userEdited);
-            return  Optional.of(userToUserDTOTranslator.translateToDTO(user));
+            return  Optional.of(userToUserDTOTranslator.translateToDTO(userEdited));
         }
         return Optional.empty();
     }
