@@ -25,16 +25,9 @@ class RoleServiceTest {
     private Role mockRole = new Role();
 
     @Test
-    void save() {
-        roleService.save(mockRole);
-        Mockito.verify(roleRepository)
-        .save(mockRole);
+    void saveAllRolesInDB() {
+        //TODO
     }
 
-    @Test
-    void findByRole() {
-        roleService.findByRole(mockRole.getRole());
-        Mockito.verify(roleRepository)
-                .findByRole(mockRole.getRole());
-    }
+
 }

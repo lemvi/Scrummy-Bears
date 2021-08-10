@@ -1,12 +1,15 @@
 package academy.everyonecodes.java.service;
 
+import academy.everyonecodes.java.data.CompanyDTO;
 import academy.everyonecodes.java.data.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.User;
 import org.springframework.stereotype.Service;
 
 @Service
-public class IndividualVolunteerDTOTranslator {
-    public User toUser(IndividualVolunteerDTO individualVolunteerDTO) {
+public class DtoTranslator
+{
+    public User IndividualVolunteerToUser(IndividualVolunteerDTO individualVolunteerDTO)
+    {
         return new User(
                 trimProperty(individualVolunteerDTO.getUsername()),
                 trimProperty(individualVolunteerDTO.getPassword()),
@@ -21,6 +24,23 @@ public class IndividualVolunteerDTOTranslator {
                 trimProperty(individualVolunteerDTO.getTelephoneNumber()),
                 trimProperty(individualVolunteerDTO.getDescription()),
                 individualVolunteerDTO.getRoles()
+        );
+    }
+
+    public User CompanyToUser(CompanyDTO companyDTO)
+    {
+        return new User(
+                trimProperty(companyDTO.getUsername()),
+                trimProperty(companyDTO.getPassword()),
+                trimProperty(companyDTO.getCompanyName()),
+                trimProperty(companyDTO.getPostalCode()),
+                trimProperty(companyDTO.getCity()),
+                trimProperty(companyDTO.getStreet()),
+                trimProperty(companyDTO.getStreetNumber()),
+                trimProperty(companyDTO.getEmailAddress()),
+                trimProperty(companyDTO.getTelephoneNumber()),
+                trimProperty(companyDTO.getDescription()),
+                companyDTO.getRoles()
         );
     }
 
