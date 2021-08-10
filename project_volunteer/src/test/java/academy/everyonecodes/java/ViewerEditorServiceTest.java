@@ -4,7 +4,7 @@ import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.UserDTO;
 import academy.everyonecodes.java.data.UserRepository;
-import academy.everyonecodes.java.service.UserToUserDTOTranslator;
+import academy.everyonecodes.java.service.UserAndSkillTranslator;
 import academy.everyonecodes.java.service.ViewerEditorService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ public class ViewerEditorServiceTest {
     @Autowired
     ViewerEditorService viewerEditorService;
     @MockBean
-    UserToUserDTOTranslator userToUserDTOTranslator;
+    UserAndSkillTranslator userAndSkillTranslator;
     @MockBean
     UserRepository userRepository;
     @MockBean
@@ -38,14 +38,14 @@ public class ViewerEditorServiceTest {
         UserDTO userdto = new UserDTO("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
 
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
-        Mockito.when(userToUserDTOTranslator.translateToDTO(user)).thenReturn(userdto);
+        Mockito.when(userAndSkillTranslator.translateToUserDTO(user)).thenReturn(userdto);
         Mockito.when(principal.getName()).thenReturn(input);
         Optional<UserDTO> oUserDTO = viewerEditorService.getAccountInfo(input, principal);
 
        Assertions.assertEquals(oUserDTO, Optional.of(userdto));
        Mockito.verify(principal).getName();
         Mockito.verify(userRepository).findByUsername(input);
-        Mockito.verify(userToUserDTOTranslator).translateToDTO(user);
+        Mockito.verify(userAndSkillTranslator).translateToUserDTO(user);
     }
     @Test
     void getAccountInfo_notFound_test() {
@@ -55,7 +55,7 @@ public class ViewerEditorServiceTest {
 
         viewerEditorService.getAccountInfo(input, principal);
         Mockito.verify(userRepository).findByUsername(input);
-        Mockito.verifyNoInteractions(userToUserDTOTranslator);
+        Mockito.verifyNoInteractions(userAndSkillTranslator);
     }
 
     @Test
@@ -64,8 +64,8 @@ public class ViewerEditorServiceTest {
         User user = new User("test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role()));
         UserDTO userdto = new UserDTO("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role()));
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
-        Mockito.when(userToUserDTOTranslator.translateToUser(userdto)).thenReturn(user);
-        Mockito.when(userToUserDTOTranslator.translateToDTO(user)).thenReturn(userdto);
+        Mockito.when(userAndSkillTranslator.translateToUser(userdto)).thenReturn(user);
+        Mockito.when(userAndSkillTranslator.translateToUserDTO(user)).thenReturn(userdto);
         Mockito.when(principal.getName()).thenReturn(input);
 
 
@@ -73,8 +73,8 @@ public class ViewerEditorServiceTest {
 
         viewerEditorService.editAccountInfo(input, userdto, principal);
         Mockito.verify(userRepository).findByUsername(input);
-        Mockito.verify(userToUserDTOTranslator).translateToUser(userdto);
-        Mockito.verify(userToUserDTOTranslator).translateToDTO(user);
+        Mockito.verify(userAndSkillTranslator).translateToUser(userdto);
+        Mockito.verify(userAndSkillTranslator).translateToUserDTO(user);
         Mockito.verify(userRepository).save(user);
     }
     @Test
@@ -88,7 +88,7 @@ public class ViewerEditorServiceTest {
         viewerEditorService.editAccountInfo(input, userdto, principal);
 
         Mockito.verify(userRepository).findByUsername(input);
-        Mockito.verifyNoInteractions(userToUserDTOTranslator);
+        Mockito.verifyNoInteractions(userAndSkillTranslator);
         Mockito.verifyNoMoreInteractions(userRepository);
     }
     @Test
@@ -104,7 +104,7 @@ public class ViewerEditorServiceTest {
         viewerEditorService.editAccountInfo(input, userFalseUsername, principal);
 
         Mockito.verify(userRepository).findByUsername(input);
-        Mockito.verifyNoInteractions(userToUserDTOTranslator);
+        Mockito.verifyNoInteractions(userAndSkillTranslator);
         Mockito.verifyNoMoreInteractions(userRepository);
     }
 }
