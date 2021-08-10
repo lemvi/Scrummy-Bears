@@ -47,7 +47,7 @@ public class UserService
         return save(user);
     }
 
-    public User save(User user)
+    private User save(User user)
     {
         user.setPassword(encryptPasswordFromUser(user));
         return userRepository.save(user);
@@ -96,7 +96,7 @@ public class UserService
 
     private void throwBadRequest()
     {
-        throw new HttpStatusCodeException(HttpStatus.BAD_REQUEST, "BAD_REQUEST")
+        throw new HttpStatusCodeException(HttpStatus.BAD_REQUEST, "BAD_REQUEST: Roles are not set correctly")
         {
         };
     }

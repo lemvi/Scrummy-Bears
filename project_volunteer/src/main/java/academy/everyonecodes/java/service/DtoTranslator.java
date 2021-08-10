@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class DtoTranslator
 {
-    public User IndividualVolunteerToUser(IndividualVolunteerDTO individualVolunteerDTO)
+    protected User IndividualVolunteerToUser(IndividualVolunteerDTO individualVolunteerDTO)
     {
         return new User(
                 trimProperty(individualVolunteerDTO.getUsername()),
@@ -27,7 +27,7 @@ public class DtoTranslator
         );
     }
 
-    public User CompanyToUser(CompanyDTO companyDTO)
+    protected User CompanyToUser(CompanyDTO companyDTO)
     {
         return new User(
                 trimProperty(companyDTO.getUsername()),

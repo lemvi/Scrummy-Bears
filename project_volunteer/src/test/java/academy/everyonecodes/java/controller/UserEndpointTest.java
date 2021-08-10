@@ -49,7 +49,7 @@ class UserEndpointTest
                 );
 
 
-        String actual = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actual = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected200OK, actual);
     }
@@ -68,7 +68,7 @@ class UserEndpointTest
                 );
 
 
-        String actual = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actual = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected200OK, actual);
     }
@@ -94,12 +94,12 @@ class UserEndpointTest
                 );
 
 
-        String actual = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actual = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actual);
 
         user.setUsername("ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf");
-        String actualTooLong = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actualTooLong = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actualTooLong);
     }
@@ -125,12 +125,12 @@ class UserEndpointTest
                 );
 
 
-        String actualEmpty = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actualEmpty = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actualEmpty);
 
         user.setPassword("ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf");
-        String actualTooLong = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actualTooLong = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actualTooLong);
     }
@@ -156,12 +156,12 @@ class UserEndpointTest
                 );
 
 
-        String actualEmpty = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actualEmpty = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actualEmpty);
 
         user.setFirstNamePerson("ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf");
-        String actualTooLong = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actualTooLong = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actualTooLong);
     }
@@ -187,12 +187,12 @@ class UserEndpointTest
                 );
 
 
-        String actualEmpty = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actualEmpty = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actualEmpty);
 
         user.setLastNamePerson("ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf");
-        String actualTooLong = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actualTooLong = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actualTooLong);
     }
@@ -218,7 +218,7 @@ class UserEndpointTest
                 );
 
 
-        String actual = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actual = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actual);
     }
@@ -244,7 +244,7 @@ class UserEndpointTest
                 );
 
 
-        String actual = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actual = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actual);
     }
@@ -270,7 +270,7 @@ class UserEndpointTest
                 );
 
 
-        String actual = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actual = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actual);
     }
@@ -296,7 +296,7 @@ class UserEndpointTest
                 );
 
 
-        String actual = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actual = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actual);
     }
@@ -322,7 +322,7 @@ class UserEndpointTest
                 );
 
 
-        String actual = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actual = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actual);
     }
@@ -348,12 +348,12 @@ class UserEndpointTest
                 );
 
 
-        String actualEmpty = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actualEmpty = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actualEmpty);
 
         user.setEmailAddress("email");
-        String actualWrongFormat = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actualWrongFormat = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actualWrongFormat);
     }
@@ -379,7 +379,7 @@ class UserEndpointTest
                 );
 
 
-        String actual = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actual = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actual);
     }
@@ -412,7 +412,7 @@ class UserEndpointTest
                 );
 
 
-        String actual = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actual = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actual);
     }
@@ -423,7 +423,7 @@ class UserEndpointTest
         IndividualVolunteerDTO user = new IndividualVolunteerDTO();
 
 
-        String actual = restTemplate.postForEntity("/register/individual", user, User.class)
+        String actual = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actual);
     }
