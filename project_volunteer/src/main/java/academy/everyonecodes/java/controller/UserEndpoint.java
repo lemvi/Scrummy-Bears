@@ -21,6 +21,6 @@ public class UserEndpoint {
 
     @PostMapping("/individual")
     User saveIndividual(@RequestBody @Valid IndividualVolunteerDTO individualVolunteerDTO) {
-        return userService.translateIndividualVolunteerDtoAndSaveUser(individualVolunteerDTO);
+        return userService.translateIndividualVolunteerDTOAndSaveUser(individualVolunteerDTO);
     }
 }

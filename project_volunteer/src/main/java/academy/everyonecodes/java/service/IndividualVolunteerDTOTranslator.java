@@ -6,21 +6,28 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class IndividualVolunteerDTOTranslator {
-    public User translateDTOtoUser(IndividualVolunteerDTO individualVolunteerDTO) {
+    public User toUser(IndividualVolunteerDTO individualVolunteerDTO) {
         return new User(
-                individualVolunteerDTO.getUsername().trim(),
-                individualVolunteerDTO.getPassword().trim(),
-                individualVolunteerDTO.getFirstNamePerson().trim(),
-                individualVolunteerDTO.getLastNamePerson().trim(),
+                trimProperty(individualVolunteerDTO.getUsername()),
+                trimProperty(individualVolunteerDTO.getPassword()),
+                trimProperty(individualVolunteerDTO.getFirstNamePerson()),
+                trimProperty(individualVolunteerDTO.getLastNamePerson()),
                 individualVolunteerDTO.getDateOfBirth(),
-                individualVolunteerDTO.getPostalCode().trim(),
-                individualVolunteerDTO.getCity().trim(),
-                individualVolunteerDTO.getStreet().trim(),
-                individualVolunteerDTO.getStreetNumber().trim(),
-                individualVolunteerDTO.getEmailAddress().trim(),
-                individualVolunteerDTO.getTelephoneNumber().trim(),
-                individualVolunteerDTO.getDescription().trim(),
+                trimProperty(individualVolunteerDTO.getPostalCode()),
+                trimProperty(individualVolunteerDTO.getCity()),
+                trimProperty(individualVolunteerDTO.getStreet()),
+                trimProperty(individualVolunteerDTO.getStreetNumber()),
+                trimProperty(individualVolunteerDTO.getEmailAddress()),
+                trimProperty(individualVolunteerDTO.getTelephoneNumber()),
+                trimProperty(individualVolunteerDTO.getDescription()),
                 individualVolunteerDTO.getRoles()
         );
+    }
+
+    private String trimProperty(String property)
+    {
+        if (property != null)
+            property = property.trim();
+        return property;
     }
 }

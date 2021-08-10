@@ -14,3 +14,5 @@ security:
       role: "ROLE_INDIVIDUAL"
     - id: 3
       role: "ROLE_COMPANY"
+  minIdSum: 1
+  maxIdSum: 3
