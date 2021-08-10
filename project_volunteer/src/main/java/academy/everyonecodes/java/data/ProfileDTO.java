@@ -12,6 +12,7 @@ public class ProfileDTO
     private String companyName;
     private Integer age;
     private String description;
+    private double rating;
 
     public ProfileDTO()
     {
@@ -24,6 +25,15 @@ public class ProfileDTO
         this.companyName = companyName;
         this.age = age;
         this.description = description;
+    }
+
+    public ProfileDTO(String username, String fullName, String companyName, Integer age, String description, double rating) {
+        this.username = username;
+        this.fullName = fullName;
+        this.companyName = companyName;
+        this.age = age;
+        this.description = description;
+        this.rating = rating;
     }
 
     public String getUsername()
@@ -74,6 +84,10 @@ public class ProfileDTO
     public void setDescription(String description)
     {
         this.description = description;
+    }
+
+    public double getRating() {
+        return rating;
     }
 
     @Override
