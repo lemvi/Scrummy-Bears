@@ -70,6 +70,8 @@ public class User
     {
     }
 
+
+
     public User(String username, String password, String firstNamePerson, String lastNamePerson, String companyName, LocalDate dateOfBirth, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
     {
         this.username = username;
@@ -113,6 +115,15 @@ public class User
         this.companyName = companyName;
         this.dateOfBirth = dateOfBirth;
         this.description = description;
+    }
+
+    public User(String username, String password, String companyName, String emailAddress, Set<Role> roles)
+    {
+        this.username = username;
+        this.password = password;
+        this.companyName = companyName;
+        this.emailAddress = emailAddress;
+        this.roles = roles;
     }
 
     public User(String username, String password, String firstNamePerson, String lastNamePerson, String emailAddress, Set<Role> roles)
