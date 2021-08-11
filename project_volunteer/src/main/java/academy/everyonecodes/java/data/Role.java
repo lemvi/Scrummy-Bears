@@ -15,6 +15,7 @@ public class Role {
 
     public Role() {}
 
+    // TODO: Potentially Remove Changes (Created this Constructor for Testing, check if really necessary if finished)
     public Role(Long id, String role) {
         this.id = id;
         this.role = role;
