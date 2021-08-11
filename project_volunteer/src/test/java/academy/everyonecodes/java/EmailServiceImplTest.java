@@ -58,7 +58,9 @@ public class EmailServiceImplTest {
 
     private String to = "to@localhost";
 
-    /*SOMETING WRONG WITH THIS:
+    //TO DO: REWRITE TEST WITH ATTACHMENT
+
+    /* SOMETHING WRONG WITH THIS:
     @Before
     public void before() throws MessagingException, URISyntaxException {
         greenMail.setUser("test@camunda.com", "bpmn");
@@ -88,7 +90,7 @@ public class EmailServiceImplTest {
 
  */
 
-/*SOMETING WRONG WITH THIS:
+/*SOMETHING WRONG WITH THIS:
     @Test
     public void messageWithAttachment() throws MessagingException {
         emailServiceImpl.sendMessageWithAttachment(to);
