@@ -95,6 +95,14 @@ public class User
         this.roles = roles;
     }
 
+    public User(String username, String firstNamePerson, String lastNamePerson, String companyName)
+    {
+        this.username = username;
+        this.firstNamePerson = firstNamePerson;
+        this.lastNamePerson = lastNamePerson;
+        this.companyName = companyName;
+    }
+
     public User(String username, String password, String firstNamePerson, String lastNamePerson, LocalDate dateOfBirth, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
     {
         this.username = username;

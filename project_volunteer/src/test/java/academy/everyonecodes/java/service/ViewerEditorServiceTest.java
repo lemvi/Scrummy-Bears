@@ -1,10 +1,10 @@
-package academy.everyonecodes.java;
+package academy.everyonecodes.java.service;
 
+import academy.everyonecodes.java.data.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
-import academy.everyonecodes.java.data.UserDTO;
 import academy.everyonecodes.java.data.UserRepository;
-import academy.everyonecodes.java.service.UserToUserDTOTranslator;
+import academy.everyonecodes.java.service.UserToIndividualVolunteerDTOTranslator;
 import academy.everyonecodes.java.service.ViewerEditorService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ public class ViewerEditorServiceTest {
     @Autowired
     ViewerEditorService viewerEditorService;
     @MockBean
-    UserToUserDTOTranslator userToUserDTOTranslator;
+    UserToIndividualVolunteerDTOTranslator userToIndividualVolunteerDTOTranslator;
     @MockBean
     UserRepository userRepository;
     @MockBean
@@ -35,17 +35,17 @@ public class ViewerEditorServiceTest {
     void getAccountInfo_found_usernameISEqual_test() {
         String input = "test";
         User user = new User( "test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
-        UserDTO userdto = new UserDTO("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
+        IndividualVolunteerDTO individualVolunteerDTO = new IndividualVolunteerDTO("test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
 
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
-        Mockito.when(userToUserDTOTranslator.translateToDTO(user)).thenReturn(userdto);
+        Mockito.when(userToIndividualVolunteerDTOTranslator.translateToDTO(user)).thenReturn(individualVolunteerDTO);
         Mockito.when(principal.getName()).thenReturn(input);
-        Optional<UserDTO> oUserDTO = viewerEditorService.getAccountInfo(input, principal);
+        Optional<IndividualVolunteerDTO> oIndividualVolunteerDTO = viewerEditorService.getAccountInfo(input, principal);
 
-       Assertions.assertEquals(oUserDTO, Optional.of(userdto));
+       Assertions.assertEquals(oIndividualVolunteerDTO, Optional.of(individualVolunteerDTO));
        Mockito.verify(principal).getName();
         Mockito.verify(userRepository).findByUsername(input);
-        Mockito.verify(userToUserDTOTranslator).translateToDTO(user);
+        Mockito.verify(userToIndividualVolunteerDTOTranslator).translateToDTO(user);
     }
     @Test
     void getAccountInfo_notFound_test() {
@@ -55,46 +55,45 @@ public class ViewerEditorServiceTest {
 
         viewerEditorService.getAccountInfo(input, principal);
         Mockito.verify(userRepository).findByUsername(input);
-        Mockito.verifyNoInteractions(userToUserDTOTranslator);
+        Mockito.verifyNoInteractions(userToIndividualVolunteerDTOTranslator);
     }
 
     @Test
     void editAccountInfo_UserFOUND_usernameISEqual_test() {
         String input = "test";
         User user = new User("test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role()));
-        UserDTO userdto = new UserDTO("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role()));
+        IndividualVolunteerDTO individualVolunteerDTO = new IndividualVolunteerDTO("test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role()));
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
-        Mockito.when(userToUserDTOTranslator.translateToUser(userdto)).thenReturn(user);
-        Mockito.when(userToUserDTOTranslator.translateToDTO(user)).thenReturn(userdto);
+        Mockito.when(userToIndividualVolunteerDTOTranslator.translateToUser(individualVolunteerDTO)).thenReturn(user);
+        Mockito.when(userToIndividualVolunteerDTOTranslator.translateToDTO(user)).thenReturn(individualVolunteerDTO);
         Mockito.when(principal.getName()).thenReturn(input);
 
 
         Mockito.when(userRepository.save(user)).thenReturn(user);
 
-        viewerEditorService.editAccountInfo(input, userdto, principal);
+        viewerEditorService.editAccountInfo(input, individualVolunteerDTO, principal);
         Mockito.verify(userRepository).findByUsername(input);
-        Mockito.verify(userToUserDTOTranslator).translateToUser(userdto);
-        Mockito.verify(userToUserDTOTranslator).translateToDTO(user);
+        Mockito.verify(userToIndividualVolunteerDTOTranslator).translateToUser(individualVolunteerDTO);
+        Mockito.verify(userToIndividualVolunteerDTOTranslator).translateToDTO(user);
         Mockito.verify(userRepository).save(user);
     }
-    @Test
-    void editAccountInfo_UserNotFOUND_editAccount_test() {
+    @Test    void editAccountInfo_UserNotFOUND_editAccount_test() {
         String input = "test";
-        UserDTO userdto = new UserDTO("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
+        IndividualVolunteerDTO individualVolunteerDTO = new IndividualVolunteerDTO("test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.empty());
         Mockito.when(principal.getName()).thenReturn(input);
 
 
-        viewerEditorService.editAccountInfo(input, userdto, principal);
+        viewerEditorService.editAccountInfo(input, individualVolunteerDTO, principal);
 
         Mockito.verify(userRepository).findByUsername(input);
-        Mockito.verifyNoInteractions(userToUserDTOTranslator);
+        Mockito.verifyNoInteractions(userToIndividualVolunteerDTOTranslator);
         Mockito.verifyNoMoreInteractions(userRepository);
     }
     @Test
     void editAccount_usernameNotEqual() {
         String input = "test";
-        UserDTO userFalseUsername = new UserDTO("false", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
+        IndividualVolunteerDTO userFalseUsername = new IndividualVolunteerDTO("false", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
         User user = new User("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
 
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
@@ -104,7 +103,7 @@ public class ViewerEditorServiceTest {
         viewerEditorService.editAccountInfo(input, userFalseUsername, principal);
 
         Mockito.verify(userRepository).findByUsername(input);
-        Mockito.verifyNoInteractions(userToUserDTOTranslator);
+        Mockito.verifyNoInteractions(userToIndividualVolunteerDTOTranslator);
         Mockito.verifyNoMoreInteractions(userRepository);
     }
 }
