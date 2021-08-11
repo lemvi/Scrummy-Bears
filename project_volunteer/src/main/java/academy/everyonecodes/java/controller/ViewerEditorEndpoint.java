@@ -17,17 +17,18 @@ public class ViewerEditorEndpoint {
         this.viewerEditorService = viewerEditorService;
     }
 
-    @PutMapping("/{username}")
-    //@PreAuthorize("hasRole('ROLE_VOLUNTEER', 'ROLE_INDIVIDUAL', 'ROLE_COMPANY')")
-    @Secured({"ROLE_INDIVIDUAL", "ROLE_VOLUNTEER","ROLE_COMPANY"})
-    UserDTO editAccountInfo(@PathVariable String username, @RequestBody UserDTO userDTO, Principal principal) {
-        return viewerEditorService.editAccountInfo(username, userDTO, principal).orElse(null);
-    }
     @GetMapping("/{username}")
     //@PreAuthorize("hasAuthority('ROLE_COMPANY')")
-    @Secured({"ROLE_INDIVIDUAL", "ROLE_VOLUNTEER","ROLE_COMPANY"})
-    UserDTO getAccountInfo(@PathVariable String username, Principal principal) {
-            return viewerEditorService.getAccountInfo(username, principal).orElse(null);
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_VOLUNTEER", "ROLE_COMPANY"})
+    UserDTO getAccountInfo(@PathVariable String username) {
+        return viewerEditorService.getAccountInfo(username).orElse(null);
+    }
+
+    @PutMapping("/{username}")
+    //@PreAuthorize("hasRole('ROLE_VOLUNTEER', 'ROLE_INDIVIDUAL', 'ROLE_COMPANY')")
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_VOLUNTEER", "ROLE_COMPANY"})
+    UserDTO editAccountInfo(@PathVariable String username, @RequestBody UserDTO userDTO) {
+        return viewerEditorService.editAccountInfo(username, userDTO).orElse(null);
     }
 }
 

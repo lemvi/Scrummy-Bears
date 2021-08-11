@@ -7,6 +7,12 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.springframework.format.annotation.DateTimeFormat;
 
 
@@ -23,7 +29,7 @@ public class User
     private String username;            // possibilities min./max., no special chars
 
     @NotEmpty
-    @Size(min=1, max=30, message = "Must have 1-30 characters")
+    @Size(min=1, max=100, message = "Must have 1-30 characters")
     private String password;
 
     @NotEmpty
