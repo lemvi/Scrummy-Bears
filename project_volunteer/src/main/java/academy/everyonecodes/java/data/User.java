@@ -1,7 +1,10 @@
 package academy.everyonecodes.java.data;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
@@ -19,58 +22,63 @@ public class User
 
     @Column(unique = true)
     @NotEmpty
-    @Size(min=1, max=30, message = "Must have 1-30 characters")
+    @Size(min = 1, max = 30, message = "Must have 1-30 characters")
     private String username;
 
     @NotEmpty
-    @Size(min=1, max=30, message = "Must have 1-30 characters")
+    @Size(min = 1, max = 100, message = "Must have 1-100 characters")
     private String password;
 
-    @NotEmpty
-    @Size(min=1, max=30, message = "Must have 1-30 characters")
+
+    @Size(min = 1, max = 30, message = "Must have 1-30 characters")
     private String firstNamePerson;
 
-    @NotEmpty
-    @Size(min=1, max=30, message = "Must have 1-30 characters")
+
+    @Size(min = 1, max = 30, message = "Must have 1-30 characters")
     private String lastNamePerson;
 
-    @Size(min=1, max=30, message = "Must have 1-30 characters")
+    @Size(max = 30, message = "Must have 1-30 characters")
     private String companyName;
 
+    @Past
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateOfBirth;
 
-    @Size(min=1, max=10, message = "Must have 1-10 characters")
+    @Size(max = 10, message = "Must have a maximum of 10 characters")
     private String postalCode;
 
-    @Size(min=1, max=85, message = "Must have 1-85 characters")
+    @Size(max = 85, message = "Must have 1-85 characters")
     private String city;
 
-    @Size(min=1, max=85, message = "Must have 1-20 characters")
+    @Size(max = 85, message = "Must have 1-85 characters")
     private String street;
 
-    @Size(min=1, max=20, message = "Must have 1-20 characters")
+    @Size(max = 20, message = "Must have 1-20 characters")
     private String streetNumber;
 
     @NotEmpty
-    @Size(min=6, max=40, message = "Must have 1-40 characters")
+    @Size(min = 6, max = 40, message = "Must have 6-40 characters")
     @Email
     private String emailAddress;
 
-    @Size(min=3, max=20, message = "Must have 1-20 characters")
+    @Size(min = 3, max = 20, message = "Must have 3-20 characters")
     private String telephoneNumber;
 
-    @Size(max=1000, message = "Maximum of 1000 characters")
+    @Size(max = 1000, message = "Maximum of 1000 characters")
     private String description;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @NotEmpty
     private Set<Role> roles;
 
     public User() {
     }
 
-    public User(String username, String password, String firstNamePerson, String lastNamePerson, String companyName, LocalDate dateOfBirth, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles) {
+
+
+    public User(String username, String password, String firstNamePerson, String lastNamePerson, String companyName, LocalDate dateOfBirth, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
+    {
         this.username = username;
         this.password = password;
         this.firstNamePerson = firstNamePerson;
@@ -87,7 +95,25 @@ public class User
         this.roles = roles;
     }
 
-    public User(String username, String firstNamePerson, String lastNamePerson, String companyName, LocalDate dateOfBirth, String description) {
+    public User(String username, String password, String firstNamePerson, String lastNamePerson, LocalDate dateOfBirth, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
+    {
+        this.username = username;
+        this.password = password;
+        this.firstNamePerson = firstNamePerson;
+        this.lastNamePerson = lastNamePerson;
+        this.dateOfBirth = dateOfBirth;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.street = street;
+        this.streetNumber = streetNumber;
+        this.emailAddress = emailAddress;
+        this.telephoneNumber = telephoneNumber;
+        this.description = description;
+        this.roles = roles;
+    }
+
+    public User(String username, String firstNamePerson, String lastNamePerson, String companyName, LocalDate dateOfBirth, String description)
+    {
         this.username = username;
         this.firstNamePerson = firstNamePerson;
         this.lastNamePerson = lastNamePerson;
@@ -96,11 +122,47 @@ public class User
         this.description = description;
     }
 
-    public User(LocalDate dateOfBirth) {
+    public User(String username, String password, String companyName, String emailAddress, Set<Role> roles)
+    {
+        this.username = username;
+        this.password = password;
+        this.companyName = companyName;
+        this.emailAddress = emailAddress;
+        this.roles = roles;
+    }
+
+    public User(String username, String password, String firstNamePerson, String lastNamePerson, String emailAddress, Set<Role> roles)
+    {
+        this.username = username;
+        this.password = password;
+        this.firstNamePerson = firstNamePerson;
+        this.lastNamePerson = lastNamePerson;
+        this.emailAddress = emailAddress;
+        this.roles = roles;
+    }
+
+    public User(LocalDate dateOfBirth)
+    {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Long getId() {
+    public User(String username, String password, String companyName, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
+    {
+        this.username = username;
+        this.password = password;
+        this.companyName = companyName;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.street = street;
+        this.streetNumber = streetNumber;
+        this.emailAddress = emailAddress;
+        this.telephoneNumber = telephoneNumber;
+        this.description = description;
+        this.roles = roles;
+    }
+
+    public Long getId()
+    {
         return id;
     }
 
