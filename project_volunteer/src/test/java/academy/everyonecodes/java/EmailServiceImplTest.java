@@ -58,7 +58,7 @@ public class EmailServiceImplTest {
 
     private String to = "to@localhost";
 
-    //TO DO: REWRITE TEST WITH ATTACHMENT
+    //TODO - REWRITE TEST WITH ATTACHMENT IF TIME SOMEWHEN
 
     /* SOMETHING WRONG WITH THIS:
     @Before
