@@ -93,29 +93,45 @@ public class ViewerEditorEndpointTestBeta {
     @Test
     @WithMockUser(username = "test", password = "test", authorities = "ROLE_INDIVIDUAL")
     public void editAccountInfo() throws Exception{
-        String input = "test";
+        String input = "username";
         String url = "/account/";
-        UserDTO userdto = new UserDTO("test", "test","test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test",
-                "test", "test", "test", Set.of(new Role(1L, "ROLE_INDIVIDUAL")));
-        template.put(url + input, userdto);
+        UserDTO userdto = new UserDTO(
+                "username",
+                "pw",
+                "firstName",
+                "lastName",
+                "company",
+                LocalDate.now(),
+                "postalCode",
+                "city",
+                "street",
+                "streetnumber",
+                "email@email.com",
+                "phone",
+                "description",
+                Set.of(new Role(1L, "ROLE_INDIVIDUAL")));
+        //template.put(url + input, userdto);
         //ObjectMapper Obj = new ObjectMapper();
         //String jsonBody = Obj.writeValueAsString(userdto);
 
         String userDtoJson = createJson(userdto);
         System.out.println(userDtoJson);
-
-        /*ObjectMapper mapper = new ObjectMapper();
+/*
+        ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String jsonBody = ow.writeValueAsString(userdto );*/
 
-        // String jsonBody = new Gson().toJson(userdto);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String jsonBody = ow.writeValueAsString(userdto);
+
+ */
+
+         //String jsonBody = new Gson().toJson(userdto);
 
         /*mvc.perform(put(url + input)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());*/
 
-        ResultActions action = mvc.perform(put("/account/test")
+        ResultActions action = mvc.perform(put(url + input)
                         //.with(user("test").password("test").roles("INDIVIDUAL")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userDtoJson));
@@ -184,19 +200,19 @@ public class ViewerEditorEndpointTestBeta {
 
     private String createJson(UserDTO userDto) {
         return "{" +
-                "\"username\": " + userDto.getUsername() + "," +
-                "\"password\": " + userDto.getUsername() + "," +
-                "\"firstNamePerson\": " + userDto.getUsername() + "," +
-                "\"lastNamePerson\": " + userDto.getUsername() + "," +
-                "\"companyName\": " + userDto.getUsername() + "," +
-                "\"dateOfBirth\": " + userDto.getUsername() + "," +
-                "\"postalCode\": " + userDto.getUsername() + "," +
-                "\"city\": " + userDto.getUsername() + "," +
-                "\"street\": " + userDto.getUsername() + "," +
-                "\"streetNumber\": " + userDto.getUsername() + "," +
-                "\"emailAddress\": " + userDto.getUsername() + "," +
-                "\"telephoneNumber\": " + userDto.getUsername() + "," +
-                "\"description\": " + userDto.getUsername() + "," +
+                "\"username\": \"" + userDto.getUsername() + "\"," +
+                "\"password\": \"" + userDto.getPassword() + "\"," +
+                "\"firstNamePerson\": \"" + userDto.getFirstNamePerson() + "\"," +
+                "\"lastNamePerson\": \"" + userDto.getLastNamePerson() + "\"," +
+                "\"companyName\": \"" + userDto.getCompanyName() + "\"," +
+                "\"dateOfBirth\": \"" + userDto.getDateOfBirth() + "\"," +
+                "\"postalCode\": \"" + userDto.getPostalCode() + "\"," +
+                "\"city\": \"" + userDto.getCity() + "\"," +
+                "\"street\": \"" + userDto.getStreet() + "\"," +
+                "\"streetNumber\": \"" + userDto.getStreetNumber() + "\"," +
+                "\"emailAddress\": \"" + userDto.getEmailAddress() + "\"," +
+                "\"telephoneNumber\": \"" + userDto.getTelephoneNumber() + "\"," +
+                "\"description\": \"" + userDto.getDescription() + "\"," +
                 "\"roles\": " + createJsonPartForRoles(userDto.getRoles()) +
                 "}";
     }
@@ -214,8 +230,8 @@ public class ViewerEditorEndpointTestBeta {
     private String createJsonPartForOneRole(Role role) {
         return "{" +
                 "\"id\": " + role.getId() + "," +
-                "\"role\": " + role.getRole() +
-                "}";
+                "\"role\": \"" + role.getRole() +
+                "\"}";
     }
 
 }
