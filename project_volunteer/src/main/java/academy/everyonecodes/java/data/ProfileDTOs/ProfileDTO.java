@@ -5,7 +5,7 @@ import academy.everyonecodes.java.data.Role;
 import java.util.Objects;
 import java.util.Set;
 
-public abstract class ProfileDTOs
+public abstract class ProfileDTO
 {
     private String username;
     private String postalCode;
@@ -17,18 +17,18 @@ public abstract class ProfileDTOs
     private String description;
     private Set<Role> roles;
 
-    public ProfileDTOs()
+    public ProfileDTO()
     {
     }
 
-    public ProfileDTOs(String username, String email, Set<Role> roles)
+    public ProfileDTO(String username, String email, Set<Role> roles)
     {
         this.username = username;
         this.email = email;
         this.roles = roles;
     }
 
-    public ProfileDTOs(String username, String postalCode, String city, String street, String streetNumber, String email, String telephoneNumber, String description, Set<Role> roles)
+    public ProfileDTO(String username, String postalCode, String city, String street, String streetNumber, String email, String telephoneNumber, String description, Set<Role> roles)
     {
         this.username = username;
         this.postalCode = postalCode;
@@ -136,7 +136,7 @@ public abstract class ProfileDTOs
     {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProfileDTOs that = (ProfileDTOs) o;
+        ProfileDTO that = (ProfileDTO) o;
         return Objects.equals(username, that.username) && Objects.equals(postalCode, that.postalCode) && Objects.equals(city, that.city) && Objects.equals(street, that.street) && Objects.equals(streetNumber, that.streetNumber) && Objects.equals(email, that.email) && Objects.equals(telephoneNumber, that.telephoneNumber) && Objects.equals(description, that.description) && Objects.equals(roles, that.roles);
     }
 

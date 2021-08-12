@@ -1,6 +1,9 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.ProfileDTO;
+import academy.everyonecodes.java.data.ProfileDTOs.CompanyProfileDTO;
+import academy.everyonecodes.java.data.ProfileDTOs.IndividualProfileDTO;
+import academy.everyonecodes.java.data.ProfileDTOs.VolunteerProfileDTO;
 import academy.everyonecodes.java.data.User;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +19,7 @@ public class UserToProfileDTOTranslator
         this.ageCalculator = ageCalculator;
     }
 
-    public ProfileDTO toDTO(User user)
+    protected ProfileDTO toDTO(User user)
     {
         return new ProfileDTO(
                 user.getUsername(),
@@ -25,5 +28,55 @@ public class UserToProfileDTOTranslator
                 ageCalculator.calculate(user),
                 user.getDescription()
                 );
+    }
+
+    protected CompanyProfileDTO toCompanyProfileDTO(User user)
+    {
+        return new CompanyProfileDTO(
+                user.getUsername(),
+                user.getPostalCode(),
+                user.getCity(),
+                user.getStreet(),
+                user.getStreetNumber(),
+                user.getEmailAddress(),
+                user.getTelephoneNumber(),
+                user.getDescription(),
+                user.getRoles(),
+                user.getCompanyName()
+        );
+    }
+
+    protected IndividualProfileDTO toIndividualProfileDTO(User user)
+    {
+        return new IndividualProfileDTO(
+                user.getUsername(),
+                user.getPostalCode(),
+                user.getCity(),
+                user.getStreet(),
+                user.getStreetNumber(),
+                user.getEmailAddress(),
+                user.getTelephoneNumber(),
+                user.getDescription(),
+                user.getRoles(),
+                user.getFirstNamePerson() + " " + user.getLastNamePerson(),
+                ageCalculator.calculate(user)
+        );
+    }
+
+    protected VolunteerProfileDTO toVolunteerProfileDTO(User user)
+    {
+        return new VolunteerProfileDTO(
+                user.getUsername(),
+                user.getPostalCode(),
+                user.getCity(),
+                user.getStreet(),
+                user.getStreetNumber(),
+                user.getEmailAddress(),
+                user.getTelephoneNumber(),
+                user.getDescription(),
+                user.getRoles(),
+                user.getFirstNamePerson() + " " + user.getLastNamePerson(),
+                ageCalculator.calculate(user)
+        );
     }
 }
