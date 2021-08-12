@@ -22,6 +22,12 @@ public class Skill {
         this.skill = skill;
     }
 
+    public Skill(Long id, User user, String skill) {
+        this.id = id;
+        this.user = user;
+        this.skill = skill;
+    }
+
     public Skill(String skill) {
         this.skill = skill;
     }
@@ -54,8 +60,8 @@ public class Skill {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Skill skill = (Skill) o;
-        return Objects.equals(id, skill.id) && Objects.equals(user, skill.user) && Objects.equals(skill, skill.skill);
+        Skill skill1 = (Skill) o;
+        return Objects.equals(id, skill1.id) && Objects.equals(user, skill1.user) && Objects.equals(skill, skill1.skill);
     }
 
     @Override

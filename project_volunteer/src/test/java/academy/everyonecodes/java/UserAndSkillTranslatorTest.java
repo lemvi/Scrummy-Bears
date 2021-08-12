@@ -1,5 +1,7 @@
 package academy.everyonecodes.java;
 
+import academy.everyonecodes.java.data.Skill;
+import academy.everyonecodes.java.data.SkillDTO;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.UserDTO;
 import academy.everyonecodes.java.service.UserAndSkillTranslator;
@@ -48,4 +50,33 @@ public class UserAndSkillTranslatorTest {
                         new User("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of())));
     }
 
+    @ParameterizedTest
+    @MethodSource("inputDataThree")
+    void skillToDTO_test(Skill input,SkillDTO expected) {
+
+        SkillDTO result = userAndSkillTranslator.translateToSkillDTO(input);
+        Assertions.assertEquals(expected, result);
+    }
+    private static Stream<Arguments> inputDataThree() {
+        return Stream.of(
+                Arguments.of(
+                        new Skill(new User(), "test"),
+                        new SkillDTO("test"))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("inputDataFour")
+    void dTOToSkill_test(Skill expected,SkillDTO input) {
+
+        Skill result = userAndSkillTranslator.translateToSkill(input);
+        Assertions.assertEquals(expected, result);
+    }
+    private static Stream<Arguments> inputDataFour() {
+        return Stream.of(
+                Arguments.of(
+                        new Skill("test"),
+                        new SkillDTO("test"))
+        );
+    }
 }
