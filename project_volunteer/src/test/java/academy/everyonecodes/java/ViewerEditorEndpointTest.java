@@ -1,12 +1,8 @@
 package academy.everyonecodes.java;
 
+import academy.everyonecodes.java.data.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.Role;
-import academy.everyonecodes.java.data.UserDTO;
 import academy.everyonecodes.java.service.ViewerEditorService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +13,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 
 
 import java.time.LocalDate;
@@ -25,7 +20,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.springframework.test.util.AssertionErrors.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,12 +42,11 @@ public class ViewerEditorEndpointTest {
     public void getAccountInfo() throws Exception {
         String input = "username";
         String url = "/account/";
-        UserDTO userdto = new UserDTO(
+        IndividualVolunteerDTO userdto = new IndividualVolunteerDTO(
                 "username",
                 "pw",
                 "firstName",
                 "lastName",
-                "company",
                 LocalDate.now(),
                 "postalCode",
                 "city",
@@ -78,7 +71,7 @@ public class ViewerEditorEndpointTest {
     public void getAccountInfo_ForbiddenAuthority() throws Exception {
         String input = "username";
         String url = "/account/";
-        UserDTO userdto = new UserDTO("username", "pw", "firstName", "lastName", "company", LocalDate.now(), "postalCode", "city", "street", "streetnumber", "email@email.com", "phone", "description", Set.of(new Role(1L, "ROLE_INDIVIDUAL")));
+        IndividualVolunteerDTO userdto = new IndividualVolunteerDTO("username", "pw", "firstName", "lastName", LocalDate.now(), "postalCode", "city", "street", "streetnumber", "email@email.com", "phone", "description", Set.of(new Role(1L, "ROLE_INDIVIDUAL")));
         Mockito.when(viewerEditorService.getAccountInfo(input)).thenReturn(Optional.of(userdto));
         mvc.perform(get(url + input)
                         .accept(MediaType.APPLICATION_JSON))
@@ -92,12 +85,11 @@ public class ViewerEditorEndpointTest {
     public void editAccountInfo() throws Exception{
         String input = "username";
         String url = "/account/";
-        UserDTO userdto = new UserDTO(
+        IndividualVolunteerDTO userdto = new IndividualVolunteerDTO(
                 "username",
                 "pw",
                 "firstName",
                 "lastName",
-                "company",
                 LocalDate.now(),
                 "postalCode",
                 "city",
@@ -136,12 +128,11 @@ public class ViewerEditorEndpointTest {
     public void editAccountInfo_ForbiddenAuthority() throws Exception{
         String input = "username";
         String url = "/account/";
-        UserDTO userdto = new UserDTO(
+        IndividualVolunteerDTO userdto = new IndividualVolunteerDTO(
                 "username",
                 "pw",
                 "firstName",
                 "lastName",
-                "company",
                 LocalDate.now(),
                 "postalCode",
                 "city",
@@ -176,22 +167,21 @@ public class ViewerEditorEndpointTest {
     }
 
 
-    private String createJson(UserDTO userDto) {
+    private String createJson(IndividualVolunteerDTO individualVolunteerDTO) {
         return "{" +
-                "\"username\": \"" + userDto.getUsername() + "\"," +
-                "\"password\": \"" + userDto.getPassword() + "\"," +
-                "\"firstNamePerson\": \"" + userDto.getFirstNamePerson() + "\"," +
-                "\"lastNamePerson\": \"" + userDto.getLastNamePerson() + "\"," +
-                "\"companyName\": \"" + userDto.getCompanyName() + "\"," +
-                "\"dateOfBirth\": \"" + userDto.getDateOfBirth() + "\"," +
-                "\"postalCode\": \"" + userDto.getPostalCode() + "\"," +
-                "\"city\": \"" + userDto.getCity() + "\"," +
-                "\"street\": \"" + userDto.getStreet() + "\"," +
-                "\"streetNumber\": \"" + userDto.getStreetNumber() + "\"," +
-                "\"emailAddress\": \"" + userDto.getEmailAddress() + "\"," +
-                "\"telephoneNumber\": \"" + userDto.getTelephoneNumber() + "\"," +
-                "\"description\": \"" + userDto.getDescription() + "\"," +
-                "\"roles\": " + createJsonPartForRoles(userDto.getRoles()) +
+                "\"username\": \"" + individualVolunteerDTO.getUsername() + "\"," +
+                "\"password\": \"" + individualVolunteerDTO.getPassword() + "\"," +
+                "\"firstNamePerson\": \"" + individualVolunteerDTO.getFirstNamePerson() + "\"," +
+                "\"lastNamePerson\": \"" + individualVolunteerDTO.getLastNamePerson() + "\"," +
+                "\"dateOfBirth\": \"" + individualVolunteerDTO.getDateOfBirth() + "\"," +
+                "\"postalCode\": \"" + individualVolunteerDTO.getPostalCode() + "\"," +
+                "\"city\": \"" + individualVolunteerDTO.getCity() + "\"," +
+                "\"street\": \"" + individualVolunteerDTO.getStreet() + "\"," +
+                "\"streetNumber\": \"" + individualVolunteerDTO.getStreetNumber() + "\"," +
+                "\"emailAddress\": \"" + individualVolunteerDTO.getEmailAddress() + "\"," +
+                "\"telephoneNumber\": \"" + individualVolunteerDTO.getTelephoneNumber() + "\"," +
+                "\"description\": \"" + individualVolunteerDTO.getDescription() + "\"," +
+                "\"roles\": " + createJsonPartForRoles(individualVolunteerDTO.getRoles()) +
                 "}";
     }
 

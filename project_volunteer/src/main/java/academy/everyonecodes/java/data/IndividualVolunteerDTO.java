@@ -1,36 +1,76 @@
 package academy.everyonecodes.java.data;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 
-public class UserDTO {
+public class IndividualVolunteerDTO {
+    @NotEmpty
+    @Size(min=1, max=30, message = "Must have 1-30 characters")
     private String username;
+
+    @NotEmpty
+    @Size(min=1, max=100, message = "Must have 1-100 characters")
     private String password;
+
+    @NotEmpty
+    @Size(min=1, max=30, message = "Must have 1-30 characters")
     private String firstNamePerson;
+
+    @NotEmpty
+    @Size(min=1, max=30, message = "Must have 1-30 characters")
     private String lastNamePerson;
-    private String companyName;
+
+    @Past
     private LocalDate dateOfBirth;
+
+    @Size(max=10, message = "Must have 10 characters")
     private String postalCode;
+
+    @Size(max=85, message = "Must have 1-85 characters")
     private String city;
+
+    @Size(max=85, message = "Must have 1-85 characters")
     private String street;
+
+    @Size(max=20, message = "Must have 1-20 characters")
     private String streetNumber;
+
+    @NotEmpty
+    @Size(min=6, max=40, message = "Must have 6-40 characters")
+    @Email
     private String emailAddress;
+
+    @Size(min=3, max=20, message = "Must have 3-20 characters")
     private String telephoneNumber;
+
+    @Size(max=1000, message = "Maximum of 1000 characters")
     private String description;
+
+    @NotEmpty
     private Set<Role> roles;
 
-
-    public UserDTO() {
+    public IndividualVolunteerDTO() {
     }
 
-    public UserDTO(String username, String password, String firstNamePerson, String lastNamePerson, String companyName, LocalDate dateOfBirth, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles) {
+    public IndividualVolunteerDTO(String username, String password, String firstNamePerson, String lastNamePerson, String emailAddress, Set<Role> roles) {
         this.username = username;
         this.password = password;
-        this.roles = roles;
         this.firstNamePerson = firstNamePerson;
         this.lastNamePerson = lastNamePerson;
-        this.companyName = companyName;
+        this.emailAddress = emailAddress;
+        this.roles = roles;
+    }
+
+    public IndividualVolunteerDTO(String username, String password, String firstNamePerson, String lastNamePerson, LocalDate dateOfBirth, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles) {
+        this.username = username;
+        this.password = password;
+        this.firstNamePerson = firstNamePerson;
+        this.lastNamePerson = lastNamePerson;
         this.dateOfBirth = dateOfBirth;
         this.postalCode = postalCode;
         this.city = city;
@@ -39,18 +79,15 @@ public class UserDTO {
         this.emailAddress = emailAddress;
         this.telephoneNumber = telephoneNumber;
         this.description = description;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -75,14 +112,6 @@ public class UserDTO {
 
     public void setLastNamePerson(String lastNamePerson) {
         this.lastNamePerson = lastNamePerson;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String company) {
-        this.companyName = company;
     }
 
     public LocalDate getDateOfBirth() {
@@ -149,17 +178,25 @@ public class UserDTO {
         this.description = description;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserDTO userDTO = (UserDTO) o;
-        return Objects.equals(username, userDTO.username) && Objects.equals(password, userDTO.password) && Objects.equals(firstNamePerson, userDTO.firstNamePerson) && Objects.equals(lastNamePerson, userDTO.lastNamePerson) && Objects.equals(companyName, userDTO.companyName) && Objects.equals(dateOfBirth, userDTO.dateOfBirth) && Objects.equals(postalCode, userDTO.postalCode) && Objects.equals(city, userDTO.city) && Objects.equals(street, userDTO.street) && Objects.equals(streetNumber, userDTO.streetNumber) && Objects.equals(emailAddress, userDTO.emailAddress) && Objects.equals(telephoneNumber, userDTO.telephoneNumber) && Objects.equals(description, userDTO.description) && Objects.equals(roles, userDTO.roles);
+        IndividualVolunteerDTO that = (IndividualVolunteerDTO) o;
+        return Objects.equals(getUsername(), that.getUsername()) && Objects.equals(getPassword(), that.getPassword()) && Objects.equals(getFirstNamePerson(), that.getFirstNamePerson()) && Objects.equals(getLastNamePerson(), that.getLastNamePerson()) && Objects.equals(getDateOfBirth(), that.getDateOfBirth()) && Objects.equals(getPostalCode(), that.getPostalCode()) && Objects.equals(getCity(), that.getCity()) && Objects.equals(getStreet(), that.getStreet()) && Objects.equals(getStreetNumber(), that.getStreetNumber()) && Objects.equals(getEmailAddress(), that.getEmailAddress()) && Objects.equals(getTelephoneNumber(), that.getTelephoneNumber()) && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getRoles(), that.getRoles());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, password, firstNamePerson, lastNamePerson, companyName, dateOfBirth, postalCode, city, street, streetNumber, emailAddress, telephoneNumber, description, roles);
+        return Objects.hash(getUsername(), getPassword(), getFirstNamePerson(), getLastNamePerson(), getDateOfBirth(), getPostalCode(), getCity(), getStreet(), getStreetNumber(), getEmailAddress(), getTelephoneNumber(), getDescription(), getRoles());
     }
 
 

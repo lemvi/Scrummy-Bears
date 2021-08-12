@@ -2,11 +2,9 @@ package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.User;
 import org.springframework.stereotype.Service;
-
-import java.time.Clock;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Optional;
+
 
 @Service
 public class AgeCalculator

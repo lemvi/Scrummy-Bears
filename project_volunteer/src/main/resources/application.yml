@@ -5,11 +5,14 @@ spring:
     password: root
   jpa:
     hibernate:
-      ddl-auto: update
-roles:
-  roleVolunteer:
-    role: "ROLE_VOLUNTEER"
-  roleIndividual:
-    role: "ROLE_INDIVIDUAL"
-  roleCompany:
-    role: "ROLE_COMPANY"
+      ddl-auto: create
+security:
+  roles:
+    - id: 1
+      role: "ROLE_VOLUNTEER"
+    - id: 2
+      role: "ROLE_INDIVIDUAL"
+    - id: 3
+      role: "ROLE_COMPANY"
+  minIdSum: 1
+  maxIdSum: 3
