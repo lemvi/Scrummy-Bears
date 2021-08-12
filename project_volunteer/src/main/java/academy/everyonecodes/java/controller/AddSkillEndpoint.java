@@ -20,7 +20,7 @@ public class AddSkillEndpoint {
 
     @PostMapping("/{username}")
     @Secured("ROLE_VOLUNTEER")
-    SkillDTO addSkill(@PathVariable String username, @RequestBody SkillDTO skill, Principal principal) {
-        return addSkillService.addSkill(username, skill, principal).orElse(null);
+    SkillDTO addSkill(@PathVariable String username, @RequestBody SkillDTO skill) {
+        return addSkillService.addSkill(username, skill).orElse(null);
     }
 }

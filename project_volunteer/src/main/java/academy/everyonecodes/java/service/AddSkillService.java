@@ -1,6 +1,8 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -20,9 +22,10 @@ public class AddSkillService {
         this.userRepository = userRepository;
         this.userAndSkillTranslator = userAndSkillTranslator;
     }
-    public Optional<SkillDTO> addSkill(String username, SkillDTO skillDTO, Principal principal) {
+    public Optional<SkillDTO> addSkill(String username, SkillDTO skillDTO) {
+        String currentPrincipalName = getAuthenticatedName();
         Optional<User> oUserToAddSkill = userRepository.findByUsername(username);
-        if (oUserToAddSkill.isPresent() && username.equals(principal.getName())) {
+        if (oUserToAddSkill.isPresent() && username.equals(currentPrincipalName)) {
             User userToAddSkill = oUserToAddSkill.get();
             Optional<Skill> oSkill = skillRepository.findById(userToAddSkill.getId());
             if (oSkill.isPresent()) {
@@ -60,6 +63,9 @@ public class AddSkillService {
         Pattern p = Pattern.compile("^[ A-Za-z]+$");
         Matcher m = p.matcher(wordToCheck);
         return m.matches();
+    }
+    private String getAuthenticatedName() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
 }

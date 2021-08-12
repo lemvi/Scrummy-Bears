@@ -61,8 +61,8 @@ public class ViewerEditorServiceTest {
     @Test
     void editAccountInfo_UserFOUND_usernameISEqual_test() {
         String input = "test";
-        User user = new User("test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role()));
-        UserDTO userdto = new UserDTO("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role()));
+        User user = new User("test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role(1L, "ROLE_INDIVIDUAL")));
+        UserDTO userdto = new UserDTO("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role(1L, "ROLE_INDIVIDUAL")));
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
         Mockito.when(userAndSkillTranslator.translateToUser(userdto)).thenReturn(user);
         Mockito.when(userAndSkillTranslator.translateToUserDTO(user)).thenReturn(userdto);
