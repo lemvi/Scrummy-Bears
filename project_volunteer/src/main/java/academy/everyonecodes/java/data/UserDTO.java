@@ -161,4 +161,6 @@ public class UserDTO {
     public int hashCode() {
         return Objects.hash(username, password, firstNamePerson, lastNamePerson, companyName, dateOfBirth, postalCode, city, street, streetNumber, emailAddress, telephoneNumber, description, roles);
     }
+
+
 }

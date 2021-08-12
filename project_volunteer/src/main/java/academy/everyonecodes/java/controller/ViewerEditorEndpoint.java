@@ -6,6 +6,7 @@ import org.springframework.security.access.annotation.Secured;
 
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController

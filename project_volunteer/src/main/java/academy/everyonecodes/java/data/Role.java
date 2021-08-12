@@ -3,6 +3,7 @@ package academy.everyonecodes.java.data;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 public class Role {
@@ -35,5 +36,22 @@ public class Role {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Role)) {
+            return false;
+        }
+        Role role1 = (Role) o;
+        return Objects.equals(getId(), role1.getId()) && Objects.equals(getRole(), role1.getRole());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getRole());
     }
 }
