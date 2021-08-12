@@ -1,6 +1,7 @@
 package academy.everyonecodes.java.controller;
 
 import academy.everyonecodes.java.data.ProfileDTOs.ProfileDTO;
+import academy.everyonecodes.java.data.ProfileDTOs.ProfileSkillRatingDTO;
 import academy.everyonecodes.java.service.ProfileDTOService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,7 @@ public class ProfileDTOEndpoint
 
     @GetMapping("/{username}")
     @Secured({"ROLE_VOLUNTEER", "ROLE_INDIVIDUAL", "ROLE_COMPANY"})
-    public ProfileDTO viewProfile(@PathVariable String username)
+    public ProfileSkillRatingDTO viewProfile(@PathVariable String username)
     {
         return profileDTOService.viewProfile(username);
     }
