@@ -23,7 +23,7 @@ public class User
     private String username;            // possibilities min./max., no special chars
 
     @NotEmpty
-    @Size(min=1, max=30, message = "Must have 1-30 characters")
+    @Size(min=1, max=100, message = "Must have 1-100 characters")
     private String password;
 
     @NotEmpty
@@ -86,6 +86,16 @@ public class User
         this.telephoneNumber = telephoneNumber;
         this.description = description;
         this.roles = roles;
+    }
+
+    public User(Long id, String username, String firstNamePerson, String lastNamePerson, String companyName, LocalDate dateOfBirth, String description) {
+        this.id = id;
+        this.username = username;
+        this.firstNamePerson = firstNamePerson;
+        this.lastNamePerson = lastNamePerson;
+        this.companyName = companyName;
+        this.dateOfBirth = dateOfBirth;
+        this.description = description;
     }
 
     public User(String username, String firstNamePerson, String lastNamePerson, String companyName, LocalDate dateOfBirth, String description) {

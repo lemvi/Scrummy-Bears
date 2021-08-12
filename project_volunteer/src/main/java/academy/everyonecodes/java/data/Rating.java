@@ -24,6 +24,9 @@ public class Rating {
 
 	Rating() {}
 
+	public Rating(int rating) {
+		this.rating = rating;
+	}
 
 	public Long getUserId() {
 		return user.getId();

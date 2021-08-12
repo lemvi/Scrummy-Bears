@@ -17,7 +17,7 @@ public class UserToProfileDTOTranslator
     private final AgeCalculator ageCalculator;
 
     @Autowired
-    RatingRepository ratingRepository;
+    RatingCalculator ratingCalculator;
 
     public UserToProfileDTOTranslator(AgeCalculator ageCalculator)
     {
@@ -32,16 +32,7 @@ public class UserToProfileDTOTranslator
                 user.getCompanyName(),
                 ageCalculator.calculate(user),
                 user.getDescription(),
-                aggregateRating(user.getId())
-                );
-    }
-
-    private double aggregateRating(Long userId) {
-        List<Rating> ratings = ratingRepository.findByUser_Id(userId);
-        return ratings.stream()
-                .map(Rating::getRating)
-                .mapToDouble(rating -> rating)
-                .average()
-                .orElse(Double.NaN);
+                ratingCalculator.aggregateRating(user.getId())
+        );
     }
 }

@@ -91,17 +91,15 @@ public class ProfileDTO
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProfileDTO that = (ProfileDTO) o;
-        return Objects.equals(username, that.username) && Objects.equals(fullName, that.fullName) && Objects.equals(companyName, that.companyName) && Objects.equals(age, that.age) && Objects.equals(description, that.description);
+        return Double.compare(that.rating, rating) == 0 && Objects.equals(username, that.username) && Objects.equals(fullName, that.fullName) && Objects.equals(companyName, that.companyName) && Objects.equals(age, that.age) && Objects.equals(description, that.description);
     }
 
     @Override
-    public int hashCode()
-    {
-        return Objects.hash(username, fullName, companyName, age, description);
+    public int hashCode() {
+        return Objects.hash(username, fullName, companyName, age, description, rating);
     }
 }
