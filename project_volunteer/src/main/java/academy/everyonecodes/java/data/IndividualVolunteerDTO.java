@@ -1,5 +1,8 @@
 package academy.everyonecodes.java.data;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Past;
@@ -26,6 +29,8 @@ public class IndividualVolunteerDTO {
     private String lastNamePerson;
 
     @Past
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateOfBirth;
 
     @Size(max=10, message = "Must have 10 characters")
