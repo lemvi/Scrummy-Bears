@@ -77,7 +77,9 @@ public class AddSkillEndpointTest {
         String url = "/addSkill/";
         SkillDTO skillDTO = new SkillDTO("skill");
         String skillDtoJson = createJson(skillDTO);
-        User user = new User("username", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role(1L, "ROLE_INDIVIDUAL")));
+        Role role = new Role("ROLE_INDIVIDUAL");
+        role.setId(id);
+        User user = new User("username", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(role));
         user.setId(id);
 
         Mockito.when(addSkillService.addSkill(username, skillDTO)).thenReturn(Optional.of(skillDTO));
@@ -97,7 +99,9 @@ public class AddSkillEndpointTest {
         String url = "/addSkill/";
         SkillDTO skillDTO = new SkillDTO("skill");
         String skillDtoJson = createJson(skillDTO);
-        User user = new User("username", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role(1L, "ROLE_INDIVIDUAL")));
+        Role role = new Role("ROLE_INDIVIDUAL");
+        role.setId(id);
+        User user = new User("username", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(role));
         user.setId(id);
 
         Mockito.when(addSkillService.addSkill(username, skillDTO)).thenReturn(Optional.of(skillDTO));
