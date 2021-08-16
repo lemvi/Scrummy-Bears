@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -173,7 +174,7 @@ public class ViewerEditorEndpointTest {
                 "\"password\": \"" + individualVolunteerDTO.getPassword() + "\"," +
                 "\"firstNamePerson\": \"" + individualVolunteerDTO.getFirstNamePerson() + "\"," +
                 "\"lastNamePerson\": \"" + individualVolunteerDTO.getLastNamePerson() + "\"," +
-                "\"dateOfBirth\": \"" + individualVolunteerDTO.getDateOfBirth() + "\"," +
+                "\"dateOfBirth\": \"" + individualVolunteerDTO.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "\"," +
                 "\"postalCode\": \"" + individualVolunteerDTO.getPostalCode() + "\"," +
                 "\"city\": \"" + individualVolunteerDTO.getCity() + "\"," +
                 "\"street\": \"" + individualVolunteerDTO.getStreet() + "\"," +
