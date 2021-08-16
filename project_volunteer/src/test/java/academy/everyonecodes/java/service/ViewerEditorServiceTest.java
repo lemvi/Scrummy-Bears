@@ -7,15 +7,22 @@ import academy.everyonecodes.java.data.UserRepository;
 import academy.everyonecodes.java.service.UserToIndividualVolunteerDTOTranslator;
 import academy.everyonecodes.java.service.ViewerEditorService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 
@@ -24,12 +31,20 @@ public class ViewerEditorServiceTest {
 
     @Autowired
     ViewerEditorService viewerEditorService;
+
     @MockBean
     UserToIndividualVolunteerDTOTranslator userToIndividualVolunteerDTOTranslator;
+
     @MockBean
     UserRepository userRepository;
-    @MockBean
-    Principal principal;
+
+    @Mock
+    private Authentication auth;
+
+    @BeforeEach
+    public void initSecurityContext() {
+        SecurityContextHolder.getContext().setAuthentication(auth);
+    }
 
     @Test
     void getAccountInfo_found_usernameISEqual_test() {
@@ -39,21 +54,45 @@ public class ViewerEditorServiceTest {
 
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
         Mockito.when(userToIndividualVolunteerDTOTranslator.translateToDTO(user)).thenReturn(individualVolunteerDTO);
-        Mockito.when(principal.getName()).thenReturn(input);
-        Optional<IndividualVolunteerDTO> oIndividualVolunteerDTO = viewerEditorService.getAccountInfo(input, principal);
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(input);
 
-       Assertions.assertEquals(oIndividualVolunteerDTO, Optional.of(individualVolunteerDTO));
-       Mockito.verify(principal).getName();
+        Optional<IndividualVolunteerDTO> oIndividualVolunteerDTO = viewerEditorService.getAccountInfo(input);
+
+        Assertions.assertEquals(Optional.of(individualVolunteerDTO), oIndividualVolunteerDTO);
+
         Mockito.verify(userRepository).findByUsername(input);
         Mockito.verify(userToIndividualVolunteerDTOTranslator).translateToDTO(user);
     }
+
+    @Test
+    void getAccountInfo_found_usernameISEqual_WrongAuthentication_test() {
+        String input = "test";
+        User user = new User( "test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
+        IndividualVolunteerDTO userdto = new IndividualVolunteerDTO("test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
+
+
+
+        Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
+        Mockito.when(userToIndividualVolunteerDTOTranslator.translateToDTO(user)).thenReturn(userdto);
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("Wrong");
+
+        Optional<IndividualVolunteerDTO> oUserDTO = viewerEditorService.getAccountInfo(input);
+
+        Assertions.assertEquals(Optional.empty(), oUserDTO);
+
+        Mockito.verify(userRepository).findByUsername(input);
+        Mockito.verifyNoMoreInteractions(userRepository);
+        Mockito.verifyNoInteractions(userToIndividualVolunteerDTOTranslator);
+    }
+
+
     @Test
     void getAccountInfo_notFound_test() {
         String input = "test";
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.empty());
-        Mockito.when(principal.getName()).thenReturn(input);
 
-        viewerEditorService.getAccountInfo(input, principal);
+        viewerEditorService.getAccountInfo(input);
+
         Mockito.verify(userRepository).findByUsername(input);
         Mockito.verifyNoInteractions(userToIndividualVolunteerDTOTranslator);
     }
@@ -66,25 +105,45 @@ public class ViewerEditorServiceTest {
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
         Mockito.when(userToIndividualVolunteerDTOTranslator.translateToUser(individualVolunteerDTO)).thenReturn(user);
         Mockito.when(userToIndividualVolunteerDTOTranslator.translateToDTO(user)).thenReturn(individualVolunteerDTO);
-        Mockito.when(principal.getName()).thenReturn(input);
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(input);
 
 
         Mockito.when(userRepository.save(user)).thenReturn(user);
 
-        viewerEditorService.editAccountInfo(input, individualVolunteerDTO, principal);
+        viewerEditorService.editAccountInfo(input, individualVolunteerDTO);
         Mockito.verify(userRepository).findByUsername(input);
         Mockito.verify(userToIndividualVolunteerDTOTranslator).translateToUser(individualVolunteerDTO);
         Mockito.verify(userToIndividualVolunteerDTOTranslator).translateToDTO(user);
         Mockito.verify(userRepository).save(user);
     }
-    @Test    void editAccountInfo_UserNotFOUND_editAccount_test() {
+
+    @Test
+    void editAccountInfo_UserFOUND_usernameISEqual_WrongAuthentication_test() {
+        String input = "test";
+        User user = new User("test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role()));
+        IndividualVolunteerDTO individualVolunteerDTO = new IndividualVolunteerDTO("test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role()));
+        Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("Wrong");
+
+
+        Mockito.when(userRepository.save(user)).thenReturn(user);
+
+        viewerEditorService.editAccountInfo(input, individualVolunteerDTO);
+
+        Mockito.verify(userRepository).findByUsername(input);
+        Mockito.verifyNoMoreInteractions(userRepository);
+        Mockito.verifyNoInteractions(userToIndividualVolunteerDTOTranslator);
+    }
+
+    @Test
+    void editAccountInfo_UserNotFOUND_editAccount_test() {
         String input = "test";
         IndividualVolunteerDTO individualVolunteerDTO = new IndividualVolunteerDTO("test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.empty());
-        Mockito.when(principal.getName()).thenReturn(input);
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(input);
 
 
-        viewerEditorService.editAccountInfo(input, individualVolunteerDTO, principal);
+        viewerEditorService.editAccountInfo(input, individualVolunteerDTO);
 
         Mockito.verify(userRepository).findByUsername(input);
         Mockito.verifyNoInteractions(userToIndividualVolunteerDTOTranslator);
@@ -97,10 +156,10 @@ public class ViewerEditorServiceTest {
         User user = new User("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
 
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
-        Mockito.when(principal.getName()).thenReturn(input);
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(input);
 
 
-        viewerEditorService.editAccountInfo(input, userFalseUsername, principal);
+        viewerEditorService.editAccountInfo(input, userFalseUsername);
 
         Mockito.verify(userRepository).findByUsername(input);
         Mockito.verifyNoInteractions(userToIndividualVolunteerDTOTranslator);

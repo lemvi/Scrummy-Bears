@@ -13,10 +13,16 @@ public class Role {
     @Column(unique = true)
     private String role;
 
-    public Role() {
-    }
+
+    public Role() {}
 
     public Role(String role) {
+        this.role = role;
+    }
+
+    // TODO: Potentially Remove Changes (Created this Constructor for Testing, check if really necessary if finished)
+    public Role(Long id, String role) {
+        this.id = id;
         this.role = role;
     }
 

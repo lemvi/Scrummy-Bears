@@ -3,6 +3,7 @@ package academy.everyonecodes.java.service;
 import academy.everyonecodes.java.data.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,16 +22,21 @@ public class ViewerEditorService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Optional<IndividualVolunteerDTO> getAccountInfo(String username, Principal principal) {
+    public Optional<IndividualVolunteerDTO> getAccountInfo(String username) {
+        String currentPrincipalName = getAuthenticatedName();
+
         Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent() && username.equals(principal.getName())) {
+        if (user.isPresent() && username.equals(currentPrincipalName)) {
             return user.map(userToIndividualVolunteerDTOTranslator::translateToDTO);
         }
         return Optional.empty();
     }
-    public Optional<IndividualVolunteerDTO> editAccountInfo(String username, IndividualVolunteerDTO individualVolunteerDTO, Principal principal) {
+
+    public Optional<IndividualVolunteerDTO> editAccountInfo(String username, IndividualVolunteerDTO individualVolunteerDTO) {
+        String currentPrincipalName = getAuthenticatedName();
+
         Optional<User> oUser = userRepository.findByUsername(username);
-        if (oUser.isPresent() && individualVolunteerDTO.getUsername().equals(username) && username.equals(principal.getName())) {
+        if (oUser.isPresent() && individualVolunteerDTO.getUsername().equals(username) && username.equals(currentPrincipalName)) {
             User userEdited = userToIndividualVolunteerDTOTranslator.translateToUser(individualVolunteerDTO);
             User userDB = oUser.get();
             userEdited.setId(userDB.getId());
@@ -40,7 +46,12 @@ public class ViewerEditorService {
         }
         return Optional.empty();
     }
-    public IndividualVolunteerDTO post(IndividualVolunteerDTO individualVolunteerDTO) {
-        return userToIndividualVolunteerDTOTranslator.translateToDTO(userRepository.save(userToIndividualVolunteerDTOTranslator.translateToUser(individualVolunteerDTO)));
+
+    public IndividualVolunteerDTO post(IndividualVolunteerDTO userDTO) {
+        return userToIndividualVolunteerDTOTranslator.translateToDTO(userRepository.save(userToIndividualVolunteerDTOTranslator.translateToUser(userDTO)));
+    }
+
+    private String getAuthenticatedName() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }

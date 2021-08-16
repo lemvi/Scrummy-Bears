@@ -72,10 +72,10 @@ public class User
     @NotEmpty
     private Set<Role> roles;
 
+
+
     public User() {
     }
-
-
 
     public User(String username, String password, String firstNamePerson, String lastNamePerson, String companyName, LocalDate dateOfBirth, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
     {
