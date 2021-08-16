@@ -37,7 +37,6 @@ class UserToProfileDTOTranslatorTest
                 2.0
         );
         User user = new User(
-                1L,
                 "name",
                 "First",
                 "Last",
@@ -45,6 +44,8 @@ class UserToProfileDTOTranslatorTest
                 LocalDate.of(2021, 8, 2),
                 "description"
         );
+
+        user.setId(1L);
 
         Mockito.when(ageCalculator.calculate(user))
                 .thenReturn(69);
@@ -209,7 +210,6 @@ class UserToProfileDTOTranslatorTest
                 Double.NaN
         );
         User user = new User(
-                1L,
                 "name",
                 "First",
                 "Last",
@@ -217,6 +217,8 @@ class UserToProfileDTOTranslatorTest
                 LocalDate.of(2021, 8, 2),
                 "description"
         );
+
+        user.setId(1L);
 
         Mockito.when(ageCalculator.calculate(user))
                 .thenReturn(69);
