@@ -1,7 +1,6 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.*;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +13,12 @@ public class AddSkillService {
 
     private final SkillRepository skillRepository;
     private final UserRepository userRepository;
-    private final UserAndSkillTranslator userAndSkillTranslator;
+    private final SkillTranslator skillTranslator;
 
-    public AddSkillService(SkillRepository skillRepository, UserRepository userRepository, UserAndSkillTranslator userAndSkillTranslator) {
+    public AddSkillService(SkillRepository skillRepository, UserRepository userRepository, SkillTranslator skillTranslator) {
         this.skillRepository = skillRepository;
         this.userRepository = userRepository;
-        this.userAndSkillTranslator = userAndSkillTranslator;
+        this.skillTranslator = skillTranslator;
     }
     public Optional<SkillDTO> addSkill(String username, SkillDTO skillDTO) {
         String currentPrincipalName = getAuthenticatedName();
@@ -37,10 +36,10 @@ public class AddSkillService {
     }
     private Optional<SkillDTO> createSkill(SkillDTO skillToAddDTO,User userToAddSkill) {
         if (checkIfOnlyLetters(skillToAddDTO.getSkill())) {
-            Skill skillToAdd = userAndSkillTranslator.translateToSkill(skillToAddDTO);
+            Skill skillToAdd = skillTranslator.translateToSkill(skillToAddDTO);
             skillToAdd.setUser(userToAddSkill);
             skillRepository.save(skillToAdd);
-            return Optional.of(userAndSkillTranslator.translateToSkillDTO(skillToAdd));
+            return Optional.of(skillTranslator.translateToSkillDTO(skillToAdd));
         }
         return Optional.empty();
 
@@ -53,7 +52,7 @@ public class AddSkillService {
             skillToAddTO.setSkill(stringToAdd);
             Skill skillToSave = new Skill(skillToAddTO.getId(), userToAddSkill, stringToAdd);
             skillRepository.save(skillToSave);
-            return Optional.of(userAndSkillTranslator.translateToSkillDTO(skillToSave));
+            return Optional.of(skillTranslator.translateToSkillDTO(skillToSave));
         }
        return Optional.empty();
     }

@@ -26,7 +26,7 @@ public class AddSkillServiceTest {
     @MockBean
     private Authentication auth;
     @MockBean
-    UserAndSkillTranslator translator;
+    SkillTranslator translator;
     @BeforeEach
     public void initSecurityContext() {
         SecurityContextHolder.getContext().setAuthentication(auth);
