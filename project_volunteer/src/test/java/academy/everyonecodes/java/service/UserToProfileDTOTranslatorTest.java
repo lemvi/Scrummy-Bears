@@ -169,20 +169,18 @@ class UserToProfileDTOTranslatorTest
     void toDTO_only_mandatory()
     {
         ProfileDTO profileDTO = new ProfileDTO(
-                "name",
+                "username",
                 "First Last",
-                null,
+                "companyName",
                 null,
                 null,
                 2.0
         );
         User user = new User(
-                "name",
+                "username",
                 "First",
                 "Last",
-                null,
-                null,
-                null
+                "companyName"
         );
 
         Mockito.when(ageCalculator.calculate(user))
