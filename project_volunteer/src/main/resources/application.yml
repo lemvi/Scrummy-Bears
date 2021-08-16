@@ -17,6 +17,18 @@ spring:
       starttls.enable: true
     debug: true
 
+security:
+  roles:
+    - id: 1
+      role: "ROLE_VOLUNTEER"
+    - id: 2
+      role: "ROLE_INDIVIDUAL"
+    - id: 3
+      role: "ROLE_COMPANY"
+  minIdSum: 1
+  maxIdSum: 3
+
+
 constants:
   how-many-failed-logins-cause-email-warning: 5
 
@@ -26,12 +38,4 @@ message:
   pathToAttachment: project_volunteer/src/main/resources/Scrummy Bears Logo.jpg
 
   #https://drive.google.com/file/d/1_0k1HyesHZC1R6oEZ2q3MY5FiaMhKPie/view?usp=sharing
-
-roles:
-  roleVolunteer:
-    role: "ROLE_VOLUNTEER"
-  roleIndividual:
-    role: "ROLE_INDIVIDUAL"
-  roleCompany:
-    role: "ROLE_COMPANY"
 
