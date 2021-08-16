@@ -1,4 +1,4 @@
-package academy.everyonecodes.java;
+package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.service.email.EmailService;
 import academy.everyonecodes.java.service.email.EmailServiceImpl;
