@@ -12,6 +12,7 @@ public class ProfileDTO
     private String companyName;
     private Integer age;
     private String description;
+    private double rating;
 
     public ProfileDTO()
     {
@@ -24,6 +25,15 @@ public class ProfileDTO
         this.companyName = companyName;
         this.age = age;
         this.description = description;
+    }
+
+    public ProfileDTO(String username, String fullName, String companyName, Integer age, String description, double rating) {
+        this.username = username;
+        this.fullName = fullName;
+        this.companyName = companyName;
+        this.age = age;
+        this.description = description;
+        this.rating = rating;
     }
 
     public String getUsername()
@@ -76,18 +86,20 @@ public class ProfileDTO
         this.description = description;
     }
 
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProfileDTO that = (ProfileDTO) o;
-        return Objects.equals(username, that.username) && Objects.equals(fullName, that.fullName) && Objects.equals(companyName, that.companyName) && Objects.equals(age, that.age) && Objects.equals(description, that.description);
+    public double getRating() {
+        return rating;
     }
 
     @Override
-    public int hashCode()
-    {
-        return Objects.hash(username, fullName, companyName, age, description);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProfileDTO that = (ProfileDTO) o;
+        return Double.compare(that.rating, rating) == 0 && Objects.equals(username, that.username) && Objects.equals(fullName, that.fullName) && Objects.equals(companyName, that.companyName) && Objects.equals(age, that.age) && Objects.equals(description, that.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, fullName, companyName, age, description, rating);
     }
 }
