@@ -31,6 +31,7 @@ public class ViewerEditorServiceTest {
     @MockBean
     Principal principal;
 
+
     @Test
     void getAccountInfo_found_usernameISEqual_test() {
         String input = "test";
@@ -61,8 +62,11 @@ public class ViewerEditorServiceTest {
     @Test
     void editAccountInfo_UserFOUND_usernameISEqual_test() {
         String input = "test";
-        User user = new User("test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role(1L, "ROLE_INDIVIDUAL")));
-        UserDTO userdto = new UserDTO("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role(1L, "ROLE_INDIVIDUAL")));
+        Role role = new Role("ROLE_INDIVIDUAL");
+        Long id = 1L;
+        role.setId(id);
+        User user = new User("test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(role));
+        UserDTO userdto = new UserDTO("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(role));
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
         Mockito.when(userAndSkillTranslator.translateToUser(userdto)).thenReturn(user);
         Mockito.when(userAndSkillTranslator.translateToUserDTO(user)).thenReturn(userdto);
@@ -80,6 +84,7 @@ public class ViewerEditorServiceTest {
     @Test
     void editAccountInfo_UserNotFOUND_editAccount_test() {
         String input = "test";
+
         UserDTO userdto = new UserDTO("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.empty());
         Mockito.when(principal.getName()).thenReturn(input);
@@ -94,6 +99,7 @@ public class ViewerEditorServiceTest {
     @Test
     void editAccount_usernameNotEqual() {
         String input = "test";
+
         UserDTO userFalseUsername = new UserDTO("false", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
         User user = new User("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
 
