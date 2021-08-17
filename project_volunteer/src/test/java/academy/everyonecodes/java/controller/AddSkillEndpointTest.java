@@ -1,6 +1,7 @@
 package academy.everyonecodes.java.controller;
 
 import academy.everyonecodes.java.data.*;
+import academy.everyonecodes.java.data.DTOs.SkillDTO;
 import academy.everyonecodes.java.service.AddSkillService;
 import academy.everyonecodes.java.service.SkillTranslator;
 import org.springframework.boot.test.context.SpringBootTest;

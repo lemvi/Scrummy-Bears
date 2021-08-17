@@ -1,7 +1,7 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.Skill;
-import academy.everyonecodes.java.data.SkillDTO;
+import academy.everyonecodes.java.data.DTOs.SkillDTO;
 import org.springframework.stereotype.Service;
 
 @Service

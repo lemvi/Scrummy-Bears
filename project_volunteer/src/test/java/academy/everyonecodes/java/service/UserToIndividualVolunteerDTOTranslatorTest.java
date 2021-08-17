@@ -1,6 +1,6 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.IndividualVolunteerDTO;
+import academy.everyonecodes.java.data.DTOs.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;

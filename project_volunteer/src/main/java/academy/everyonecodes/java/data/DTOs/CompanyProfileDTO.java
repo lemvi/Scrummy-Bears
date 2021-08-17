@@ -1,4 +1,4 @@
-package academy.everyonecodes.java.data.ProfileDTOs;
+package academy.everyonecodes.java.data.DTOs;
 
 import academy.everyonecodes.java.data.Role;
 
@@ -16,9 +16,9 @@ public class CompanyProfileDTO extends ProfileDTO
         this.companyName = companyName;
     }
 
-    public CompanyProfileDTO(String username, String postalCode, String city, String street, String streetNumber, String email, String telephoneNumber, String description, Set<Role> roles, String companyName)
+    public CompanyProfileDTO(String username, String postalCode, String city, String street, String streetNumber, String email, String telephoneNumber, String description, Set<Role> roles, double rating, String companyName)
     {
-        super(username, postalCode, city, street, streetNumber, email, telephoneNumber, description, roles);
+        super(username, postalCode, city, street, streetNumber, email, telephoneNumber, description, roles, rating);
         this.companyName = companyName;
     }
 

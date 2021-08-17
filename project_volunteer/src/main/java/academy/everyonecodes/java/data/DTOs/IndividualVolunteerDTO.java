@@ -1,5 +1,6 @@
-package academy.everyonecodes.java.data;
+package academy.everyonecodes.java.data.DTOs;
 
+import academy.everyonecodes.java.data.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 

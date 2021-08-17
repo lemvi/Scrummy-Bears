@@ -1,25 +1,24 @@
-package academy.everyonecodes.java.data.ProfileDTOs;
+package academy.everyonecodes.java.data.DTOs;
 
 import academy.everyonecodes.java.data.Role;
 
 import java.util.Objects;
 import java.util.Set;
 
-public class VolunteerProfileDTO extends ProfileDTO
+public class IndividualProfileDTO extends ProfileDTO
 {
     private String fullName;
     private int age;
 
-    public VolunteerProfileDTO(String username, String email, Set<Role> roles, String fullName, int age)
+    public IndividualProfileDTO(String username, String email, Set<Role> roles, String fullName)
     {
         super(username, email, roles);
         this.fullName = fullName;
-        this.age = age;
     }
 
-    public VolunteerProfileDTO(String username, String postalCode, String city, String street, String streetNumber, String email, String telephoneNumber, String description, Set<Role> roles, String fullName, int age)
+    public IndividualProfileDTO(String username, String postalCode, String city, String street, String streetNumber, String email, String telephoneNumber, String description, Set<Role> roles, double rating, String fullName, int age)
     {
-        super(username, postalCode, city, street, streetNumber, email, telephoneNumber, description, roles);
+        super(username, postalCode, city, street, streetNumber, email, telephoneNumber, description, roles, rating);
         this.fullName = fullName;
         this.age = age;
     }
@@ -50,7 +49,7 @@ public class VolunteerProfileDTO extends ProfileDTO
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        VolunteerProfileDTO that = (VolunteerProfileDTO) o;
+        IndividualProfileDTO that = (IndividualProfileDTO) o;
         return age == that.age && Objects.equals(fullName, that.fullName);
     }
 

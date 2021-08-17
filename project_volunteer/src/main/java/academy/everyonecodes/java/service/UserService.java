@@ -1,6 +1,8 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.*;
+import academy.everyonecodes.java.data.DTOs.CompanyDTO;
+import academy.everyonecodes.java.data.DTOs.IndividualVolunteerDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;

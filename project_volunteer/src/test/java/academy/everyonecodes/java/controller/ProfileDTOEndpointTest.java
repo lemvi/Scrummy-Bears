@@ -40,7 +40,7 @@ class ProfileDTOEndpointTest {
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk());
 
-		Mockito.verify(profileDTOService).get(username);
+		Mockito.verify(profileDTOService).viewProfile(username);
 		Mockito.verifyNoMoreInteractions(profileDTOService);
 	}
 

@@ -1,6 +1,6 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.ProfileDTOs.ProfileSkillRatingDTO;
+import academy.everyonecodes.java.data.DTOs.ProfileDTO;
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.UserRepository;
@@ -18,9 +18,10 @@ public class ProfileDTOService
     private final int minIdSum;
     private final UserService userService;
     private final String usernameNotFound;
-    private final ProfileViewer profileViewer;
+    private final RatingCalculator ratingCalculator;
 
-    public ProfileDTOService(UserRepository userRepository, UserToProfileDTOTranslator userToProfileDTOTranslator, @Value("${security.maxIdSum}") int maxIdSum, @Value("${security.minIdSum}") int minIdSum, UserService userService, @Value("${errorMessages.usernameNotFound}") String usernameNotFound, ProfileViewer profileViewer)
+
+    public ProfileDTOService(UserRepository userRepository, UserToProfileDTOTranslator userToProfileDTOTranslator, @Value("${security.maxIdSum}") int maxIdSum, @Value("${security.minIdSum}") int minIdSum, UserService userService, @Value("${errorMessages.usernameNotFound}") String usernameNotFound, RatingCalculator ratingCalculator)
     {
         this.userRepository = userRepository;
         this.userToProfileDTOTranslator = userToProfileDTOTranslator;
@@ -28,10 +29,11 @@ public class ProfileDTOService
         this.minIdSum = minIdSum;
         this.userService = userService;
         this.usernameNotFound = usernameNotFound;
-        this.profileViewer = profileViewer;
+        this.ratingCalculator = ratingCalculator;
     }
-//TODO SKILL & RATING ADDED -> CHECK IF WORKING WHEN MERGED
-    public ProfileSkillRatingDTO viewProfile(String username)
+
+    //TODO SKILL & RATING ADDED -> CHECK IF WORKING WHEN MERGED
+    public ProfileDTO viewProfile(String username)
     {
         User user = userRepository.findByUsername(username).orElse(null);
 
@@ -41,17 +43,15 @@ public class ProfileDTOService
         Set<Role> roles = user.getRoles();
 
         boolean hasMaximumAmountOfRoles = userService.getRoleIdSum(roles) == maxIdSum;
-        Skill skill = profileViewer.getSkill(username).orElse(null);
-        Rating rating = profileViewer.getRating(username).orElse(null);
 
         if (hasMaximumAmountOfRoles && roles.size() == minIdSum)
         {
-            return new ProfileSkillRatingDTO(userToProfileDTOTranslator.toCompanyProfileDTO(user), skill, rating);
+            return userToProfileDTOTranslator.toCompanyProfileDTO(user);
         } else if (hasMaximumAmountOfRoles)
         {
-            return new ProfileSkillRatingDTO(userToProfileDTOTranslator.toIndividualProfileDTO(user), skill, rating);
+            return userToProfileDTOTranslator.toIndividualProfileDTO(user);
         }
 
-        return new ProfileSkillRatingDTO(userToProfileDTOTranslator.toVolunteerProfileDTO(user), skill, rating);
+        return userToProfileDTOTranslator.toVolunteerProfileDTO(user);
     }
 }

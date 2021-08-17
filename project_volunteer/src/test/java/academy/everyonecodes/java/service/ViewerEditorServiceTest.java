@@ -1,11 +1,9 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.IndividualVolunteerDTO;
+import academy.everyonecodes.java.data.DTOs.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.UserRepository;
-import academy.everyonecodes.java.service.UserToIndividualVolunteerDTOTranslator;
-import academy.everyonecodes.java.service.ViewerEditorService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,15 +12,11 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 
-import java.security.Principal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 

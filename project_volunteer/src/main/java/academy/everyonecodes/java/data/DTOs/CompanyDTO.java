@@ -1,4 +1,6 @@
-package academy.everyonecodes.java.data;
+package academy.everyonecodes.java.data.DTOs;
+
+import academy.everyonecodes.java.data.Role;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;

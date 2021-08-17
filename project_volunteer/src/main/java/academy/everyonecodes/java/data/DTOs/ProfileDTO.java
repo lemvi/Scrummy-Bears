@@ -1,4 +1,4 @@
-package academy.everyonecodes.java.data.ProfileDTOs;
+package academy.everyonecodes.java.data.DTOs;
 
 import academy.everyonecodes.java.data.Role;
 
@@ -17,6 +17,8 @@ public abstract class ProfileDTO
     private String description;
     private Set<Role> roles;
 
+    private double rating;
+
     public ProfileDTO()
     {
     }
@@ -28,7 +30,7 @@ public abstract class ProfileDTO
         this.roles = roles;
     }
 
-    public ProfileDTO(String username, String postalCode, String city, String street, String streetNumber, String email, String telephoneNumber, String description, Set<Role> roles)
+    public ProfileDTO(String username, String postalCode, String city, String street, String streetNumber, String email, String telephoneNumber, String description, Set<Role> roles, double rating)
     {
         this.username = username;
         this.postalCode = postalCode;
@@ -39,6 +41,7 @@ public abstract class ProfileDTO
         this.telephoneNumber = telephoneNumber;
         this.description = description;
         this.roles = roles;
+        this.rating = rating;
     }
 
     public String getUsername()
@@ -131,18 +134,28 @@ public abstract class ProfileDTO
         this.roles = roles;
     }
 
+    public double getRating()
+    {
+        return rating;
+    }
+
+    public void setRating(double rating)
+    {
+        this.rating = rating;
+    }
+
     @Override
     public boolean equals(Object o)
     {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProfileDTO that = (ProfileDTO) o;
-        return Objects.equals(username, that.username) && Objects.equals(postalCode, that.postalCode) && Objects.equals(city, that.city) && Objects.equals(street, that.street) && Objects.equals(streetNumber, that.streetNumber) && Objects.equals(email, that.email) && Objects.equals(telephoneNumber, that.telephoneNumber) && Objects.equals(description, that.description) && Objects.equals(roles, that.roles);
+        return Double.compare(that.rating, rating) == 0 && Objects.equals(username, that.username) && Objects.equals(postalCode, that.postalCode) && Objects.equals(city, that.city) && Objects.equals(street, that.street) && Objects.equals(streetNumber, that.streetNumber) && Objects.equals(email, that.email) && Objects.equals(telephoneNumber, that.telephoneNumber) && Objects.equals(description, that.description) && Objects.equals(roles, that.roles);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(username, postalCode, city, street, streetNumber, email, telephoneNumber, description, roles);
+        return Objects.hash(username, postalCode, city, street, streetNumber, email, telephoneNumber, description, roles, rating);
     }
 }

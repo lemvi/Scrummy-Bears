@@ -1,43 +1,27 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.ProfileDTO;
-import academy.everyonecodes.java.data.Rating;
-import academy.everyonecodes.java.data.RatingRepository;
-import academy.everyonecodes.java.data.ProfileDTOs.CompanyProfileDTO;
-import academy.everyonecodes.java.data.ProfileDTOs.IndividualProfileDTO;
-import academy.everyonecodes.java.data.ProfileDTOs.VolunteerProfileDTO;
+import academy.everyonecodes.java.data.DTOs.CompanyProfileDTO;
+import academy.everyonecodes.java.data.DTOs.IndividualProfileDTO;
+import academy.everyonecodes.java.data.DTOs.VolunteerProfileDTO;
 import academy.everyonecodes.java.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 public class UserToProfileDTOTranslator
 {
     private final AgeCalculator ageCalculator;
-
     @Autowired
     RatingCalculator ratingCalculator;
+    private final SkillService skillService;
 
-    public UserToProfileDTOTranslator(AgeCalculator ageCalculator)
+
+    public UserToProfileDTOTranslator(AgeCalculator ageCalculator, SkillService skillService)
     {
         this.ageCalculator = ageCalculator;
+        this.skillService = skillService;
     }
 
-    protected ProfileDTO toDTO(User user)
-    {
-        return new ProfileDTO(
-                user.getUsername(),
-                user.getFirstNamePerson() + " " + user.getLastNamePerson(),
-                user.getCompanyName(),
-                ageCalculator.calculate(user),
-                user.getDescription(),
-                ratingCalculator.aggregateRating(user.getId())
-        );
-    }
 
     protected CompanyProfileDTO toCompanyProfileDTO(User user)
     {
@@ -51,6 +35,7 @@ public class UserToProfileDTOTranslator
                 user.getTelephoneNumber(),
                 user.getDescription(),
                 user.getRoles(),
+                ratingCalculator.aggregateRating(user.getId()),
                 user.getCompanyName()
         );
     }
@@ -67,6 +52,7 @@ public class UserToProfileDTOTranslator
                 user.getTelephoneNumber(),
                 user.getDescription(),
                 user.getRoles(),
+                ratingCalculator.aggregateRating(user.getId()),
                 user.getFirstNamePerson() + " " + user.getLastNamePerson(),
                 ageCalculator.calculate(user)
         );
@@ -84,8 +70,10 @@ public class UserToProfileDTOTranslator
                 user.getTelephoneNumber(),
                 user.getDescription(),
                 user.getRoles(),
+                ratingCalculator.aggregateRating(user.getId()),
                 user.getFirstNamePerson() + " " + user.getLastNamePerson(),
-                ageCalculator.calculate(user)
+                ageCalculator.calculate(user),
+                skillService.collect(user)
         );
     }
 }

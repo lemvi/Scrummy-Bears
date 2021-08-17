@@ -1,4 +1,4 @@
-package academy.everyonecodes.java.data;
+package academy.everyonecodes.java.data.DTOs;
 
 import java.util.Objects;
 

@@ -1,13 +1,12 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.IndividualVolunteerDTO;
+import academy.everyonecodes.java.data.DTOs.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.Optional;
 
 @Service

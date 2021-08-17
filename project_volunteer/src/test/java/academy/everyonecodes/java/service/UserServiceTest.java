@@ -1,6 +1,8 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.*;
+import academy.everyonecodes.java.data.DTOs.CompanyDTO;
+import academy.everyonecodes.java.data.DTOs.IndividualVolunteerDTO;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -8,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import java.time.LocalDate;

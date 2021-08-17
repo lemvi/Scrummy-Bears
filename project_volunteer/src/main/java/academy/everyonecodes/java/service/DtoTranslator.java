@@ -1,7 +1,7 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.CompanyDTO;
-import academy.everyonecodes.java.data.IndividualVolunteerDTO;
+import academy.everyonecodes.java.data.DTOs.CompanyDTO;
+import academy.everyonecodes.java.data.DTOs.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.User;
 import org.springframework.stereotype.Service;
 
