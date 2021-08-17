@@ -23,7 +23,9 @@ public class UserService
     private final int maxIdSum;
     private final int minIdSum;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, DtoTranslator dtoTranslator, Set<Role> roles, @Value("${security.maxIdSum}") int maxIdSum, @Value("${security.minIdSum}") int minIdSum)
+    private final String wrongRoles;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, DtoTranslator dtoTranslator, Set<Role> roles, @Value("${security.maxIdSum}") int maxIdSum, @Value("${security.minIdSum}") int minIdSum, @Value("${errorMessages.wrongRoles}") String wrongRoles)
     {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -31,6 +33,7 @@ public class UserService
         this.roles = roles;
         this.maxIdSum = maxIdSum;
         this.minIdSum = minIdSum;
+        this.wrongRoles = wrongRoles;
     }
 
     public User translateIndividualVolunteerDTOAndSaveUser(IndividualVolunteerDTO individualVolunteerDTO)
@@ -65,7 +68,7 @@ public class UserService
         Set<String> rolesString = convertRoleSetToStringSet(roles);
 
         if (!rolesString.containsAll(userRolesString))
-            throwBadRequest();
+            throwBadRequest(wrongRoles);
 
         for (Role role : roles)
         {
@@ -76,27 +79,25 @@ public class UserService
             }
         }
 
-        Long userRoleSum = userRoles.stream()
-                .map(Role::getId)
-                .reduce(0L, Long::sum);
+        Long userRoleSum = getRoleIdSum(userRoles);
 
         if (!(minIdSum <= userRoleSum && userRoleSum <= maxIdSum))
-            throwBadRequest();
+            throwBadRequest(wrongRoles);
 
         if (userRoles.size() == minIdSum && userRoleSum == maxIdSum)
         {
             if (user.getCompanyName() == null)
-                throwBadRequest();
+                throwBadRequest(wrongRoles);
         } else
         {
             if (user.getFirstNamePerson() == null)
-                throwBadRequest();
+                throwBadRequest(wrongRoles);
         }
     }
 
-    private void throwBadRequest()
+    protected void throwBadRequest(String errorMessage)
     {
-        throw new HttpStatusCodeException(HttpStatus.BAD_REQUEST, "BAD_REQUEST: Roles are not set correctly")
+        throw new HttpStatusCodeException(HttpStatus.BAD_REQUEST, errorMessage)
         {
         };
     }
@@ -107,5 +108,12 @@ public class UserService
         return roles.stream()
                 .map(Role::getRole)
                 .collect(Collectors.toSet());
+    }
+
+    protected Long getRoleIdSum(Set<Role> roles)
+    {
+        return roles.stream()
+                .map(Role::getId)
+                .reduce(0L, Long::sum);
     }
 }

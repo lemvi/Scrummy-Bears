@@ -1,24 +1,53 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.ProfileDTO;
+import academy.everyonecodes.java.data.ProfileDTOs.ProfileDTO;
+import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 public class ProfileDTOService
 {
     private final UserRepository userRepository;
     private final UserToProfileDTOTranslator userToProfileDTOTranslator;
+    private final int maxIdSum;
+    private final int minIdSum;
+    private final UserService userService;
+    private final String usernameNotFound;
 
-    public ProfileDTOService(UserRepository userRepository, UserToProfileDTOTranslator userToProfileDTOTranslator)
+    public ProfileDTOService(UserRepository userRepository, UserToProfileDTOTranslator userToProfileDTOTranslator, @Value("${security.maxIdSum}") int maxIdSum, @Value("${security.minIdSum}") int minIdSum, UserService userService, @Value("${errorMessages.usernameNotFound}") String usernameNotFound)
     {
         this.userRepository = userRepository;
         this.userToProfileDTOTranslator = userToProfileDTOTranslator;
+        this.maxIdSum = maxIdSum;
+        this.minIdSum = minIdSum;
+        this.userService = userService;
+        this.usernameNotFound = usernameNotFound;
     }
 
-    public ProfileDTO get(String username)
+    public ProfileDTO viewProfile(String username)
     {
-        return userToProfileDTOTranslator.toDTO(userRepository.findByUsername(username).orElse(null));
+        User user = userRepository.findByUsername(username).orElse(null);
+
+        if (user == null)
+            userService.throwBadRequest(usernameNotFound);
+
+        Set<Role> roles = user.getRoles();
+
+        boolean hasMaximumAmountOfRoles = userService.getRoleIdSum(roles) == maxIdSum;
+
+        if (hasMaximumAmountOfRoles && roles.size() == minIdSum)
+        {
+            return userToProfileDTOTranslator.toCompanyProfileDTO(user);
+        } else if (hasMaximumAmountOfRoles)
+        {
+            return userToProfileDTOTranslator.toIndividualProfileDTO(user);
+        }
+
+        return userToProfileDTOTranslator.toVolunteerProfileDTO(user);
     }
 }

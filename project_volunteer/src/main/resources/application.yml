@@ -27,6 +27,9 @@ security:
       role: "ROLE_COMPANY"
   minIdSum: 1
   maxIdSum: 3
+errorMessages:
+  wrongRoles: "BAD_REQUEST: Roles are not set correctly"
+  usernameNotFound: "BAD_REQUEST: Username doesn't exist"
 
 
 constants:
