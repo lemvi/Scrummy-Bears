@@ -1,16 +1,16 @@
 package academy.everyonecodes.java.controller;
 
-import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.DTOs.SkillDTO;
-import academy.everyonecodes.java.service.AddSkillService;
+import academy.everyonecodes.java.data.Role;
+import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.UserRepository;
+import academy.everyonecodes.java.service.SkillService;
 import academy.everyonecodes.java.service.SkillTranslator;
-import org.springframework.boot.test.context.SpringBootTest;
-
-//import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.MediaType;
@@ -22,9 +22,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -36,7 +34,7 @@ public class AddSkillEndpointTest {
     TestRestTemplate template;
 
     @MockBean
-    AddSkillService addSkillService;
+    SkillService skillService;
     @MockBean
     UserRepository userRepository;
 
@@ -61,13 +59,13 @@ public class AddSkillEndpointTest {
         role.setId(id);
         User user = new User("username", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(role));
 
-        Mockito.when(addSkillService.addSkill(username, skillDTO)).thenReturn(Optional.of(skillDTO));
+        Mockito.when(skillService.addSkill(username, skillDTO)).thenReturn(Optional.of(skillDTO));
         mvc.perform(post(url + username)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(skillDtoJson)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-        Mockito.verify(addSkillService).addSkill(username, skillDTO);
+        Mockito.verify(skillService).addSkill(username, skillDTO);
     }
 
     @Test
@@ -82,13 +80,13 @@ public class AddSkillEndpointTest {
         role.setId(id);
         User user = new User("username", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(role));
 
-        Mockito.when(addSkillService.addSkill(username, skillDTO)).thenReturn(Optional.of(skillDTO));
+        Mockito.when(skillService.addSkill(username, skillDTO)).thenReturn(Optional.of(skillDTO));
         mvc.perform(post(url + username)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(skillDtoJson)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
-        Mockito.verifyNoInteractions(addSkillService);
+        Mockito.verifyNoInteractions(skillService);
     }
     private String createJson(SkillDTO skilLDTO) {
         return "{" +
