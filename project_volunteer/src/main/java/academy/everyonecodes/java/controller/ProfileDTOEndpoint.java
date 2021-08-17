@@ -23,6 +23,6 @@ public class ProfileDTOEndpoint
     @Secured({"ROLE_VOLUNTEER", "ROLE_INDIVIDUAL", "ROLE_COMPANY"})
     public ProfileDTO viewProfile(@PathVariable String username)
     {
-        return profileDTOService.viewProfile(username);
+        return profileDTOService.viewProfile(username).orElse(null);
     }
 }

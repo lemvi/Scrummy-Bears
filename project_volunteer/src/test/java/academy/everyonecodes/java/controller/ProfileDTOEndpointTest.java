@@ -9,10 +9,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -27,6 +28,8 @@ class ProfileDTOEndpointTest {
 
 	@Autowired
 	private MockMvc mvc;
+	@MockBean
+	private Authentication auth;
 
 	String url = "/profile/";
 
@@ -56,4 +59,5 @@ class ProfileDTOEndpointTest {
 
 		Mockito.verifyNoInteractions(profileDTOService);
 	}
+
 }

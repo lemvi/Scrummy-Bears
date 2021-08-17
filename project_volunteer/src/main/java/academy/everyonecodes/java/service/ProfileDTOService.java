@@ -7,6 +7,7 @@ import academy.everyonecodes.java.data.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -18,10 +19,9 @@ public class ProfileDTOService
     private final int minIdSum;
     private final UserService userService;
     private final String usernameNotFound;
-    private final RatingCalculator ratingCalculator;
 
 
-    public ProfileDTOService(UserRepository userRepository, UserToProfileDTOTranslator userToProfileDTOTranslator, @Value("${security.maxIdSum}") int maxIdSum, @Value("${security.minIdSum}") int minIdSum, UserService userService, @Value("${errorMessages.usernameNotFound}") String usernameNotFound, RatingCalculator ratingCalculator)
+    public ProfileDTOService(UserRepository userRepository, UserToProfileDTOTranslator userToProfileDTOTranslator, @Value("${security.maxIdSum}") int maxIdSum, @Value("${security.minIdSum}") int minIdSum, UserService userService, @Value("${errorMessages.usernameNotFound}") String usernameNotFound)
     {
         this.userRepository = userRepository;
         this.userToProfileDTOTranslator = userToProfileDTOTranslator;
@@ -29,29 +29,30 @@ public class ProfileDTOService
         this.minIdSum = minIdSum;
         this.userService = userService;
         this.usernameNotFound = usernameNotFound;
-        this.ratingCalculator = ratingCalculator;
     }
 
-    //TODO SKILL & RATING ADDED -> CHECK IF WORKING WHEN MERGED
-    public ProfileDTO viewProfile(String username)
+    public Optional<ProfileDTO> viewProfile(String username)
     {
         User user = userRepository.findByUsername(username).orElse(null);
 
-        if (user == null)
+        if (user == null) {
             userService.throwBadRequest(usernameNotFound);
+            return Optional.empty();
+        }
+
 
         Set<Role> roles = user.getRoles();
-
-        boolean hasMaximumAmountOfRoles = userService.getRoleIdSum(roles) == maxIdSum;
+        Long roleIdSum = userService.getRoleIdSum(roles);
+        boolean hasMaximumAmountOfRoles = roleIdSum == maxIdSum;
 
         if (hasMaximumAmountOfRoles && roles.size() == minIdSum)
         {
-            return userToProfileDTOTranslator.toCompanyProfileDTO(user);
-        } else if (hasMaximumAmountOfRoles)
+            return Optional.of(userToProfileDTOTranslator.toCompanyProfileDTO(user));
+        } else if (!hasMaximumAmountOfRoles && roleIdSum == 2)
         {
-            return userToProfileDTOTranslator.toIndividualProfileDTO(user);
+            return Optional.of(userToProfileDTOTranslator.toIndividualProfileDTO(user));
         }
 
-        return userToProfileDTOTranslator.toVolunteerProfileDTO(user);
+        return Optional.of(userToProfileDTOTranslator.toVolunteerProfileDTO(user));
     }
 }
