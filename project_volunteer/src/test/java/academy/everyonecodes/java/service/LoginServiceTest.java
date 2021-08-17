@@ -1,9 +1,9 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.InvalidLoginCount;
-import academy.everyonecodes.java.data.InvalidLoginCountRepository;
+import academy.everyonecodes.java.data.repositories.InvalidLoginCountRepository;
 import academy.everyonecodes.java.data.User;
-import academy.everyonecodes.java.data.UserRepository;
+import academy.everyonecodes.java.data.repositories.UserRepository;
 import academy.everyonecodes.java.security.UserPrincipal;
 import academy.everyonecodes.java.service.email.EmailServiceImpl;
 import org.junit.jupiter.api.Test;

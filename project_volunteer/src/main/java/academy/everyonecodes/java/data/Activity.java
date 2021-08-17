@@ -56,7 +56,18 @@ public class Activity {
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<User> participants;
 
+
     public Activity(){
+    }
+
+    public Activity(String title, String description, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean openEnd, User organizer)
+    {
+        this.title = title;
+        this.description = description;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.openEnd = openEnd;
+        this.organizer = organizer;
     }
 
     public Activity(String title, String description, String recommendedSkills, List<String> categories, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean openEnd, User organizer, Set<User> applicants, Set<User> participants) {

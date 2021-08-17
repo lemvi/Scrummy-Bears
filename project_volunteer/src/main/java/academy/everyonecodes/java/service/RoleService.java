@@ -1,7 +1,7 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.Role;
-import academy.everyonecodes.java.data.RoleRepository;
+import academy.everyonecodes.java.data.repositories.RoleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;

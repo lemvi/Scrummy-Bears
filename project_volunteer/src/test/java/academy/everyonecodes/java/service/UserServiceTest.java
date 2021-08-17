@@ -1,8 +1,9 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.*;
-import academy.everyonecodes.java.data.DTOs.CompanyDTO;
-import academy.everyonecodes.java.data.DTOs.IndividualVolunteerDTO;
+import academy.everyonecodes.java.data.dtos.CompanyDTO;
+import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
+import academy.everyonecodes.java.data.repositories.UserRepository;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

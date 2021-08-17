@@ -1,6 +1,6 @@
 package academy.everyonecodes.java.controller;
 
-import academy.everyonecodes.java.data.DTOs.ProfileDTO;
+import academy.everyonecodes.java.data.dtos.ProfileDTO;
 import academy.everyonecodes.java.service.ProfileDTOService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,9 +1,9 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.Skill;
-import academy.everyonecodes.java.data.SkillRepository;
+import academy.everyonecodes.java.data.repositories.SkillRepository;
 import academy.everyonecodes.java.data.User;
-import academy.everyonecodes.java.data.UserRepository;
+import academy.everyonecodes.java.data.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
