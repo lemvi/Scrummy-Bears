@@ -56,7 +56,7 @@ public class ActivityService
         Optional<Draft> oDraft = draftRepository.findById(draft.getId());
         if (oDraft.isPresent())
         {
-            return Optional.of(postDraft(draft));
+            return Optional.of(postDraft(oDraft.get()));
         }
         return Optional.empty();
     }
