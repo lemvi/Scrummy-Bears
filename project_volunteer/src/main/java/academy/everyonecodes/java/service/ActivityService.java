@@ -40,6 +40,14 @@ public class ActivityService
         return saveActivity(draft);
     }
 
+    /*
+    public Draft saveAsDraft(Activity activity)
+    {
+        return draftRepository.save(activityDraftTranslator.toDraft(activity));
+    }
+
+     */
+
     public Draft postDraft(Draft draft)
     {
         draft.setOrganizer(getAuthenticatedName());
