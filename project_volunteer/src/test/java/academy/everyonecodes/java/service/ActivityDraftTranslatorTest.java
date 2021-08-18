@@ -41,6 +41,7 @@ public class ActivityDraftTranslatorTest
                 organizer,
                 applicants,
                 participants);
+
         Draft actual = translator.toDraft(activity);
         Draft expected = new Draft(
                 "title",
@@ -51,6 +52,39 @@ public class ActivityDraftTranslatorTest
                 LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(10, 10, 10)),
                 false,
                 "organizer");
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void toActivity() {
+        Draft draft = new Draft(
+                "title",
+                "descr",
+                "skills",
+                "categoryOne;categoryTwo",
+                LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(10, 10, 10)),
+                LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(10, 10, 10)),
+                false,
+                "organizer");
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(new Role("ROLE_INDIVIDUAL"));
+        //User organizer = new User("organizer", "password", "email@email.com", roles);
+        Set<User> applicants = new HashSet<>();
+        Set<User> participants = new HashSet<>();
+        Activity expected = new Activity(
+                "title",
+                "descr",
+                "skills",
+                List.of("categoryOne", "categoryTwo"),
+                LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(10, 10, 10)),
+                LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(10, 10, 10)),
+                false,
+                null,
+                applicants,
+                participants);
+
+        Activity actual = translator.toActivity(draft);
         Assertions.assertEquals(expected, actual);
     }
 }
