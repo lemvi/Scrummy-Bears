@@ -6,6 +6,7 @@ import academy.everyonecodes.java.service.ActivityService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,23 +21,23 @@ public class ActivityEndpoint
                 //TODO VALIDATION
     @PostMapping
     @Secured({"ROLE_INDIVIDUAL", "ROLE_COMPANY"})
-    Activity postActivity(@RequestBody Activity activity)
+    Activity postActivity(@RequestBody @Valid Activity activity)
     {
         return activityService.postActivity(activity);
     }
 
     @PostMapping("/drafts")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_COMPANY"})
-    Draft saveAsDraft(@RequestBody Activity activity)
+    Draft postDraft(@RequestBody Draft draft)
     {
-        return activityService.saveAsDraft(activity);
+        return activityService.postDraft(draft);
     }
 
     @GetMapping("/drafts")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_COMPANY"})
-    List<Draft> getAllDrafts()
+    List<Draft> getAllDraftsOfOrganizer()
     {
-        return activityService.getAllDrafts();
+        return activityService.getAllDraftsOfOrganizer();
     }
 
     @PutMapping("/drafts")
@@ -46,10 +47,10 @@ public class ActivityEndpoint
         return activityService.editDraft(draft).orElse(null);
     }
 
-    @PutMapping
+    @PutMapping("/drafts/{draftId}")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_COMPANY"})
-    Activity saveDraftAsActivity(@RequestBody Draft draft)
+    Activity saveDraftAsActivity(@PathVariable Long draftId)
     {
-        return activityService.saveDraftAsActivity(draft);
+        return activityService.saveDraftAsActivity(draftId).orElse(null);
     }
 }

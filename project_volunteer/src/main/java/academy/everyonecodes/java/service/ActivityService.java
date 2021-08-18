@@ -30,39 +30,45 @@ public class ActivityService
 
     public Activity postActivity(Activity activity)
     {
-        String currentPrincipalName = getAuthenticatedName();
-        Optional<User> oUser = userRepository.findByUsername(currentPrincipalName);
+        Optional<User> oUser = userRepository.findByUsername(getAuthenticatedName());
         oUser.ifPresent(activity::setOrganizer);
         return activityRepository.save(activity);
     }
 
-    public Draft saveAsDraft(Draft draft) {
+    public Draft postDraft(Draft draft)
+    {
+        draft.setOrganizer(getAuthenticatedName());
         return draftRepository.save(draft);
     }
 
-    public Optional<Draft> editDraft(Draft draft) {
+    public List<Draft> getAllDraftsOfOrganizer()
+    {
+        return draftRepository.findByOrganizer(getAuthenticatedName());
+    }
+
+    public Optional<Draft> editDraft(Draft draft)
+    {
         Optional<Draft> oDraft = draftRepository.findById(draft.getId());
-        if (oDraft.isPresent()) {
-            return Optional.of(saveAsDraft(draft));
+        if (oDraft.isPresent())
+        {
+            return Optional.of(postDraft(draft));
         }
         return Optional.empty();
     }
 
-    public List<Draft> getAllDrafts()
+    public Optional<Activity> saveDraftAsActivity(Long draftId)
     {
-        return draftRepository.findAll();
+        Optional<Draft> oDraft = draftRepository.findById(draftId);
+        if (oDraft.isPresent())
+        {
+            draftRepository.deleteById(draftId);
+            return Optional.of(postActivity(activityDraftTranslator.toActivity(oDraft.get())));
+        }
+        return Optional.empty();
     }
 
-    public Draft saveAsDraft(Activity activity)
+    private String getAuthenticatedName()
     {
-        return draftRepository.save(activityDraftTranslator.toDraft(activity));
-    }
-    public Activity saveDraftAsActivity(Draft draft)
-    {
-        return postActivity(activityDraftTranslator.toActivity(draft));
-    }
-
-    private String getAuthenticatedName() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }
