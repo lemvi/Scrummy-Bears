@@ -31,7 +31,7 @@ public class Draft
     @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime endDateTime;
 
-    private boolean openEnd;
+    private Boolean openEnd;
 
     private String organizer;
 
@@ -39,7 +39,7 @@ public class Draft
     {
     }
 
-    public Draft(String title, String description, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean openEnd, String organizer)
+    public Draft(String title, String description, LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean openEnd, String organizer)
     {
         this.title = title;
         this.description = description;
@@ -49,7 +49,7 @@ public class Draft
         this.organizer = organizer;
     }
 
-    public Draft(String title, String description, String recommendedSkills, String categories, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean openEnd, String organizer)
+    public Draft(String title, String description, String recommendedSkills, String categories, LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean openEnd, String organizer)
     {
         this.title = title;
         this.description = description;
@@ -131,12 +131,12 @@ public class Draft
         this.endDateTime = endDateTime;
     }
 
-    public boolean isOpenEnd()
+    public Boolean isOpenEnd()
     {
         return openEnd;
     }
 
-    public void setOpenEnd(boolean openEnd)
+    public void setOpenEnd(Boolean openEnd)
     {
         this.openEnd = openEnd;
     }
@@ -157,7 +157,7 @@ public class Draft
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Draft draft = (Draft) o;
-        return openEnd == draft.openEnd && Objects.equals(id, draft.id) && Objects.equals(title, draft.title) && Objects.equals(description, draft.description) && Objects.equals(recommendedSkills, draft.recommendedSkills) && Objects.equals(categories, draft.categories) && Objects.equals(startDateTime, draft.startDateTime) && Objects.equals(endDateTime, draft.endDateTime) && Objects.equals(organizer, draft.organizer);
+        return Objects.equals(id, draft.id) && Objects.equals(title, draft.title) && Objects.equals(description, draft.description) && Objects.equals(recommendedSkills, draft.recommendedSkills) && Objects.equals(categories, draft.categories) && Objects.equals(startDateTime, draft.startDateTime) && Objects.equals(endDateTime, draft.endDateTime) && Objects.equals(openEnd, draft.openEnd) && Objects.equals(organizer, draft.organizer);
     }
 
     @Override
