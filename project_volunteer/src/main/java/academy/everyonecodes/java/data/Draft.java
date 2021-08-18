@@ -39,6 +39,16 @@ public class Draft
     {
     }
 
+    public Draft(String title, String description, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean openEnd, String organizer)
+    {
+        this.title = title;
+        this.description = description;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.openEnd = openEnd;
+        this.organizer = organizer;
+    }
+
     public Draft(String title, String description, String recommendedSkills, String categories, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean openEnd, String organizer)
     {
         this.title = title;

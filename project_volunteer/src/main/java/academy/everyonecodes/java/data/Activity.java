@@ -48,7 +48,6 @@ public class Activity {
     @NotNull
     private Boolean openEnd;
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
     private User organizer;
 
     @ManyToMany(fetch = FetchType.LAZY)

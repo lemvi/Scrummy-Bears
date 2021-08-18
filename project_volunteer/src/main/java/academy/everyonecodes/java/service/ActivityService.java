@@ -25,7 +25,7 @@ public class ActivityService
 
     private final String endDateBeforeStartDate;
 
-    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, UserService userService, @Value("${security.errorMessages.endDateBeforeStartDate}") String endDateBeforeStartDate)
+    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, UserService userService, @Value("${errorMessages.endDateBeforeStartDate}") String endDateBeforeStartDate)
     {
         this.activityRepository = activityRepository;
         this.activityDraftTranslator = activityDraftTranslator;
@@ -39,14 +39,6 @@ public class ActivityService
     {
         return saveActivity(draft);
     }
-
-    /*
-    public Draft saveAsDraft(Activity activity)
-    {
-        return draftRepository.save(activityDraftTranslator.toDraft(activity));
-    }
-
-     */
 
     public Draft postDraft(Draft draft)
     {
