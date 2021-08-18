@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.stream.Collectors;
 
 @Service
-public class DraftActivityTranslator
+public class ActivityDraftTranslator
 {
     public Draft toDraft(Activity activity)
     {

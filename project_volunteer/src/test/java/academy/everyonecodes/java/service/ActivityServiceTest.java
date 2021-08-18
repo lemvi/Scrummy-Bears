@@ -1,18 +1,9 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.Activity;
 import academy.everyonecodes.java.data.repositories.ActivityRepository;
-import academy.everyonecodes.java.data.User;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class ActivityServiceTest {

@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Set;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class DraftActivityTranslatorTest
+public class ActivityDraftTranslatorTest
 {
     @Autowired
-    DraftActivityTranslator translator;
+    ActivityDraftTranslator translator;
 
     @Test
     void toDraft()
@@ -53,5 +53,4 @@ public class DraftActivityTranslatorTest
                 "organizer");
         Assertions.assertEquals(expected, actual);
     }
-
 }

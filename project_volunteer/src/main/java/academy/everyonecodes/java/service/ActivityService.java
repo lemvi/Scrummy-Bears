@@ -16,14 +16,14 @@ import java.util.Optional;
 public class ActivityService
 {
     private final ActivityRepository activityRepository;
-    private final DraftActivityTranslator draftActivityTranslator;
+    private final ActivityDraftTranslator activityDraftTranslator;
     private final DraftRepository draftRepository;
     private final UserRepository userRepository;
 
-    public ActivityService(ActivityRepository activityRepository, DraftActivityTranslator draftActivityTranslator, DraftRepository draftRepository, UserRepository userRepository)
+    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository)
     {
         this.activityRepository = activityRepository;
-        this.draftActivityTranslator = draftActivityTranslator;
+        this.activityDraftTranslator = activityDraftTranslator;
         this.draftRepository = draftRepository;
         this.userRepository = userRepository;
     }
@@ -55,11 +55,11 @@ public class ActivityService
 
     public Draft saveAsDraft(Activity activity)
     {
-        return draftRepository.save(draftActivityTranslator.toDraft(activity));
+        return draftRepository.save(activityDraftTranslator.toDraft(activity));
     }
     public Activity saveDraftAsActivity(Draft draft)
     {
-        return postActivity(draftActivityTranslator.toActivity(draft));
+        return postActivity(activityDraftTranslator.toActivity(draft));
     }
 
     private String getAuthenticatedName() {
