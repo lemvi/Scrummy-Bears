@@ -6,9 +6,11 @@ import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import academy.everyonecodes.java.data.repositories.DraftRepository;
 import academy.everyonecodes.java.data.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,20 +21,23 @@ public class ActivityService
     private final ActivityDraftTranslator activityDraftTranslator;
     private final DraftRepository draftRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository)
+    private final String endDateBeforeStartDate;
+
+    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, UserService userService, @Value("${security.errorMessages.endDateBeforeStartDate}") String endDateBeforeStartDate)
     {
         this.activityRepository = activityRepository;
         this.activityDraftTranslator = activityDraftTranslator;
         this.draftRepository = draftRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
+        this.endDateBeforeStartDate = endDateBeforeStartDate;
     }
 
-    public Activity postActivity(Activity activity)
+    public Activity postActivity(Draft draft)
     {
-        Optional<User> oUser = userRepository.findByUsername(getAuthenticatedName());
-        oUser.ifPresent(activity::setOrganizer);
-        return activityRepository.save(activity);
+        return saveActivity(draft);
     }
 
     public Draft postDraft(Draft draft)
@@ -41,7 +46,7 @@ public class ActivityService
         return draftRepository.save(draft);
     }
 
-    public List<Draft> getAllDraftsOfOrganizer()
+    public List<Draft> getDraftsOfOrganizer()
     {
         return draftRepository.findByOrganizer(getAuthenticatedName());
     }
@@ -60,15 +65,38 @@ public class ActivityService
     {
         Optional<Draft> oDraft = draftRepository.findById(draftId);
         if (oDraft.isPresent())
-        {
-            draftRepository.deleteById(draftId);
-            return Optional.of(postActivity(activityDraftTranslator.toActivity(oDraft.get())));
-        }
+            return Optional.of(saveActivity(oDraft.get()));
         return Optional.empty();
+    }
+
+    public List<Activity> getActivitiesOfOrganizer()
+    {
+        return activityRepository.findByOrganizer_Username(getAuthenticatedName());
+    }
+
+    private Activity saveActivity(Draft draft)
+    {
+        Activity activity = activityDraftTranslator.toActivity(draft);
+        draftRepository.delete(draft);
+
+        Optional<User> oUser = userRepository.findByUsername(getAuthenticatedName());
+        oUser.ifPresent(activity::setOrganizer);
+        activity.setApplicants(new HashSet<>());
+        activity.setParticipants(new HashSet<>());
+        if (activity.isOpenEnd())
+            activity.setEndDateTime(activity.getStartDateTime());
+        if (!validateStartDateBeforeEndDate(activity))
+            userService.throwBadRequest(endDateBeforeStartDate);
+        return activityRepository.save(activity);
     }
 
     private String getAuthenticatedName()
     {
         return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    private boolean validateStartDateBeforeEndDate(Activity activity)
+    {
+        return activity.getStartDateTime().isBefore(activity.getEndDateTime());
     }
 }

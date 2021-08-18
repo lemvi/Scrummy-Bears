@@ -6,11 +6,10 @@ import academy.everyonecodes.java.service.ActivityService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/activities")
+@RequestMapping
 public class ActivityEndpoint
 {
     private final ActivityService activityService;
@@ -18,12 +17,19 @@ public class ActivityEndpoint
     {
         this.activityService = activityService;
     }
-                //TODO VALIDATION
-    @PostMapping
+
+    @PostMapping("/activities")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_COMPANY"})
-    Activity postActivity(@RequestBody @Valid Activity activity)
+    Activity postActivity(@RequestBody Draft draft)
     {
-        return activityService.postActivity(activity);
+        return activityService.postActivity(draft);
+    }
+
+    @GetMapping("/activities")
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_COMPANY"})
+    List<Activity> getActivitiesOfOrganizer()
+    {
+        return activityService.getActivitiesOfOrganizer();
     }
 
     @PostMapping("/drafts")
@@ -35,9 +41,9 @@ public class ActivityEndpoint
 
     @GetMapping("/drafts")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_COMPANY"})
-    List<Draft> getAllDraftsOfOrganizer()
+    List<Draft> getDraftsOfOrganizer()
     {
-        return activityService.getAllDraftsOfOrganizer();
+        return activityService.getDraftsOfOrganizer();
     }
 
     @PutMapping("/drafts")

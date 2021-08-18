@@ -7,6 +7,7 @@ import academy.everyonecodes.java.service.ActivityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -85,6 +86,23 @@ public class ActivityEndpointTest
     }
 
     @Test
+    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_VOLUNTEER"})
+    void postActivity_unauthorized_role() throws Exception
+    {
+        Activity activity = new Activity(
+                "title",
+                "description",
+                LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10)),
+                LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10)),
+                true,
+                organizer
+        );
+
+        assertIsForbidden(activity);
+        Mockito.verifyNoInteractions(activityService);
+    }
+
+    @Test
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
     void postActivity_TITLE_empty__too_long() throws Exception
     {
@@ -136,7 +154,7 @@ public class ActivityEndpointTest
                 "recommendedSkills",
                 categories,
                 null,
-                LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(10, 10, 10)),
+                LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10)),
                 true,
                 organizer,
                 applicants,
@@ -150,14 +168,14 @@ public class ActivityEndpointTest
 
     @Test
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
-    void postActivity_END_DATE_TIME_including_optional_fields() throws Exception
+    void postActivity_END_DATE_TIME_empty__not_in_future() throws Exception
     {
         Activity activity = new Activity(
                 "title",
                 "description",
                 "recommendedSkills",
                 categories,
-                LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(10, 10, 10)),
+                LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10)),
                 null,
                 true,
                 organizer,
@@ -195,7 +213,7 @@ public class ActivityEndpointTest
 
     @Test
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
-    void postActivity_ORGANIZER_including_optional_fields() throws Exception
+    void postActivity_ORGANIZER_is_null() throws Exception
     {
         Activity activity = new Activity(
                 "title",
@@ -213,48 +231,6 @@ public class ActivityEndpointTest
         assertIsBadRequest(activity);
     }
 
-    @Test
-    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
-    void postActivity_APPLICANTS_not_Empty() throws Exception
-    {
-        applicants.add(organizer);
-        Activity activity = new Activity(
-                "title",
-                "description",
-                "recommendedSkills",
-                categories,
-                LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10)),
-                LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10)),
-                true,
-                organizer,
-                applicants,
-                participants
-        );
-
-        assertIsBadRequest(activity);
-    }
-
-    @Test
-    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
-    void postActivity_PARTICIPANTS_not_Empty() throws Exception
-    {
-        participants.add(organizer);
-        Activity activity = new Activity(
-                "title",
-                "description",
-                "recommendedSkills",
-                categories,
-                LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10)),
-                LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10)),
-                true,
-                organizer,
-                applicants,
-                participants
-        );
-
-        assertIsBadRequest(activity);
-
-    }
 
     private void assertIsOK(Activity activity) throws Exception
     {
@@ -284,20 +260,6 @@ public class ActivityEndpointTest
                 .andExpect(status().isBadRequest());
     }
 
-    private void assertIsUnauthorized(Activity activity) throws Exception
-    {
-        organizer.setId(1L);
-        objectMapper.registerModule(new JavaTimeModule());
-        String activityJson = objectMapper.writeValueAsString(activity);
-        System.out.println(activityJson);
-
-        mvc.perform(post("/activities")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(activityJson)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnauthorized());
-    }
-
     private void assertIsForbidden(Activity activity) throws Exception
     {
         organizer.setId(1L);
@@ -314,7 +276,4 @@ public class ActivityEndpointTest
 }
 
 
-//TODO FutureDate has to be present or future OF STARTDATE
-//TODO shouldnt be able to create activity with either applicants or participants in it
 //TODO Alle anderen methods testen
-//TODO authorization testen

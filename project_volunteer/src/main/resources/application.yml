@@ -30,6 +30,7 @@ security:
 errorMessages:
   wrongRoles: "BAD_REQUEST: Roles are not set correctly"
   usernameNotFound: "BAD_REQUEST: Username doesn't exist"
+  endDateBeforeStartDate: "BAD_REQUEST: End date time must be after start date time"
 
 
 constants:

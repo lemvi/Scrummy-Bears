@@ -6,26 +6,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.stream.Collectors;
 
 @Service
 public class ActivityDraftTranslator
 {
-    public Draft toDraft(Activity activity)
-    {
-        return new Draft(
-                activity.getTitle(),
-                activity.getDescription(),
-                activity.getRecommendedSkills(),
-                activity.getCategories().stream()
-                        .collect(Collectors.joining(";")),
-                activity.getStartDateTime(),
-                activity.getEndDateTime(),
-                activity.isOpenEnd(),
-                activity.getOrganizer().getUsername()
-        );
-    }
-
     public Activity toActivity(Draft draft)
     {
         return new Activity(
