@@ -97,6 +97,7 @@ public class ActivityService
 
     private boolean validateStartDateBeforeEndDate(Activity activity)
     {
-        return activity.getStartDateTime().isBefore(activity.getEndDateTime());
+        return activity.getStartDateTime().isBefore(activity.getEndDateTime())
+                || activity.getStartDateTime().equals(activity.getEndDateTime());
     }
 }
