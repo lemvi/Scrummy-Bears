@@ -22,19 +22,81 @@ public class ActivityDraftTranslatorTest
     @Autowired
     ActivityDraftTranslator translator;
 
+    Set<Role> roles = new HashSet<>(List.of(new Role(2L, "ROLE_INDIVIDUAL")));
+    User organizer = new User(
+            "username",
+            "password",
+            "email@email.com",
+            roles
+    );
+    Set<User> applicants = new HashSet<>();
+    Set<User> participants = new HashSet<>();
+    String categories = "oneCategory";
+
     @Test
-    void toDraft()
+    void toActivity_all_fields() {
+        Draft draft = new Draft(
+                "title",
+                "descr",
+                "skills",
+                categories,
+                LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10)),
+                LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10)),
+                false,
+                organizer.getUsername());
+
+        Activity expected = new Activity(
+                "title",
+                "descr",
+                "skills",
+                List.of(categories),
+                LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10)),
+                LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10)),
+                false,
+                null,
+                applicants,
+                participants);
+
+        Activity actual = translator.toActivity(draft);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void toActivity_all_left_out_fields() {
+        Draft draft = new Draft(
+                null,
+                null,
+                null,
+                "",
+                null,
+                null,
+                true,
+                null);
+
+        Activity expected = new Activity(
+                null,
+                null,
+                null,
+                List.of(""),
+                null,
+                null,
+                true,
+                null,
+                applicants,
+                participants);
+
+        Activity actual = translator.toActivity(draft);
+        Assertions.assertEquals(expected, actual);
+    }
+    /*
+    @Test
+    void toDraft_all_fields()
     {
-        Set<Role> roles = new HashSet<>();
-        roles.add(new Role("ROLE_INDIVIDUAL"));
-        User organizer = new User("organizer", "password", "email@email.com", roles);
-        Set<User> applicants = new HashSet<>();
-        Set<User> participants = new HashSet<>();
         Activity activity = new Activity(
                 "title",
                 "descr",
                 "skills",
-                List.of("categoryOne", "categoryTwo"),
+                List.of(categories),
                 LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(10, 10, 10)),
                 LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(10, 10, 10)),
                 false,
@@ -47,44 +109,41 @@ public class ActivityDraftTranslatorTest
                 "title",
                 "descr",
                 "skills",
-                "categoryOne;categoryTwo",
+                categories,
                 LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(10, 10, 10)),
                 LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(10, 10, 10)),
                 false,
-                "organizer");
+                organizer.getUsername());
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
-    void toActivity() {
-        Draft draft = new Draft(
-                "title",
-                "descr",
-                "skills",
-                "categoryOne;categoryTwo",
-                LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(10, 10, 10)),
-                LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(10, 10, 10)),
-                false,
-                "organizer");
+    void toDraft_all_left_out_fields() {
 
-        Set<Role> roles = new HashSet<>();
-        roles.add(new Role("ROLE_INDIVIDUAL"));
-        //User organizer = new User("organizer", "password", "email@email.com", roles);
-        Set<User> applicants = new HashSet<>();
-        Set<User> participants = new HashSet<>();
-        Activity expected = new Activity(
-                "title",
-                "descr",
-                "skills",
-                List.of("categoryOne", "categoryTwo"),
-                LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(10, 10, 10)),
-                LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(10, 10, 10)),
-                false,
+        Activity activity = new Activity(
                 null,
+                null,
+                null,
+                List.of(),
+                null,
+                null,
+                true,
+                organizer,
                 applicants,
                 participants);
-
-        Activity actual = translator.toActivity(draft);
+        Draft actual = translator.toDraft(activity);
+        Draft expected = new Draft(
+                null,
+                null,
+                null,
+                "",
+                null,
+                null,
+                true,
+                organizer.getUsername());
         Assertions.assertEquals(expected, actual);
     }
+
+     */
+
 }

@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 @Service
 public class ActivityDraftTranslator
 {
+    /*
     public Draft toDraft(Activity activity)
     {
         return new Draft(
@@ -25,6 +26,8 @@ public class ActivityDraftTranslator
                 activity.getOrganizer().getUsername()
         );
     }
+
+     */
 
     public Activity toActivity(Draft draft)
     {
