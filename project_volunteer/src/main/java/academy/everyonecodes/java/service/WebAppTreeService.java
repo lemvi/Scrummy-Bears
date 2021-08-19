@@ -17,22 +17,6 @@ import static java.util.stream.Collectors.groupingBy;
 @ConfigurationProperties("webapptreelist")
 public class WebAppTreeService {
 
-	/*private Map<Integer, Employee> employees = new HashMap<>();
-
-	private String[] getPageData() {
-		String[] pageDate = {
-				"1 Top",
-				"2 Account 1",
-				"3 Profile 1",
-				"4 Search 1",
-
-		};
-	}*/
-
-	/*public void writeNodeTree() {
-		Node<String>
-	}*/
-
 	public String prepareWebAppTree() {
 		return prepareOutput();
 	}

@@ -54,16 +54,15 @@ webapptreelist:
         - role: "ROLE_VOLUNTEER"
         - role: "ROLE_INDIVIDUAL"
         - role: "ROLE_COMPANY"
-
     - category: Account
       name: View My Account
       description: View my Account Info
       uri: "/account/{username}"
       restMethod: GET
       allowedRoles:
-          - role: "ROLE_VOLUNTEER"
-          - role: "ROLE_INDIVIDUAL"
-          - role: "ROLE_COMPANY"
+        - role: "ROLE_VOLUNTEER"
+        - role: "ROLE_INDIVIDUAL"
+        - role: "ROLE_COMPANY"
     - category: Account
       name: Edit my Account
       description: Make changes in my Account
@@ -97,7 +96,7 @@ webapptreelist:
       uri: "/search/{text}"
       restMethod: GET
       allowedRoles:
-          - role: "ROLE_INDIVIDUAL"
+        - role: "ROLE_INDIVIDUAL"
 
     - category: Activities
       name: Create Activity
@@ -153,32 +152,32 @@ webapptreelist:
       uri: "/volunteer/search"
       restMethod: GET
       allowedRoles:
-        - role: "VOLUNTEER"
+        - role: "ROLE_VOLUNTEER"
     - category: Activities
       name: View all my Activities
       description: View all my Activities as Volunteer
       uri: "/{username}/activities"
       restMethod: GET
       allowedRoles:
-        - role: "VOLUNTEER"
+        - role: "ROLE_VOLUNTEER"
     - category: Activities
       name: View all my completed Activities
       description: View all my completed Activities as Volunteer
       uri: "/{username}/activities/completed"
       restMethod: GET
       allowedRoles:
-        - role: "VOLUNTEER"
+        - role: "ROLE_VOLUNTEER"
     - category: Activities
       name: View all my pending Activities
       description: View all my pending Activities as Volunteer
       uri: "/{username}/activities/pending"
       restMethod: GET
       allowedRoles:
-        - role: "VOLUNTEER"
+        - role: "ROLE_VOLUNTEER"
     - category: Activities
       name: View all my active Activities
       description: View all my active Activities as Volunteer
       uri: "/{username}/activities/active"
       restMethod: GET
       allowedRoles:
-        - role: "VOLUNTEER"
+        - role: "ROLE_VOLUNTEER"
