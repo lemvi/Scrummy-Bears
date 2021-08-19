@@ -149,8 +149,8 @@ webapptreelist:
         - role: "ROLE_COMPANY"
     - category: Activities
       name: View all existing Activities
-      description: View all Activities from the database
-      uri: "/{username}/activities"
+      description: View all Activities from the database to see what you can search for
+      uri: "/volunteer/search"
       restMethod: GET
       allowedRoles:
         - role: "VOLUNTEER"
