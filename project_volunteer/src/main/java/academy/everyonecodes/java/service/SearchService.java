@@ -31,17 +31,19 @@ public class SearchService {
     }
 
     public List<Activity> mergeLists(List<Activity> list1, List<Activity> list2, List<Activity> list3, List<Activity> list4) {
-
-        for (int i = 0; i < list1.size() || i < list2.size() || i < list3.size() || i < list4.size(); i++) {
-
-            if (list2.size() > i && !list1.contains(list2.get(i))) {
-                list1.add(list2.get(i));
+        for (Activity activity : list2) {
+            if (!list1.contains(activity)) {
+                list1.add(activity);
             }
-            if (list3.size() > i && !list1.contains(list3.get(i))) {
-                list1.add(list3.get(i));
+        }
+        for (Activity activity : list3) {
+            if (!list1.contains(activity)) {
+                list1.add(activity);
             }
-            if (list4.size() > i && !list1.contains(list4.get(i))) {
-                list1.add(list4.get(i));
+        }
+        for (Activity activity : list4) {
+            if (!list1.contains(activity)) {
+                list1.add(activity);
             }
         }
         return list1;

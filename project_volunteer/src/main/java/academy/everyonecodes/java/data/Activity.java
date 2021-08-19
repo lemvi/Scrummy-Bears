@@ -1,9 +1,7 @@
 package academy.everyonecodes.java.data;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.search.annotations.Field;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
