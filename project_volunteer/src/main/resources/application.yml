@@ -17,6 +17,11 @@ spring:
       starttls.enable: true
     debug: true
 
+
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS : false
+
 security:
   roles:
     - id: 1
@@ -30,6 +35,7 @@ security:
 errorMessages:
   wrongRoles: "BAD_REQUEST: Roles are not set correctly"
   usernameNotFound: "BAD_REQUEST: Username doesn't exist"
+  activitisNotFound: "Sorry, we found no Activities with the keyword:"
 
 
 constants:
