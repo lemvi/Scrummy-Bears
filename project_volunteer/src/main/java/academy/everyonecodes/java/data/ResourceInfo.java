@@ -1,5 +1,6 @@
 package academy.everyonecodes.java.data;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class ResourceInfo {
@@ -11,6 +12,7 @@ public class ResourceInfo {
 	private String restMethod;
 	private Set<Role> allowedRoles;
 
+	public ResourceInfo() {}
 
 	public ResourceInfo(String category, String name, String description, String uri, String restMethod, Set<Role> allowedRoles) {
 		this.category = category;
@@ -67,5 +69,30 @@ public class ResourceInfo {
 
 	public void setAllowedRoles(Set<Role> allowedRoles) {
 		this.allowedRoles = allowedRoles;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ResourceInfo that = (ResourceInfo) o;
+		return Objects.equals(category, that.category) && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(uri, that.uri) && Objects.equals(restMethod, that.restMethod) && Objects.equals(allowedRoles, that.allowedRoles);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(category, name, description, uri, restMethod, allowedRoles);
+	}
+
+	@Override
+	public String toString() {
+		return "ResourceInfo{" +
+				"category='" + category + '\'' +
+				", name='" + name + '\'' +
+				", description='" + description + '\'' +
+				", uri='" + uri + '\'' +
+				", restMethod='" + restMethod + '\'' +
+				", allowedRoles=" + allowedRoles +
+				'}';
 	}
 }

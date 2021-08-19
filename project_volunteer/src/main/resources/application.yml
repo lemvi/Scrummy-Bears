@@ -27,6 +27,7 @@ security:
       role: "ROLE_COMPANY"
   minIdSum: 1
   maxIdSum: 3
+
 errorMessages:
   wrongRoles: "BAD_REQUEST: Roles are not set correctly"
   usernameNotFound: "BAD_REQUEST: Username doesn't exist"
@@ -42,3 +43,142 @@ message:
 
   #https://drive.google.com/file/d/1_0k1HyesHZC1R6oEZ2q3MY5FiaMhKPie/view?usp=sharing
 
+webapptreelist:
+  resourceinfos:
+    - category: WebAppTree
+      name: See the Web App Tree
+      description: Get an overview of all possible actions for you
+      uri: "/webapptree"
+      restMethod: GET
+      allowedRoles:
+        - role: "ROLE_VOLUNTEER"
+        - role: "ROLE_INDIVIDUAL"
+        - role: "ROLE_COMPANY"
+
+    - category: Account
+      name: View My Account
+      description: View my Account Info
+      uri: "/account/{username}"
+      restMethod: GET
+      allowedRoles:
+          - role: "ROLE_VOLUNTEER"
+          - role: "ROLE_INDIVIDUAL"
+          - role: "ROLE_COMPANY"
+    - category: Account
+      name: Edit my Account
+      description: Make changes in my Account
+      uri: "/account/{username}"
+      restMethod: PUT
+      allowedRoles:
+        - role: "ROLE_VOLUNTEER"
+        - role: "ROLE_INDIVIDUAL"
+        - role: "ROLE_COMPANY"
+    - category: Account
+      name: Add Skills
+      description: Add skills to my Account"
+      uri: "/addSkill/{username}"
+      restMethod: POST
+      allowedRoles:
+        - role: "ROLE_VOLUNTEER"
+
+    - category: Profile
+      name: View Profile as seen by others
+      description: View my Profile as seen by Others
+      uri: "/profile/{username}"
+      restMethod: GET
+      allowedRoles:
+        - role: "ROLE_VOLUNTEER"
+        - role: "ROLE_INDIVIDUAL"
+        - role: "ROLE_COMPANY"
+
+    - category: Search
+      name: Search for activities as Volunteer
+      description: Search for Activities as Volunteer
+      uri: "/search/{text}"
+      restMethod: GET
+      allowedRoles:
+          - role: "ROLE_INDIVIDUAL"
+
+    - category: Activities
+      name: Create Activity
+      description: Create a new Activity as Organizer
+      uri: "/activities"
+      restMethod: POST
+      allowedRoles:
+        - role: "ROLE_INDIVIDUAL"
+        - role: "ROLE_COMPANY"
+    - category: Activities
+      name: View all Activities
+      description: View all my Activities as Organizer
+      uri: "/activities"
+      restMethod: GET
+      allowedRoles:
+        - role: "ROLE_INDIVIDUAL"
+        - role: "ROLE_COMPANY"
+    - category: Activities
+      name: Create Draft
+      description: Create a new Draft as Organizer
+      uri: "/drafts"
+      restMethod: POST
+      allowedRoles:
+        - role: "ROLE_INDIVIDUAL"
+        - role: "ROLE_COMPANY"
+    - category: Activities
+      name: View all Drafts
+      description: View all my Drafts as Organizer
+      uri: "/drafts"
+      restMethod: GET
+      allowedRoles:
+        - role: "ROLE_INDIVIDUAL"
+        - role: "ROLE_COMPANY"
+    - category: Activities
+      name: Edit Draft
+      description: Edit created Draft as Organizer
+      uri: "/drafts"
+      restMethod: PUT
+      allowedRoles:
+        - role: "ROLE_INDIVIDUAL"
+        - role: "ROLE_COMPANY"
+    - category: Activities
+      name: Save Draft as Activity
+      description: Save my Draft as Activity as Organizer
+      uri: "/drafts/{draftId}"
+      restMethod: PUT
+      allowedRoles:
+        - role: "ROLE_INDIVIDUAL"
+        - role: "ROLE_COMPANY"
+    - category: Activities
+      name: View all existing Activities
+      description: View all Activities from the database
+      uri: "/{username}/activities"
+      restMethod: GET
+      allowedRoles:
+        - role: "VOLUNTEER"
+    - category: Activities
+      name: View all my Activities
+      description: View all my Activities as Volunteer
+      uri: "/{username}/activities"
+      restMethod: GET
+      allowedRoles:
+        - role: "VOLUNTEER"
+    - category: Activities
+      name: View all my completed Activities
+      description: View all my completed Activities as Volunteer
+      uri: "/{username}/activities/completed"
+      restMethod: GET
+      allowedRoles:
+        - role: "VOLUNTEER"
+    - category: Activities
+      name: View all my pending Activities
+      description: View all my pending Activities as Volunteer
+      uri: "/{username}/activities/pending"
+      restMethod: GET
+      allowedRoles:
+        - role: "VOLUNTEER"
+    - category: Activities
+      name: View all my active Activities
+      description: View all my active Activities as Volunteer
+      uri: "/{username}/activities/active"
+      restMethod: GET
+      allowedRoles:
+        - role: "VOLUNTEER"
