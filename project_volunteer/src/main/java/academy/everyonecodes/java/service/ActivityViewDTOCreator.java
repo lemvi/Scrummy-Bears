@@ -13,23 +13,16 @@ public class ActivityViewDTOCreator {
 
     private final RatingCalculator ratingCalculator;
     private final StatusHandler statusHandler;
-    private final UserService userService;
     private final RatingRepository ratingRepository;
 
 
     public ActivityViewDTOCreator(RatingCalculator ratingCalculator, StatusHandler statusHandler, UserService userService, RatingRepository ratingRepository) {
         this.ratingCalculator = ratingCalculator;
         this.statusHandler = statusHandler;
-        this.userService = userService;
         this.ratingRepository = ratingRepository;
     }
 
     public ActivityViewDTO createActivityViewDTO_forVolunteer(Activity activity, User user) {
-//        Optional<User> oUser = userService.findByUsername(user);
-//        if(oUser.isEmpty()) {
-//            userService.throwBadRequest("user not found");
-//        }
-//        User user = oUser.get();
         Long userId = user.getId();
         Long activityId = activity.getId();
 

@@ -2,6 +2,7 @@ package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.Activity;
 import academy.everyonecodes.java.data.DTOs.ActivityViewDTO;
+import academy.everyonecodes.java.data.Status;
 import academy.everyonecodes.java.data.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,6 +50,28 @@ public class ActivityViewerService {
         List<Activity> activities = activityService.findAll();
         return activities.stream()
                 .filter(activity -> activity.getApplicants().contains(user) || activity.getParticipants().contains(user))
+                .collect(Collectors.toList());
+
+    }
+
+    public List<ActivityViewDTO> getListOfActivityViewDTOsForSpecificVolunteer_pending(String username) {
+        List<ActivityViewDTO> activityViewDTOS = getListOfActivityViewDTOsForSpecificVolunteer(username);
+        return activityViewDTOS.stream()
+                .filter(activityViewDTO -> activityViewDTO.getStatus().equals(Status.PENDING))
+                .collect(Collectors.toList());
+    }
+
+    public List<ActivityViewDTO> getListOfActivityViewDTOsForSpecificVolunteer_completed(String username) {
+        List<ActivityViewDTO> activityViewDTOS = getListOfActivityViewDTOsForSpecificVolunteer(username);
+        return activityViewDTOS.stream()
+                .filter(activityViewDTO -> activityViewDTO.getStatus().equals(Status.COMPLETED))
+                .collect(Collectors.toList());
+    }
+
+    public List<ActivityViewDTO> getListOfActivityViewDTOsForSpecificVolunteer_active(String username) {
+        List<ActivityViewDTO> activityViewDTOS = getListOfActivityViewDTOsForSpecificVolunteer(username);
+        return activityViewDTOS.stream()
+                .filter(activityViewDTO -> activityViewDTO.getStatus().equals(Status.ACTIVE))
                 .collect(Collectors.toList());
 
     }

@@ -2,6 +2,7 @@ package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.Activity;
 import academy.everyonecodes.java.data.DTOs.ActivityViewDTO;
+import academy.everyonecodes.java.data.Status;
 import academy.everyonecodes.java.data.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -102,6 +103,99 @@ class ActivityViewerServiceTest {
 
         assertEquals(expected, actual);
         assertDoesNotThrow(() -> activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username));
+    }
+
+    @Test
+    void getListOfActivityViewDTOsForSpecificVolunteer_pending_valid() {
+        String username = "username";
+
+        User volunteer = new User();
+        volunteer.setId(111L);
+
+        Activity activity = new Activity();
+        activity.setApplicants(Set.of(volunteer));
+        activity.setParticipants(Set.of(new User()));
+
+        ActivityViewDTO activityViewDTO = new ActivityViewDTO();
+        activityViewDTO.setStatus(Status.PENDING);
+
+        List<Activity> activities = List.of(activity);
+
+        Optional<User> oUser = Optional.of(volunteer);
+
+        when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
+        when(userService.findByUsername(username)).thenReturn(oUser);
+        when(activityService.findAll()).thenReturn(activities);
+        doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(userNotFoundErrorMessage);
+        when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
+
+        List<ActivityViewDTO> expected = List.of(activityViewDTO);
+        List<ActivityViewDTO> actual = activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer_pending(username);
+
+        assertEquals(expected, actual);
+        assertDoesNotThrow(() -> activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer_pending(username));
+    }
+
+    @Test
+    void getListOfActivityViewDTOsForSpecificVolunteer_completed_valid() {
+        String username = "username";
+
+        User volunteer = new User();
+        volunteer.setId(111L);
+
+        Activity activity = new Activity();
+        activity.setApplicants(Set.of(volunteer));
+        activity.setParticipants(Set.of(new User()));
+
+        ActivityViewDTO activityViewDTO = new ActivityViewDTO();
+        activityViewDTO.setStatus(Status.COMPLETED);
+
+        List<Activity> activities = List.of(activity);
+
+        Optional<User> oUser = Optional.of(volunteer);
+
+        when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
+        when(userService.findByUsername(username)).thenReturn(oUser);
+        when(activityService.findAll()).thenReturn(activities);
+        doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(userNotFoundErrorMessage);
+        when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
+
+        List<ActivityViewDTO> expected = List.of(activityViewDTO);
+        List<ActivityViewDTO> actual = activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer_completed(username);
+
+        assertEquals(expected, actual);
+        assertDoesNotThrow(() -> activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer_completed(username));
+    }
+
+    @Test
+    void getListOfActivityViewDTOsForSpecificVolunteer_active_valid() {
+        String username = "username";
+
+        User volunteer = new User();
+        volunteer.setId(111L);
+
+        Activity activity = new Activity();
+        activity.setApplicants(Set.of(volunteer));
+        activity.setParticipants(Set.of(new User()));
+
+        ActivityViewDTO activityViewDTO = new ActivityViewDTO();
+        activityViewDTO.setStatus(Status.ACTIVE);
+
+        List<Activity> activities = List.of(activity);
+
+        Optional<User> oUser = Optional.of(volunteer);
+
+        when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
+        when(userService.findByUsername(username)).thenReturn(oUser);
+        when(activityService.findAll()).thenReturn(activities);
+        doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(userNotFoundErrorMessage);
+        when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
+
+        List<ActivityViewDTO> expected = List.of(activityViewDTO);
+        List<ActivityViewDTO> actual = activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer_active(username);
+
+        assertEquals(expected, actual);
+        assertDoesNotThrow(() -> activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer_active(username));
     }
 
     @Test

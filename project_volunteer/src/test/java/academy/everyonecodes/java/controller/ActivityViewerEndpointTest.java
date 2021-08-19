@@ -22,9 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class ActivityViewerEndpointTest {
 
-//    @Autowired
-//    private TestRestTemplate restTemplate;                              // Probably don't need this
-
     @MockBean
     private ActivityViewerService activityViewerService;
 
@@ -44,7 +41,7 @@ class ActivityViewerEndpointTest {
 
     @Test
     @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_INDIVIDUAL"})
-    void getMyActivities_asVolunteer_invalidRole() throws Exception {
+    void getMyActivities_asVolunteer_invalidRole_individual() throws Exception {
         String username = "username";
         String url = "/" + username + "/activities";
         mvc.perform(get(url)
@@ -52,4 +49,61 @@ class ActivityViewerEndpointTest {
                 .andExpect(status().isForbidden());
         verifyNoInteractions(activityViewerService);
     }
+
+    @Test
+    @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_COMPANY"})
+    void getMyActivities_asVolunteer_invalidRole_company() throws Exception {
+        String username = "username";
+        String url = "/" + username + "/activities";
+        mvc.perform(get(url)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+        verifyNoInteractions(activityViewerService);
+    }
+
+    @Test
+    @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_MAFIABOSS"})
+    void getMyActivities_asVolunteer_invalidRole_roleNonExistent() throws Exception {
+        String username = "username";
+        String url = "/" + username + "/activities";
+        mvc.perform(get(url)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+        verifyNoInteractions(activityViewerService);
+    }
+
+    @Test
+    @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_VOLUNTEER"})
+    void getMyActivities_asVolunteer_pending_valid() throws Exception {
+        String username = "username";
+        String url = "/" + username + "/activities/pending";
+        mvc.perform(get(url)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        verify(activityViewerService).getListOfActivityViewDTOsForSpecificVolunteer_pending(username);
+    }
+
+    @Test
+    @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_VOLUNTEER"})
+    void getMyActivities_asVolunteer_active_valid() throws Exception {
+        String username = "username";
+        String url = "/" + username + "/activities/active";
+        mvc.perform(get(url)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        verify(activityViewerService).getListOfActivityViewDTOsForSpecificVolunteer_active(username);
+    }
+
+    @Test
+    @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_VOLUNTEER"})
+    void getMyActivities_asVolunteer_completed_valid() throws Exception {
+        String username = "username";
+        String url = "/" + username + "/activities/completed";
+        mvc.perform(get(url)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        verify(activityViewerService).getListOfActivityViewDTOsForSpecificVolunteer_completed(username);
+    }
+
+
 }

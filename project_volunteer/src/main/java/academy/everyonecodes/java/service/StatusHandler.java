@@ -22,15 +22,11 @@ public class StatusHandler {
     }
 
     public Status getStatusForSpecificActivityAndVolunteer(Activity activity, Long userId) {
-//        Optional<Activity> optionalActivity = activityService.findById(activity.getId());
         Optional<User> optionalUser = userService.findById(userId);
-//        if (optionalActivity.isEmpty()) {
-//            userService.throwBadRequest("activity not found");
-//        }
+
         if (optionalUser.isEmpty()) {
             userService.throwBadRequest(userNotFoundErrorMessage);
         }
-//        Activity activity = optionalActivity.get();
         User user = optionalUser.get();
 
         if (checkIfCompleted(activity)) {
