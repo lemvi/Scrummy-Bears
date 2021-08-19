@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class VolunteerSearchService {
+public class ActivityService {
 
 	private final ActivityRepository activityRepository;
 
-	public VolunteerSearchService(ActivityRepository activityRepository) {
+	public ActivityService(ActivityRepository activityRepository) {
 		this.activityRepository = activityRepository;
 	}
 

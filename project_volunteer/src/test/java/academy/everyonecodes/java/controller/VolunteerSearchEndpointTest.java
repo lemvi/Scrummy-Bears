@@ -1,6 +1,6 @@
 package academy.everyonecodes.java.controller;
 
-import academy.everyonecodes.java.service.VolunteerSearchService;
+import academy.everyonecodes.java.service.ActivityService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,7 +22,7 @@ class VolunteerSearchEndpointTest {
 	MockMvc mockMvc;
 
 	@MockBean
-	VolunteerSearchService volunteerSearchService;
+	ActivityService activityService;
 
 	String url = "/volunteer/search/";
 
@@ -34,8 +33,8 @@ class VolunteerSearchEndpointTest {
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk());
 
-		Mockito.verify(volunteerSearchService).getAllActivities();
-		Mockito.verifyNoMoreInteractions(volunteerSearchService);
+		Mockito.verify(activityService).getAllActivities();
+		Mockito.verifyNoMoreInteractions(activityService);
 	}
 
 	@Test
@@ -45,7 +44,7 @@ class VolunteerSearchEndpointTest {
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isForbidden());
 
-		Mockito.verifyNoInteractions(volunteerSearchService);
+		Mockito.verifyNoInteractions(activityService);
 	}
 
 	@Test
@@ -55,7 +54,7 @@ class VolunteerSearchEndpointTest {
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isForbidden());
 
-		Mockito.verifyNoInteractions(volunteerSearchService);
+		Mockito.verifyNoInteractions(activityService);
 	}
 
 	@Test
@@ -65,6 +64,6 @@ class VolunteerSearchEndpointTest {
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isForbidden());
 
-		Mockito.verifyNoInteractions(volunteerSearchService);
+		Mockito.verifyNoInteractions(activityService);
 	}
 }
