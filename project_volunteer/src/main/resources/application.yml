@@ -96,7 +96,7 @@ webapptreelist:
       uri: "/search/{text}"
       restMethod: GET
       allowedRoles:
-        - role: "ROLE_INDIVIDUAL"
+        - role: "ROLE_VOLUNTEER"
 
     - category: Activities
       name: Create Activity
