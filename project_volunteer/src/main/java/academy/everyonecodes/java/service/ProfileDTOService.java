@@ -47,11 +47,12 @@ public class ProfileDTOService
         if (hasMaximumAmountOfRoles && roles.size() == minIdSum)
         {
             return userToProfileDTOTranslator.toCompanyProfileDTO(user);
-        } else if (hasMaximumAmountOfRoles)
+        } else if (hasMaximumAmountOfRoles || user.getRoles().contains(new Role(1L, "ROLE_VOLUNTEER")))
         {
-            return userToProfileDTOTranslator.toIndividualProfileDTO(user);
-        }
+            return userToProfileDTOTranslator.toVolunteerProfileDTO(user);
 
-        return userToProfileDTOTranslator.toVolunteerProfileDTO(user);
+        }
+        return userToProfileDTOTranslator.toIndividualProfileDTO(user);
+
     }
 }

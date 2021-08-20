@@ -115,7 +115,7 @@ public class SearchServiceTest {
 
         return Stream.of(
                 Arguments.of(
-                        new LinkedList<>(List.of(a1, a2)), List.of(a1, a2), List.of(a3, a4), List.of(a5, a6), List.of(a1,a2, a3, a5, a4, a6)
+                        new LinkedList<>(List.of(a1, a2)), List.of(a1, a2), List.of(a3, a4), List.of(a5, a6), List.of(a1,a2, a3, a4, a5, a6)
                 )
                 ,
                 Arguments.of(
