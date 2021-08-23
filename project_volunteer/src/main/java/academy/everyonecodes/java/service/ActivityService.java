@@ -69,6 +69,10 @@ public class ActivityService
         return Optional.empty();
     }
 
+    public List<Activity> getAllActivities() {
+        return activityRepository.findAll();
+    }
+
     public List<Activity> getActivitiesOfOrganizer()
     {
         return activityRepository.findByOrganizer_Username(getAuthenticatedName());
