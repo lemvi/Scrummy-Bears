@@ -1,8 +1,8 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.DTOs.CompanyProfileDTO;
-import academy.everyonecodes.java.data.DTOs.IndividualProfileDTO;
-import academy.everyonecodes.java.data.DTOs.VolunteerProfileDTO;
+import academy.everyonecodes.java.data.dtos.CompanyProfileDTO;
+import academy.everyonecodes.java.data.dtos.IndividualProfileDTO;
+import academy.everyonecodes.java.data.dtos.VolunteerProfileDTO;
 import academy.everyonecodes.java.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

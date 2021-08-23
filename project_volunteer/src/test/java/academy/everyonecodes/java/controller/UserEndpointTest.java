@@ -1,6 +1,6 @@
 package academy.everyonecodes.java.controller;
 
-import academy.everyonecodes.java.data.DTOs.IndividualVolunteerDTO;
+import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.service.UserService;
@@ -55,7 +55,7 @@ class UserEndpointTest
     }
 
     @Test
-    void saveIndividual_valid_without_optional_fields()
+    void saveIndividual_valid_only_mandatory_fields()
     {
         IndividualVolunteerDTO user = new IndividualVolunteerDTO
                 (

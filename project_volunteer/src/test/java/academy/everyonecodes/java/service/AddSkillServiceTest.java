@@ -1,7 +1,9 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.*;
-import academy.everyonecodes.java.data.DTOs.SkillDTO;
+import academy.everyonecodes.java.data.dtos.SkillDTO;
+import academy.everyonecodes.java.data.repositories.SkillRepository;
+import academy.everyonecodes.java.data.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +21,7 @@ import java.util.Set;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class AddSkillServiceTest {
     @Autowired
-    AddSkillService addSkillService;
+    SkillService skillService;
     @MockBean
     SkillRepository skillRepository;
     @MockBean
@@ -40,7 +42,7 @@ public class AddSkillServiceTest {
         SkillDTO skilldto = new SkillDTO(skillToAdd);
         Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
-        addSkillService.addSkill(username, skilldto);
+        skillService.addSkill(username, skilldto);
 
         Mockito.verify(userRepository).findByUsername(username);
         Mockito.verifyNoInteractions(skillRepository);
@@ -63,7 +65,7 @@ public class AddSkillServiceTest {
         Mockito.when(skillRepository.save(skill)).thenReturn(skill);
         Mockito.when(translator.translateToSkillDTO(skill)).thenReturn(skilldto);
 
-        addSkillService.addSkill(username, skilldto);
+        skillService.addSkill(username, skilldto);
 
         Mockito.verify(userRepository).findByUsername(username);
         Mockito.verify(auth).getName();
@@ -87,7 +89,7 @@ public class AddSkillServiceTest {
         Skill skill = new Skill(id, user, skillToAdd);
         SkillDTO skilldto = new SkillDTO(skillToAdd);
 
-        addSkillService.addSkill(username, skilldto);
+        skillService.addSkill(username, skilldto);
 
         Mockito.verify(userRepository).findByUsername(username);
         Mockito.verify(auth).getName();
@@ -117,7 +119,7 @@ public class AddSkillServiceTest {
         Mockito.when(skillRepository.save(skillToSave)).thenReturn(skillToSave);
         Mockito.when(translator.translateToSkillDTO(skillToSave)).thenReturn(skillDTOToSave);
 
-        Optional<SkillDTO> result = addSkillService.addSkill(username, skilldto);
+        Optional<SkillDTO> result = skillService.addSkill(username, skilldto);
         Assertions.assertEquals(Optional.of(skillDTOToSave), result);
         Mockito.verify(userRepository).findByUsername(username);
         Mockito.verify(auth).getName();
@@ -140,7 +142,7 @@ public class AddSkillServiceTest {
         Mockito.when(auth.getName()).thenReturn(username);
         Mockito.when(skillRepository.findById(id)).thenReturn(Optional.of(skill));
 
-        addSkillService.addSkill(username, skilldto);
+        skillService.addSkill(username, skilldto);
 
         Mockito.verify(userRepository).findByUsername(username);
         Mockito.verify(auth).getName();

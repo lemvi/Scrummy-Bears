@@ -1,5 +1,6 @@
-package academy.everyonecodes.java.data;
+package academy.everyonecodes.java.data.repositories;
 
+import academy.everyonecodes.java.data.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

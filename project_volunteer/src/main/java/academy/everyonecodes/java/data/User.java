@@ -95,12 +95,12 @@ public class User
         this.roles = roles;
     }
 
-    public User(String username, String firstNamePerson, String lastNamePerson, String companyName)
+    public User(String username, String password, String emailAddress, Set<Role> roles)
     {
         this.username = username;
-        this.firstNamePerson = firstNamePerson;
-        this.lastNamePerson = lastNamePerson;
-        this.companyName = companyName;
+        this.password = password;
+        this.emailAddress = emailAddress;
+        this.roles = roles;
     }
 
     public User(String username, String password, String firstNamePerson, String lastNamePerson, LocalDate dateOfBirth, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
@@ -118,16 +118,6 @@ public class User
         this.telephoneNumber = telephoneNumber;
         this.description = description;
         this.roles = roles;
-    }
-
-    public User(String username, String firstNamePerson, String lastNamePerson, String companyName, LocalDate dateOfBirth, String description)
-    {
-        this.username = username;
-        this.firstNamePerson = firstNamePerson;
-        this.lastNamePerson = lastNamePerson;
-        this.companyName = companyName;
-        this.dateOfBirth = dateOfBirth;
-        this.description = description;
     }
 
     public User(String username, String password, String companyName, String emailAddress, Set<Role> roles)
@@ -301,5 +291,27 @@ public class User
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getUsername(), getPassword(), getFirstNamePerson(), getLastNamePerson(), getCompanyName(), getDateOfBirth(), getPostalCode(), getCity(), getStreet(), getStreetNumber(), getEmailAddress(), getTelephoneNumber(), getDescription());
+    }
+
+    @Override
+    public String toString()
+    {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstNamePerson='" + firstNamePerson + '\'' +
+                ", lastNamePerson='" + lastNamePerson + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", postalCode='" + postalCode + '\'' +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", streetNumber='" + streetNumber + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", telephoneNumber='" + telephoneNumber + '\'' +
+                ", description='" + description + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 }

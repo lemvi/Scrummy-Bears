@@ -1,4 +1,4 @@
-package academy.everyonecodes.java.data.DTOs;
+package academy.everyonecodes.java.data.dtos;
 
 import academy.everyonecodes.java.data.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
