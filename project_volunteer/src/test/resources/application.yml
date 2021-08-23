@@ -1,0 +1,70 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/project_volunteer?useSSL=false
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: scrummybears08@gmail.com
+    password: ScrumProject0821!#
+    transport.protocol: smtp
+    smtp:
+      auth: true
+      starttls.enable: true
+    debug: true
+
+security:
+  roles:
+    - id: 1
+      role: "ROLE_VOLUNTEER"
+    - id: 2
+      role: "ROLE_INDIVIDUAL"
+    - id: 3
+      role: "ROLE_COMPANY"
+  minIdSum: 1
+  maxIdSum: 3
+
+errorMessages:
+  wrongRoles: "BAD_REQUEST: Roles are not set correctly"
+  usernameNotFound: "BAD_REQUEST: Username doesn't exist"
+  endDateBeforeStartDate: "BAD_REQUEST: End date time must be after start date time"
+  loggedInUserNotMatchingRequest: "BAD_REQUEST: Logged in user does not match the user you are trying to access"
+
+
+constants:
+  how-many-failed-logins-cause-email-warning: 5
+
+message:
+  subject: Incorrect password for 5 times
+  text: Was this you? Someone tried to login with an incorrect password for 5 times. Please reset your Password.
+  pathToAttachment: project_volunteer/src/main/resources/Scrummy Bears Logo.jpg
+
+  #https://drive.google.com/file/d/1_0k1HyesHZC1R6oEZ2q3MY5FiaMhKPie/view?usp=sharing
+
+webapptreelist:
+  resourceinfos:
+    - category: "Profile"
+      name: "View Volunteer"
+      description: "View Profile as seen by others"
+      uri: "/profile/{username}"
+      restMethod: "GET"
+      allowedRoles:
+        - role: "ROLE_VOLUNTEER"
+    - category: "Profile"
+      name: "View Individual"
+      description: "View Profile as seen by others"
+      uri: "/profile/{username}"
+      restMethod: "GET"
+      allowedRoles:
+        - role: "ROLE_INDIVIDUAL"
+    - category: "Profile"
+      name: "View Company"
+      description: "View Profile as seen by others"
+      uri: "/profile/{username}"
+      restMethod: "GET"
+      allowedRoles:
+        - role: "ROLE_COMPANY"

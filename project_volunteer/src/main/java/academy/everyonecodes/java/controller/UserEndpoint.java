@@ -1,7 +1,7 @@
 package academy.everyonecodes.java.controller;
 
-import academy.everyonecodes.java.data.DTOs.CompanyDTO;
-import academy.everyonecodes.java.data.DTOs.IndividualVolunteerDTO;
+import academy.everyonecodes.java.data.dtos.CompanyDTO;
+import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.service.UserService;
 import org.springframework.web.bind.annotation.*;
