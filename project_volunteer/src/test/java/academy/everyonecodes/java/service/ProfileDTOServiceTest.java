@@ -1,13 +1,13 @@
 package academy.everyonecodes.java.service;
 
 
-import academy.everyonecodes.java.data.DTOs.CompanyProfileDTO;
-import academy.everyonecodes.java.data.DTOs.IndividualProfileDTO;
-import academy.everyonecodes.java.data.DTOs.VolunteerProfileDTO;
+import academy.everyonecodes.java.data.dtos.CompanyProfileDTO;
+import academy.everyonecodes.java.data.dtos.IndividualProfileDTO;
+import academy.everyonecodes.java.data.dtos.VolunteerProfileDTO;
 import academy.everyonecodes.java.data.Rating;
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
-import academy.everyonecodes.java.data.UserRepository;
+import academy.everyonecodes.java.data.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

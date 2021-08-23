@@ -209,7 +209,7 @@ public class ActivityServiceTest {
 
     @Test
     void findAll() {
-        activityService.findAll();
+        activityService.getAllActivities();
 
         verify(activityRepository).findAll();
     }

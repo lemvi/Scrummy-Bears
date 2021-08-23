@@ -46,7 +46,7 @@ public class ActivityViewerService {
     }
 
     public List<Activity> getAllActivitiesForSpecificVolunteer(User user) {
-        List<Activity> activities = activityService.findAll();
+        List<Activity> activities = activityService.getAllActivities();
         return activities.stream()
                 .filter(activity -> activity.getApplicants().contains(user) || activity.getParticipants().contains(user))
                 .collect(Collectors.toList());

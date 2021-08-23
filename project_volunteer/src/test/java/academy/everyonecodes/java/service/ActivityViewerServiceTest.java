@@ -94,7 +94,7 @@ class ActivityViewerServiceTest {
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
-        when(activityService.findAll()).thenReturn(activities);
+        when(activityService.getAllActivities()).thenReturn(activities);
         doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(userNotFoundErrorMessage);
         when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
 
@@ -125,7 +125,7 @@ class ActivityViewerServiceTest {
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
-        when(activityService.findAll()).thenReturn(activities);
+        when(activityService.getAllActivities()).thenReturn(activities);
         doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(userNotFoundErrorMessage);
         when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
 
@@ -156,7 +156,7 @@ class ActivityViewerServiceTest {
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
-        when(activityService.findAll()).thenReturn(activities);
+        when(activityService.getAllActivities()).thenReturn(activities);
         doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(userNotFoundErrorMessage);
         when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
 
@@ -187,7 +187,7 @@ class ActivityViewerServiceTest {
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
-        when(activityService.findAll()).thenReturn(activities);
+        when(activityService.getAllActivities()).thenReturn(activities);
         doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(userNotFoundErrorMessage);
         when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
 
@@ -216,7 +216,7 @@ class ActivityViewerServiceTest {
 
         List<Activity> activities = List.of(activity1, activity2);
 
-        when(activityService.findAll()).thenReturn(activities);
+        when(activityService.getAllActivities()).thenReturn(activities);
 
         List<Activity> expected = List.of(activity1);
         List<Activity> actual = activityViewerService.getAllActivitiesForSpecificVolunteer(volunteer1);

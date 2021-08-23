@@ -81,6 +81,7 @@ class StatusHandlerTest {
         Activity activity = new Activity();
         activity.setEndDateTime(LocalDateTime.MIN);
         activity.setApplicants(Set.of(user));
+        activity.setOpenEnd(false);
 
         when(userService.findById(userId)).thenReturn(Optional.of(user));
         doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(userNotFoundErrorMessage);

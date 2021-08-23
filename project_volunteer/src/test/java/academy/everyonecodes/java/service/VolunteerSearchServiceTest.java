@@ -1,6 +1,6 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.ActivityRepository;
+import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

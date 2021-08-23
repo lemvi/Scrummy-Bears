@@ -2,6 +2,7 @@ package academy.everyonecodes.java.data.repositories;
 
 import academy.everyonecodes.java.data.Rating;
 import academy.everyonecodes.java.data.RatingId;
+import academy.everyonecodes.java.data.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
