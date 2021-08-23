@@ -1,7 +1,7 @@
 package academy.everyonecodes.java.controller;
 
 import academy.everyonecodes.java.data.dtos.SkillDTO;
-import academy.everyonecodes.java.service.AddSkillService;
+import academy.everyonecodes.java.service.SkillService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/addSkill")
 public class AddSkillEndpoint {
 
-    private final AddSkillService addSkillService;
+        private final SkillService service;
 
-    public AddSkillEndpoint(AddSkillService addSkillService) {
-        this.addSkillService = addSkillService;
+    public AddSkillEndpoint(SkillService service) {
+        this.service = service;
     }
 
     @PostMapping("/{username}")
     @Secured("ROLE_VOLUNTEER")
     SkillDTO addSkill(@PathVariable String username, @RequestBody SkillDTO skill) {
-        return addSkillService.addSkill(username, skill).orElse(null);
+        return service.addSkill(username, skill).orElse(null);
     }
 }

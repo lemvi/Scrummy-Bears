@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,23 +32,22 @@ public class Activity {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> categories;
 
-    @NotEmpty
+    @NotNull
     @FutureOrPresent
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime startDateTime;
 
-    @NotEmpty
+    @NotNull
     @FutureOrPresent
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime endDateTime;
 
-    @NotEmpty
-    private boolean openEnd;
+    @NotNull
+    private Boolean openEnd;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @NotEmpty
+    @ManyToOne(fetch = FetchType.EAGER)
     private User organizer;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -56,10 +56,21 @@ public class Activity {
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<User> participants;
 
+
     public Activity(){
     }
 
-    public Activity(String title, String description, String recommendedSkills, List<String> categories, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean openEnd, User organizer, Set<User> applicants, Set<User> participants) {
+    public Activity(String title, String description, LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean openEnd, User organizer)
+    {
+        this.title = title;
+        this.description = description;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.openEnd = openEnd;
+        this.organizer = organizer;
+    }
+
+    public Activity(String title, String description, String recommendedSkills, List<String> categories, LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean openEnd, User organizer, Set<User> applicants, Set<User> participants) {
         this.title = title;
         this.description = description;
         this.recommendedSkills = recommendedSkills;
@@ -128,11 +139,11 @@ public class Activity {
         this.endDateTime = endDateTime;
     }
 
-    public boolean isOpenEnd() {
+    public Boolean isOpenEnd() {
         return openEnd;
     }
 
-    public void setOpenEnd(boolean openEnd) {
+    public void setOpenEnd(Boolean openEnd) {
         this.openEnd = openEnd;
     }
 

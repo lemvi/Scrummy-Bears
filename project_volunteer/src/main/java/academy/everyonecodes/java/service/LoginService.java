@@ -1,6 +1,8 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.*;
+import academy.everyonecodes.java.data.repositories.InvalidLoginCountRepository;
+import academy.everyonecodes.java.data.repositories.UserRepository;
 import academy.everyonecodes.java.security.BadCredentialsListener;
 import academy.everyonecodes.java.security.SuccessfulLoginListener;
 import academy.everyonecodes.java.security.UserPrincipal;

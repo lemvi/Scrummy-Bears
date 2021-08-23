@@ -55,7 +55,7 @@ class UserEndpointTest
     }
 
     @Test
-    void saveIndividual_valid_without_optional_fields()
+    void saveIndividual_valid_only_mandatory_fields()
     {
         IndividualVolunteerDTO user = new IndividualVolunteerDTO
                 (
