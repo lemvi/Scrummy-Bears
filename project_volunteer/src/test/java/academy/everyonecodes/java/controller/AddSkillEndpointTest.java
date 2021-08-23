@@ -1,9 +1,9 @@
 package academy.everyonecodes.java.controller;
 
-import academy.everyonecodes.java.data.DTOs.SkillDTO;
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
-import academy.everyonecodes.java.data.UserRepository;
+import academy.everyonecodes.java.data.repositories.UserRepository;
+import academy.everyonecodes.java.data.dtos.SkillDTO;
 import academy.everyonecodes.java.service.SkillService;
 import academy.everyonecodes.java.service.SkillTranslator;
 import org.junit.jupiter.api.Test;
