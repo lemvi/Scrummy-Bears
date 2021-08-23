@@ -1,6 +1,6 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.dtos.CompanyProfileDTO;
+import academy.everyonecodes.java.data.dtos.OrganizationProfileDTO;
 import academy.everyonecodes.java.data.dtos.IndividualProfileDTO;
 import academy.everyonecodes.java.data.dtos.VolunteerProfileDTO;
 import academy.everyonecodes.java.data.User;
@@ -23,9 +23,9 @@ public class UserToProfileDTOTranslator
     }
 
 
-    protected CompanyProfileDTO toCompanyProfileDTO(User user)
+    protected OrganizationProfileDTO toOrganizationProfileDTO(User user)
     {
-        return new CompanyProfileDTO(
+        return new OrganizationProfileDTO(
                 user.getUsername(),
                 user.getPostalCode(),
                 user.getCity(),
@@ -36,7 +36,7 @@ public class UserToProfileDTOTranslator
                 user.getDescription(),
                 user.getRoles(),
                 ratingService.calculateAverageUserRating(user.getId()),
-                user.getCompanyName()
+                user.getOrganizationName()
         );
     }
 

@@ -25,7 +25,7 @@ public class WebAppTreeEndpoint {
 	WebAppTreeService webAppTreeService;
 
 	@GetMapping
-	@Secured({"ROLE_INDIVIDUAL", "ROLE_VOLUNTEER", "ROLE_COMPANY"})
+	@Secured({"ROLE_INDIVIDUAL", "ROLE_VOLUNTEER", "ROLE_ORGANIZATION"})
 	public String getWebAppTree() {
 		return webAppTreeService.prepareWebAppTree();
 	/*	return new ResponseEntity<>(

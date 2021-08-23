@@ -1,6 +1,6 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.dtos.CompanyDTO;
+import academy.everyonecodes.java.data.dtos.OrganizationDTO;
 import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.User;
 import org.springframework.stereotype.Service;
@@ -27,20 +27,20 @@ public class DtoTranslator
         );
     }
 
-    protected User CompanyToUser(CompanyDTO companyDTO)
+    protected User OrganizationToUser(OrganizationDTO organizationDTO)
     {
         return new User(
-                trimProperty(companyDTO.getUsername()),
-                trimProperty(companyDTO.getPassword()),
-                trimProperty(companyDTO.getCompanyName()),
-                trimProperty(companyDTO.getPostalCode()),
-                trimProperty(companyDTO.getCity()),
-                trimProperty(companyDTO.getStreet()),
-                trimProperty(companyDTO.getStreetNumber()),
-                trimProperty(companyDTO.getEmailAddress()),
-                trimProperty(companyDTO.getTelephoneNumber()),
-                trimProperty(companyDTO.getDescription()),
-                companyDTO.getRoles()
+                trimProperty(organizationDTO.getUsername()),
+                trimProperty(organizationDTO.getPassword()),
+                trimProperty(organizationDTO.getOrganizationName()),
+                trimProperty(organizationDTO.getPostalCode()),
+                trimProperty(organizationDTO.getCity()),
+                trimProperty(organizationDTO.getStreet()),
+                trimProperty(organizationDTO.getStreetNumber()),
+                trimProperty(organizationDTO.getEmailAddress()),
+                trimProperty(organizationDTO.getTelephoneNumber()),
+                trimProperty(organizationDTO.getDescription()),
+                organizationDTO.getRoles()
         );
     }
 

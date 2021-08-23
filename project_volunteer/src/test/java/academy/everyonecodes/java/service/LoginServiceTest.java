@@ -149,7 +149,7 @@ class LoginServiceTest {
 		testUser.setId(1L);
 		testUser.setUsername("Testy");
 		testUser.setPassword("test");
-		// "Testy", "test", "TestFirst", "TestLast", "TestCompany", null, null, null, null, null, "test@testmail.com", null, null, null);
+		// "Testy", "test", "TestFirst", "TestLast", "TestOrganization", null, null, null, null, null, "test@testmail.com", null, null, null);
 
 		InvalidLoginCount testInvalidLoginCount = new InvalidLoginCount(testUser, 0);
 

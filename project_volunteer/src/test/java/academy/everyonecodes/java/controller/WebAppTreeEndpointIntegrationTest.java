@@ -38,7 +38,7 @@ class WebAppTreeEndpointIntegrationTest {
 	private final List<ResourceInfo> testResourceInfos = List.of(
 			new ResourceInfo("Profile", "View Volunteer", "View Profile as seen by others", "/profile/{username}", "GET", Set.of(new Role("ROLE_VOLUNTEER"))),
 			new ResourceInfo("Profile", "View Individual", "View Profile as seen by others", "/profile/{username}", "GET", Set.of(new Role("ROLE_INDIVIDUAL"))),
-			new ResourceInfo("Profile", "View Company", "View Profile as seen by others", "/profile/{username}", "GET", Set.of(new Role("ROLE_COMPANY")))
+			new ResourceInfo("Profile", "View Organization", "View Profile as seen by others", "/profile/{username}", "GET", Set.of(new Role("ROLE_ORGANIZATION")))
 	);
 
 
@@ -68,9 +68,9 @@ class WebAppTreeEndpointIntegrationTest {
 	}
 
 	@Test
-	@WithMockUser(username = "Test", password = "test", authorities = {"ROLE_COMPANY"})
-	void getWebAppTree_AsCompany() throws Exception {
-		String expected = "Profile" + "\n" + "    " + "View Company" + "\n";
+	@WithMockUser(username = "Test", password = "test", authorities = {"ROLE_ORGANIZATION"})
+	void getWebAppTree_AsOrganization() throws Exception {
+		String expected = "Profile" + "\n" + "    " + "View Organization" + "\n";
 		var result = mockMvc.perform(get(url)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())

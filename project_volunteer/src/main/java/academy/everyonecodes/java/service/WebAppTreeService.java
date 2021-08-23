@@ -22,29 +22,29 @@ public class WebAppTreeService {
 	}
 
 	/*private final List<ResourceInfo> resourceInfos = List.of(
-			new ResourceInfo("Account", "Edit Account", "Make changes in Profile", "/account/{username}", "PUT", Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_INDIVIDUAL"), new Role("ROLE_COMPANY"))),
-			new ResourceInfo("Account", "View Account", "View Account Info", "/account/{username}", "GET", Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_INDIVIDUAL"), new Role("ROLE_COMPANY"))),
-			new ResourceInfo("Profile", "View Profile", "View Profile as seen by others", "/profile/{username}", "GET", Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_INDIVIDUAL"), new Role("ROLE_COMPANY"))),
-			new ResourceInfo("Profile", "View Profile", "View Profile as seen by others", "/profile/{username}", "GET", Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_INDIVIDUAL"), new Role("ROLE_COMPANY"))),
+			new ResourceInfo("Account", "Edit Account", "Make changes in Profile", "/account/{username}", "PUT", Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_INDIVIDUAL"), new Role("ROLE_ORGANIZATION"))),
+			new ResourceInfo("Account", "View Account", "View Account Info", "/account/{username}", "GET", Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_INDIVIDUAL"), new Role("ROLE_ORGANIZATION"))),
+			new ResourceInfo("Profile", "View Profile", "View Profile as seen by others", "/profile/{username}", "GET", Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_INDIVIDUAL"), new Role("ROLE_ORGANIZATION"))),
+			new ResourceInfo("Profile", "View Profile", "View Profile as seen by others", "/profile/{username}", "GET", Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_INDIVIDUAL"), new Role("ROLE_ORGANIZATION"))),
 			new ResourceInfo("Profile", "View Volunteer", "View Profile as seen by others", "/profile/{username}", "GET", Set.of(new Role("ROLE_VOLUNTEER"))),
 			new ResourceInfo("Profile", "View Individual", "View Profile as seen by others", "/profile/{username}", "GET", Set.of(new Role("ROLE_INDIVIDUAL"))),
-			new ResourceInfo("Profile", "View Company", "View Profile as seen by others", "/profile/{username}", "GET", Set.of(new Role("ROLE_COMPANY")))
+			new ResourceInfo("Profile", "View Organization", "View Profile as seen by others", "/profile/{username}", "GET", Set.of(new Role("ROLE_ORGANIZATION")))
 	);*/
 
 	private List<ResourceInfo> resourceinfos;
 	/*= List.of(
 
 			new ResourceInfo("Account", "View my Account", "View my Account Info", "/account/{username}", "GET", Set.of(new Role(
-					"ROLE_VOLUNTEER"), new Role("ROLE_INDIVIDUAL"), new Role("ROLE_COMPANY"))),
+					"ROLE_VOLUNTEER"), new Role("ROLE_INDIVIDUAL"), new Role("ROLE_ORGANIZATION"))),
 
 			new ResourceInfo("Account", "Edit my Account", "Make changes in my Account", "/account/{username}", "PUT", Set.of(new Role(
-					"ROLE_VOLUNTEER"), new Role("ROLE_INDIVIDUAL"), new Role("ROLE_COMPANY"))),
+					"ROLE_VOLUNTEER"), new Role("ROLE_INDIVIDUAL"), new Role("ROLE_ORGANIZATION"))),
 
 			new ResourceInfo("Account", "Add Skills", "Add skills to my Account", "/addSkill/{username}", "POST",
 					Set.of(new Role("ROLE_VOLUNTEER"))),
 
 			new ResourceInfo("Profile", "View Profile as seen by others", "View my Profile as seen by Others", "/profile/{username}", "GET"
-					, Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_INDIVIDUAL"), new Role("ROLE_COMPANY"))),
+					, Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_INDIVIDUAL"), new Role("ROLE_ORGANIZATION"))),
 
 			new ResourceInfo("Search", "Search for activities as Volunteer", "Search for Activities as Volunteer", "/search/{text}", "GET",
 					Set.of(new Role("ROLE_VOLUNTEER"))),
@@ -52,23 +52,23 @@ public class WebAppTreeService {
 
 
 			new ResourceInfo("Activities", "Create Activity", "Create a new Activity as Organizer", "/activities", "POST",
-					Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_COMPANY"))),
+					Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_ORGANIZATION"))),
 
 			new ResourceInfo("Activities", "View all Activities", "View all my Activities as Organizer", "/activities", "GET",
-					Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_COMPANY"))),
+					Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_ORGANIZATION"))),
 
 			new ResourceInfo("Activities", "Create Draft", "Create a new Draft as Organizer", "/drafts", "POST", Set.of(new Role("ROLE_INDIVIDUAL"),
-					new Role("ROLE_COMPANY"))),
+					new Role("ROLE_ORGANIZATION"))),
 
 			new ResourceInfo("Activities", "View all Drafts", "View all my Drafts as Organizer", "/drafts", "GET", Set.of(new Role("ROLE_INDIVIDUAL")
-					, new Role("ROLE_COMPANY"))),
+					, new Role("ROLE_ORGANIZATION"))),
 
 			new ResourceInfo("Activities", "Edit Draft", "Edit created Draft as Organizer", "/drafts", "PUT", Set.of(new Role("ROLE_INDIVIDUAL"),
-					new Role("ROLE_COMPANY"))),
+					new Role("ROLE_ORGANIZATION"))),
 
 			new ResourceInfo("Activities", "Save Draft as Activity", "Save my Draft as Activity as Organizer", "/drafts/{draftId}", "PUT",
 					Set.of(new Role(
-							"ROLE_INDIVIDUAL"),    new Role("ROLE_COMPANY"))),
+							"ROLE_INDIVIDUAL"),    new Role("ROLE_ORGANIZATION"))),
 
 			new ResourceInfo("Activities", "View all my Activities", "View all my Activities as Volunteer", "/{username}/activities", "GET",
 					Set.of(new Role("ROLE_VOLUNTEER"))),

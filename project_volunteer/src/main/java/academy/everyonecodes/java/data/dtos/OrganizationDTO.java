@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.Set;
 
-public class CompanyDTO
+public class OrganizationDTO
 {
     @NotEmpty
     @Size(min = 1, max = 30, message = "Must have 1-30 characters")
@@ -20,7 +20,7 @@ public class CompanyDTO
 
     @NotEmpty
     @Size(min = 1, max = 30, message = "Must have 1-30 characters")
-    private String companyName;
+    private String organizationName;
 
     @Size(max = 10, message = "Must have 10 characters")
     private String postalCode;
@@ -48,24 +48,24 @@ public class CompanyDTO
     @NotEmpty
     private Set<Role> roles;
 
-    public CompanyDTO()
+    public OrganizationDTO()
     {
     }
 
-    public CompanyDTO(String username, String password, String companyName, String emailAddress, Set<Role> roles)
+    public OrganizationDTO(String username, String password, String organizationName, String emailAddress, Set<Role> roles)
     {
         this.username = username;
         this.password = password;
-        this.companyName = companyName;
+        this.organizationName = organizationName;
         this.emailAddress = emailAddress;
         this.roles = roles;
     }
 
-    public CompanyDTO(String username, String password, String companyName, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
+    public OrganizationDTO(String username, String password, String organizationName, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
     {
         this.username = username;
         this.password = password;
-        this.companyName = companyName;
+        this.organizationName = organizationName;
         this.postalCode = postalCode;
         this.city = city;
         this.street = street;
@@ -96,14 +96,14 @@ public class CompanyDTO
         this.password = password;
     }
 
-    public String getCompanyName()
+    public String getOrganizationName()
     {
-        return companyName;
+        return organizationName;
     }
 
-    public void setCompanyName(String companyName)
+    public void setOrganizationName(String organizationName)
     {
-        this.companyName = companyName;
+        this.organizationName = organizationName;
     }
 
     public String getPostalCode()
@@ -191,13 +191,13 @@ public class CompanyDTO
     {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CompanyDTO that = (CompanyDTO) o;
-        return Objects.equals(username, that.username) && Objects.equals(password, that.password) && Objects.equals(companyName, that.companyName) && Objects.equals(postalCode, that.postalCode) && Objects.equals(city, that.city) && Objects.equals(street, that.street) && Objects.equals(streetNumber, that.streetNumber) && Objects.equals(emailAddress, that.emailAddress) && Objects.equals(telephoneNumber, that.telephoneNumber) && Objects.equals(description, that.description) && Objects.equals(roles, that.roles);
+        OrganizationDTO that = (OrganizationDTO) o;
+        return Objects.equals(username, that.username) && Objects.equals(password, that.password) && Objects.equals(organizationName, that.organizationName) && Objects.equals(postalCode, that.postalCode) && Objects.equals(city, that.city) && Objects.equals(street, that.street) && Objects.equals(streetNumber, that.streetNumber) && Objects.equals(emailAddress, that.emailAddress) && Objects.equals(telephoneNumber, that.telephoneNumber) && Objects.equals(description, that.description) && Objects.equals(roles, that.roles);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(username, password, companyName, postalCode, city, street, streetNumber, emailAddress, telephoneNumber, description, roles);
+        return Objects.hash(username, password, organizationName, postalCode, city, street, streetNumber, emailAddress, telephoneNumber, description, roles);
     }
 }

@@ -1,7 +1,7 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.*;
-import academy.everyonecodes.java.data.dtos.CompanyDTO;
+import academy.everyonecodes.java.data.dtos.OrganizationDTO;
 import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,9 +47,9 @@ public class UserService
         return save(user);
     }
 
-    public User translateCompanyDTOAndSaveUser(CompanyDTO companyDTO)
+    public User translateOrganizationDTOAndSaveUser(OrganizationDTO organizationDTO)
     {
-        User user = dtoTranslator.CompanyToUser(companyDTO);
+        User user = dtoTranslator.OrganizationToUser(organizationDTO);
         validateRoles(user);
         return save(user);
     }
@@ -98,7 +98,7 @@ public class UserService
 
         if (userRoles.size() == minIdSum && userRoleSum == maxIdSum)
         {
-            if (user.getCompanyName() == null)
+            if (user.getOrganizationName() == null)
                 throwBadRequest(wrongRoles);
         } else
         {

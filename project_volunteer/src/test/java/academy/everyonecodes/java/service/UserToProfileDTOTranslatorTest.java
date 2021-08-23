@@ -31,7 +31,7 @@
 //        ProfileDTO profileDTO = new ProfileDTO(
 //                "name",
 //                "First Last",
-//                "company",
+//                "organization",
 //                69,
 //                "description",
 //                2.0
@@ -40,7 +40,7 @@
 //                "name",
 //                "First",
 //                "Last",
-//                "company",
+//                "organization",
 //                LocalDate.of(2021, 8, 2),
 //                "description"
 //        );
@@ -65,7 +65,7 @@
 //    }
 //
 //    @Test
-//    void toDTO_no_company()
+//    void toDTO_no_organization()
 //    {
 //        ProfileDTO profileDTO = new ProfileDTO(
 //                "name",
@@ -104,7 +104,7 @@
 //        ProfileDTO profileDTO = new ProfileDTO(
 //                "name",
 //                "First Last",
-//                "company",
+//                "organization",
 //                null,
 //                "description",
 //                2.0
@@ -113,7 +113,7 @@
 //                "name",
 //                "First",
 //                "Last",
-//                "company",
+//                "organization",
 //                null,
 //                "description"
 //        );
@@ -138,7 +138,7 @@
 //        ProfileDTO profileDTO = new ProfileDTO(
 //                "name",
 //                "First Last",
-//                "company",
+//                "organization",
 //                69,
 //                null,
 //                2.0
@@ -147,7 +147,7 @@
 //                "name",
 //                "First",
 //                "Last",
-//                "company",
+//                "organization",
 //                LocalDate.of(2021, 8, 2),
 //                null
 //        );
@@ -172,7 +172,7 @@
 //        ProfileDTO profileDTO = new ProfileDTO(
 //                "username",
 //                "First Last",
-//                "companyName",
+//                "organizationName",
 //                null,
 //                null,
 //                2.0
@@ -181,7 +181,7 @@
 //                "username",
 //                "First",
 //                "Last",
-//                "companyName"
+//                "organizationName"
 //        );
 //
 //        Mockito.when(ageCalculator.calculate(user))
@@ -204,7 +204,7 @@
 //        ProfileDTO profileDTO = new ProfileDTO(
 //                "name",
 //                "First Last",
-//                "company",
+//                "organization",
 //                69,
 //                "description",
 //                Double.NaN
@@ -213,7 +213,7 @@
 //                "name",
 //                "First",
 //                "Last",
-//                "company",
+//                "organization",
 //                LocalDate.of(2021, 8, 2),
 //                "description"
 //        );

@@ -48,8 +48,8 @@ class VolunteerSearchEndpointTest {
 	}
 
 	@Test
-	@WithMockUser(username = "Testy", password = "Irrelevant", authorities = {"ROLE_COMPANY"})
-	void getAllActivities_AccessForbidden_Company() throws Exception {
+	@WithMockUser(username = "Testy", password = "Irrelevant", authorities = {"ROLE_ORGANIZATION"})
+	void getAllActivities_AccessForbidden_Organization() throws Exception {
 		mockMvc.perform(get(url)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isForbidden());

@@ -27,7 +27,7 @@ security:
     - id: 2
       role: "ROLE_INDIVIDUAL"
     - id: 3
-      role: "ROLE_COMPANY"
+      role: "ROLE_ORGANIZATION"
   minIdSum: 1
   maxIdSum: 3
 
@@ -66,9 +66,9 @@ webapptreelist:
       allowedRoles:
         - role: "ROLE_INDIVIDUAL"
     - category: "Profile"
-      name: "View Company"
+      name: "View Organization"
       description: "View Profile as seen by others"
       uri: "/profile/{username}"
       restMethod: "GET"
       allowedRoles:
-        - role: "ROLE_COMPANY"
+        - role: "ROLE_ORGANIZATION"

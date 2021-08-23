@@ -1,6 +1,6 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.dtos.CompanyDTO;
+import academy.everyonecodes.java.data.dtos.OrganizationDTO;
 import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
@@ -58,12 +58,12 @@ class DtoTranslatorTest
     }
 
     @Test
-    void companyToUser()
+    void organizationToUser()
     {
-        CompanyDTO companyDTO = new CompanyDTO(
+        OrganizationDTO organizationDTO = new OrganizationDTO(
                 "  username  ",
                 "   password  ",
-                "  companyName  ",
+                "  organizationName  ",
                 "  postalCode  ",
                 "  city  ",
                 "  street  ",
@@ -71,13 +71,13 @@ class DtoTranslatorTest
                 "  email@email.com  ",
                 "  telephone  ",
                 "  description  ",
-                Set.of(new Role("ROLE_COMPANY"))
+                Set.of(new Role("ROLE_ORGANIZATION"))
         );
 
         var expected = new User(
                 "username",
                 "password",
-                "companyName",
+                "organizationName",
                 "postalCode",
                 "city",
                 "street",
@@ -85,9 +85,9 @@ class DtoTranslatorTest
                 "email@email.com",
                 "telephone",
                 "description",
-                Set.of(new Role("ROLE_COMPANY"))
+                Set.of(new Role("ROLE_ORGANIZATION"))
         );
-        var actual = dtoTranslator.CompanyToUser(companyDTO);
+        var actual = dtoTranslator.OrganizationToUser(organizationDTO);
 
         Assertions.assertEquals(expected, actual);
     }

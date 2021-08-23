@@ -1,7 +1,7 @@
 package academy.everyonecodes.java.service;
 
 
-import academy.everyonecodes.java.data.dtos.CompanyProfileDTO;
+import academy.everyonecodes.java.data.dtos.OrganizationProfileDTO;
 import academy.everyonecodes.java.data.dtos.IndividualProfileDTO;
 import academy.everyonecodes.java.data.dtos.VolunteerProfileDTO;
 import academy.everyonecodes.java.data.Rating;
@@ -73,24 +73,24 @@ class ProfileDTOServiceTest {
     }
 
     @Test
-    void userNotNull_hasMaximumAmountOfRoles_true_COMPANY() {
+    void userNotNull_hasMaximumAmountOfRoles_true_ORGANIZATION() {
         String username = "username";
-        Role role = new Role( "ROLE_COMPANY");
-        User user = new User("username", "test", "full", "name","companyName", LocalDate.of(2021, 2, 2), "postalCode", "city", "street", "num", "email@email.com", "phone", "description", Set.of(role));
+        Role role = new Role( "ROLE_ORGANIZATION");
+        User user = new User("username", "test", "full", "name","organizationName", LocalDate.of(2021, 2, 2), "postalCode", "city", "street", "num", "email@email.com", "phone", "description", Set.of(role));
         Long id = 1L;
         user.setId(id);
         Set<Role> roles = user.getRoles();
 
         Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
         Mockito.when(userService.getRoleIdSum(roles)).thenReturn(3L);
-        CompanyProfileDTO companyProfileDTO = new CompanyProfileDTO("username", "postalCode", "city", "street", "num", "email@email.com", "phone", "description", Set.of(role), 1.0, "companyName");
-        Mockito.when(userToProfileDTOTranslator.toCompanyProfileDTO(user)).thenReturn(companyProfileDTO);
+        OrganizationProfileDTO organizationProfileDTO = new OrganizationProfileDTO("username", "postalCode", "city", "street", "num", "email@email.com", "phone", "description", Set.of(role), 1.0, "organizationName");
+        Mockito.when(userToProfileDTOTranslator.toOrganizationProfileDTO(user)).thenReturn(organizationProfileDTO);
 
         profileDTOService.viewProfile(username);
 
         Mockito.verify(userRepository).findByUsername(username);
         Mockito.verify(userService).getRoleIdSum(roles);
-        Mockito.verify(userToProfileDTOTranslator).toCompanyProfileDTO(user);
+        Mockito.verify(userToProfileDTOTranslator).toOrganizationProfileDTO(user);
     }
     @Test
     void userNotNull_hasMaximumAmountOfRoles_false_INDIVIDUAL() {

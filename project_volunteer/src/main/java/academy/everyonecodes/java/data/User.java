@@ -38,7 +38,7 @@ public class User
     private String lastNamePerson;
 
     @Size(max = 30, message = "Must have 1-30 characters")
-    private String companyName;
+    private String organizationName;
 
     @Past
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
@@ -77,13 +77,13 @@ public class User
     public User() {
     }
 
-    public User(String username, String password, String firstNamePerson, String lastNamePerson, String companyName, LocalDate dateOfBirth, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
+    public User(String username, String password, String firstNamePerson, String lastNamePerson, String organizationName, LocalDate dateOfBirth, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
     {
         this.username = username;
         this.password = password;
         this.firstNamePerson = firstNamePerson;
         this.lastNamePerson = lastNamePerson;
-        this.companyName = companyName;
+        this.organizationName = organizationName;
         this.dateOfBirth = dateOfBirth;
         this.postalCode = postalCode;
         this.city = city;
@@ -120,11 +120,11 @@ public class User
         this.roles = roles;
     }
 
-    public User(String username, String password, String companyName, String emailAddress, Set<Role> roles)
+    public User(String username, String password, String organizationName, String emailAddress, Set<Role> roles)
     {
         this.username = username;
         this.password = password;
-        this.companyName = companyName;
+        this.organizationName = organizationName;
         this.emailAddress = emailAddress;
         this.roles = roles;
     }
@@ -144,11 +144,11 @@ public class User
         this.dateOfBirth = dateOfBirth;
     }
 
-    public User(String username, String password, String companyName, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
+    public User(String username, String password, String organizationName, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
     {
         this.username = username;
         this.password = password;
-        this.companyName = companyName;
+        this.organizationName = organizationName;
         this.postalCode = postalCode;
         this.city = city;
         this.street = street;
@@ -180,8 +180,8 @@ public class User
         return lastNamePerson;
     }
 
-    public String getCompanyName() {
-        return companyName;
+    public String getOrganizationName() {
+        return organizationName;
     }
 
     public LocalDate getDateOfBirth() {
@@ -240,8 +240,8 @@ public class User
         this.lastNamePerson = lastNamePerson;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
     }
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
@@ -285,12 +285,12 @@ public class User
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(getId(), user.getId()) && Objects.equals(getUsername(), user.getUsername()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getFirstNamePerson(), user.getFirstNamePerson()) && Objects.equals(getLastNamePerson(), user.getLastNamePerson()) && Objects.equals(getCompanyName(), user.getCompanyName()) && Objects.equals(getDateOfBirth(), user.getDateOfBirth()) && Objects.equals(getPostalCode(), user.getPostalCode()) && Objects.equals(getCity(), user.getCity()) && Objects.equals(getStreet(), user.getStreet()) && Objects.equals(getStreetNumber(), user.getStreetNumber()) && Objects.equals(getEmailAddress(), user.getEmailAddress()) && Objects.equals(getTelephoneNumber(), user.getTelephoneNumber()) && Objects.equals(getDescription(), user.getDescription());
+        return Objects.equals(getId(), user.getId()) && Objects.equals(getUsername(), user.getUsername()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getFirstNamePerson(), user.getFirstNamePerson()) && Objects.equals(getLastNamePerson(), user.getLastNamePerson()) && Objects.equals(getOrganizationName(), user.getOrganizationName()) && Objects.equals(getDateOfBirth(), user.getDateOfBirth()) && Objects.equals(getPostalCode(), user.getPostalCode()) && Objects.equals(getCity(), user.getCity()) && Objects.equals(getStreet(), user.getStreet()) && Objects.equals(getStreetNumber(), user.getStreetNumber()) && Objects.equals(getEmailAddress(), user.getEmailAddress()) && Objects.equals(getTelephoneNumber(), user.getTelephoneNumber()) && Objects.equals(getDescription(), user.getDescription());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getUsername(), getPassword(), getFirstNamePerson(), getLastNamePerson(), getCompanyName(), getDateOfBirth(), getPostalCode(), getCity(), getStreet(), getStreetNumber(), getEmailAddress(), getTelephoneNumber(), getDescription());
+        return Objects.hash(getId(), getUsername(), getPassword(), getFirstNamePerson(), getLastNamePerson(), getOrganizationName(), getDateOfBirth(), getPostalCode(), getCity(), getStreet(), getStreetNumber(), getEmailAddress(), getTelephoneNumber(), getDescription());
     }
 
     @Override
@@ -302,7 +302,7 @@ public class User
                 ", password='" + password + '\'' +
                 ", firstNamePerson='" + firstNamePerson + '\'' +
                 ", lastNamePerson='" + lastNamePerson + '\'' +
-                ", companyName='" + companyName + '\'' +
+                ", organizationName='" + organizationName + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", postalCode='" + postalCode + '\'' +
                 ", city='" + city + '\'' +

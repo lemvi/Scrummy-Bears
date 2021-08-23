@@ -20,7 +20,7 @@ public class ProfileDTOEndpoint
     }
 
     @GetMapping("/{username}")
-    @Secured({"ROLE_VOLUNTEER", "ROLE_INDIVIDUAL", "ROLE_COMPANY"})
+    @Secured({"ROLE_VOLUNTEER", "ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     public ProfileDTO viewProfile(@PathVariable String username)
     {
         return profileDTOService.viewProfile(username).orElse(null);

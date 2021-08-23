@@ -49,7 +49,7 @@ public class ActivityEndpointTest
     }
 
     @Test
-    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL", "ROLE_COMPANY"})
+    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     void postActivity_valid_credentials_two_roles() throws Exception
     {
         assertPostActivityIsOK(draft);

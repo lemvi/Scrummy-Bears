@@ -1,7 +1,7 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.*;
-import academy.everyonecodes.java.data.dtos.CompanyDTO;
+import academy.everyonecodes.java.data.dtos.OrganizationDTO;
 import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.repositories.UserRepository;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -63,8 +63,8 @@ class UserServiceTest
 
 
     @ParameterizedTest
-    @MethodSource("getValidParamsCompany")
-    void translateCompanyDTOAndSaveUserTest_validRoles(CompanyDTO input, User expected)
+    @MethodSource("getValidParamsOrganization")
+    void translateOrganizationDTOAndSaveUserTest_validRoles(OrganizationDTO input, User expected)
     {
         String password = input.getPassword();
 
@@ -73,7 +73,7 @@ class UserServiceTest
         when(repository.save(expected))
                 .thenReturn(expected);
 
-        User actual = userService.translateCompanyDTOAndSaveUser(input);
+        User actual = userService.translateOrganizationDTOAndSaveUser(input);
 
         assertEquals(expected, actual);
         verify(passwordEncoder).encode(password);
@@ -82,10 +82,10 @@ class UserServiceTest
 
 
     @ParameterizedTest
-    @MethodSource("getInvalidParamsCompany")
-    void translateCompanyDTOAndSaveUserTest_invalidRoles(CompanyDTO input)
+    @MethodSource("getInvalidParamsOrganization")
+    void translateOrganizationDTOAndSaveUserTest_invalidRoles(OrganizationDTO input)
     {
-        assertThrows(HttpStatusCodeException.class, () -> userService.translateCompanyDTOAndSaveUser(input));
+        assertThrows(HttpStatusCodeException.class, () -> userService.translateOrganizationDTOAndSaveUser(input));
     }
 
     static Stream<Arguments> getValidParams()
@@ -208,7 +208,7 @@ class UserServiceTest
                                 validFirst,
                                 validSecond,
                                 validEmail,
-                                Set.of(new Role("ROLE_COMPANY"))
+                                Set.of(new Role("ROLE_ORGANIZATION"))
                         )
                 ),
                 Arguments.of(
@@ -218,7 +218,7 @@ class UserServiceTest
                                 validFirst,
                                 validSecond,
                                 validEmail,
-                                Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_COMPANY"))
+                                Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_ORGANIZATION"))
                         )
                 ),
                 Arguments.of(
@@ -228,7 +228,7 @@ class UserServiceTest
                                 validFirst,
                                 validSecond,
                                 validEmail,
-                                Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_COMPANY"))
+                                Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_ORGANIZATION"))
                         )
                 ),
                 Arguments.of(
@@ -244,12 +244,12 @@ class UserServiceTest
         );
     }
 
-    static Stream<Arguments> getValidParamsCompany()
+    static Stream<Arguments> getValidParamsOrganization()
     {
         String validUsername = "user";
         String validPw = "123456";
         String validEncryptedPw = "encrypted";
-        String validCompanyName = "companyName";
+        String validOrganizationName = "organizationName";
         String validEmail = "user@email.com";
         String postalCode = "postalCode";
         String city = "city";
@@ -260,26 +260,26 @@ class UserServiceTest
 
         return Stream.of(
                 Arguments.of(
-                        new CompanyDTO(
+                        new OrganizationDTO(
                                 validUsername,
                                 validPw,
-                                validCompanyName,
+                                validOrganizationName,
                                 validEmail,
-                                Set.of(new Role("ROLE_COMPANY"))
+                                Set.of(new Role("ROLE_ORGANIZATION"))
                         ),
                         new User(
                                 validUsername,
                                 validEncryptedPw,
-                                validCompanyName,
+                                validOrganizationName,
                                 validEmail,
-                                Set.of(new Role("ROLE_COMPANY"))
+                                Set.of(new Role("ROLE_ORGANIZATION"))
                         )
                 ),
                 Arguments.of(
-                        new CompanyDTO(
+                        new OrganizationDTO(
                                 validUsername,
                                 validPw,
-                                validCompanyName,
+                                validOrganizationName,
                                 postalCode,
                                 city,
                                 street,
@@ -287,12 +287,12 @@ class UserServiceTest
                                 validEmail,
                                 telephoneNumber,
                                 description,
-                                Set.of(new Role("ROLE_COMPANY"))
+                                Set.of(new Role("ROLE_ORGANIZATION"))
                         ),
                         new User(
                                 validUsername,
                                 validEncryptedPw,
-                                validCompanyName,
+                                validOrganizationName,
                                 postalCode,
                                 city,
                                 street,
@@ -300,69 +300,69 @@ class UserServiceTest
                                 validEmail,
                                 telephoneNumber,
                                 description,
-                                Set.of(new Role("ROLE_COMPANY"))
+                                Set.of(new Role("ROLE_ORGANIZATION"))
                         )
                 )
         );
     }
 
-    static Stream<Arguments> getInvalidParamsCompany()
+    static Stream<Arguments> getInvalidParamsOrganization()
     {
         String validUsername = "user";
         String validPw = "123456";
-        String validCompanyName = "companyName";
+        String validOrganizationName = "organizationName";
         String validEmail = "user@email.com";
         return Stream.of(
                 Arguments.of(
-                        new CompanyDTO(
+                        new OrganizationDTO(
                                 validUsername,
                                 validPw,
-                                validCompanyName,
+                                validOrganizationName,
                                 validEmail,
                                 Set.of(new Role("ROLE_INDIVIDUAL"))
                         )
                 ),
                 Arguments.of(
-                        new CompanyDTO(
+                        new OrganizationDTO(
                                 validUsername,
                                 validPw,
-                                validCompanyName,
+                                validOrganizationName,
                                 validEmail,
                                 Set.of(new Role("ROLE_VOLUNTEER"))
                         )
                 ),
                 Arguments.of(
-                        new CompanyDTO(
+                        new OrganizationDTO(
                                 validUsername,
                                 validPw,
-                                validCompanyName,
+                                validOrganizationName,
                                 validEmail,
                                 Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_VOLUNTEER"))
                         )
                 ),
                 Arguments.of(
-                        new CompanyDTO(
+                        new OrganizationDTO(
                                 validUsername,
                                 validPw,
-                                validCompanyName,
+                                validOrganizationName,
                                 validEmail,
-                                Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_COMPANY"))
+                                Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_ORGANIZATION"))
                         )
                 ),
                 Arguments.of(
-                        new CompanyDTO(
+                        new OrganizationDTO(
                                 validUsername,
                                 validPw,
-                                validCompanyName,
+                                validOrganizationName,
                                 validEmail,
-                                Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_COMPANY"))
+                                Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_ORGANIZATION"))
                         )
                 ),
                 Arguments.of(
-                        new CompanyDTO(
+                        new OrganizationDTO(
                                 validUsername,
                                 validPw,
-                                validCompanyName,
+                                validOrganizationName,
                                 validEmail,
                                 Set.of(new Role("ROLE_MAFIABOSS"))
                         )

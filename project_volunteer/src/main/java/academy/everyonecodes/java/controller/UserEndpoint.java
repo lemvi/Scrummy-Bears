@@ -1,6 +1,6 @@
 package academy.everyonecodes.java.controller;
 
-import academy.everyonecodes.java.data.dtos.CompanyDTO;
+import academy.everyonecodes.java.data.dtos.OrganizationDTO;
 import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.service.UserService;
@@ -25,9 +25,9 @@ public class UserEndpoint
         return userService.translateIndividualVolunteerDTOAndSaveUser(individualVolunteerDTO);
     }
 
-    @PostMapping(params = "company")
-    User saveCompany(@RequestParam String company, @RequestBody @Valid CompanyDTO companyDTO)
+    @PostMapping(params = "organization")
+    User saveOrganization(@RequestParam String organization, @RequestBody @Valid OrganizationDTO organizationDTO)
     {
-        return userService.translateCompanyDTOAndSaveUser(companyDTO);
+        return userService.translateOrganizationDTOAndSaveUser(organizationDTO);
     }
 }

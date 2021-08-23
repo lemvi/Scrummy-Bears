@@ -19,42 +19,42 @@ public class ActivityEndpoint
     }
 
     @PostMapping("/activities")
-    @Secured({"ROLE_INDIVIDUAL", "ROLE_COMPANY"})
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     Activity postActivity(@RequestBody Draft draft)
     {
         return activityService.postActivity(draft);
     }
 
     @GetMapping("/activities")
-    @Secured({"ROLE_INDIVIDUAL", "ROLE_COMPANY"})
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     List<Activity> getActivitiesOfOrganizer()
     {
         return activityService.getActivitiesOfOrganizer();
     }
 
     @PostMapping("/drafts")
-    @Secured({"ROLE_INDIVIDUAL", "ROLE_COMPANY"})
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     Draft postDraft(@RequestBody Draft draft)
     {
         return activityService.postDraft(draft);
     }
 
     @GetMapping("/drafts")
-    @Secured({"ROLE_INDIVIDUAL", "ROLE_COMPANY"})
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     List<Draft> getDraftsOfOrganizer()
     {
         return activityService.getDraftsOfOrganizer();
     }
 
     @PutMapping("/drafts")
-    @Secured({"ROLE_INDIVIDUAL", "ROLE_COMPANY"})
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     Draft editDraft(@RequestBody Draft draft)
     {
         return activityService.editDraft(draft).orElse(null);
     }
 
     @PutMapping("/drafts/{draftId}")
-    @Secured({"ROLE_INDIVIDUAL", "ROLE_COMPANY"})
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     Activity saveDraftAsActivity(@PathVariable Long draftId)
     {
         return activityService.saveDraftAsActivity(draftId).orElse(null);

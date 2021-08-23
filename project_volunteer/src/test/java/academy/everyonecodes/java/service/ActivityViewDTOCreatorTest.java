@@ -48,8 +48,8 @@ class ActivityViewDTOCreatorTest {
         userOrganizer.setId(organizerId);
         String username = "username";
         userOrganizer.setUsername(username);
-        Set<Role> role_company = Set.of(new Role("ROLE_COMPANY"));
-        userOrganizer.setRoles(role_company);
+        Set<Role> role_organization = Set.of(new Role("ROLE_ORGANIZATION"));
+        userOrganizer.setRoles(role_organization);
         activity.setTitle(title);
         activity.setOrganizer(userOrganizer);
         activity.setApplicants(Set.of(userVolunteer));
@@ -65,7 +65,7 @@ class ActivityViewDTOCreatorTest {
 
         OrganizerViewForVolunteerActivityViewDTO organizerView = new OrganizerViewForVolunteerActivityViewDTO(
                 username,
-                role_company.stream().map(role -> role.getRole()).collect(Collectors.toSet()),
+                role_organization.stream().map(role -> role.getRole()).collect(Collectors.toSet()),
                 rating);
 
         ActivityViewDTO expected = new ActivityViewDTO(
@@ -102,8 +102,8 @@ class ActivityViewDTOCreatorTest {
         userOrganizer.setId(organizerId);
         String username = "username";
         userOrganizer.setUsername(username);
-        Set<Role> role_company = Set.of(new Role("ROLE_COMPANY"));
-        userOrganizer.setRoles(role_company);
+        Set<Role> role_organization = Set.of(new Role("ROLE_ORGANIZATION"));
+        userOrganizer.setRoles(role_organization);
         activity.setTitle(title);
         activity.setOrganizer(userOrganizer);
         activity.setApplicants(Set.of(userVolunteer));
@@ -119,7 +119,7 @@ class ActivityViewDTOCreatorTest {
 
         OrganizerViewForVolunteerActivityViewDTO organizerView = new OrganizerViewForVolunteerActivityViewDTO(
                 username,
-                role_company.stream().map(role -> role.getRole()).collect(Collectors.toSet()),
+                role_organization.stream().map(role -> role.getRole()).collect(Collectors.toSet()),
                 rating);
 
         ActivityViewDTO expected = new ActivityViewDTO(

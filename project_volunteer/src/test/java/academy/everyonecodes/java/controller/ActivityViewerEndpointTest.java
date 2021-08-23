@@ -51,8 +51,8 @@ class ActivityViewerEndpointTest {
     }
 
     @Test
-    @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_COMPANY"})
-    void getMyActivities_asVolunteer_invalidRole_company() throws Exception {
+    @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_ORGANIZATION"})
+    void getMyActivities_asVolunteer_invalidRole_organization() throws Exception {
         String username = "username";
         String url = "/" + username + "/activities";
         mvc.perform(get(url)
