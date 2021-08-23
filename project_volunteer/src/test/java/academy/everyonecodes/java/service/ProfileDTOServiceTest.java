@@ -99,6 +99,7 @@ class ProfileDTOServiceTest {
 
         User user = new User("username", "test", "full", "name", LocalDate.of(2021, 2, 2), "postalCode", "city", "street", "num", "email@email.com", "phone", "description", Set.of(role));
         Long id = 1L;
+        role.setId(2L);
         user.setId(id);
         Set<Role> roles = user.getRoles();
 
@@ -120,6 +121,8 @@ class ProfileDTOServiceTest {
         Role role = new Role( "ROLE_INDIVIDUAL");
         Role role2 = new Role( "ROLE_VOLUNTEER");
         Long id = 1L;
+        role.setId(2L);
+        role2.setId(id);
 
         User user = new User("username", "test", "full", "name", LocalDate.of(2021, 2, 2), "postalCode", "city", "street", "num", "email@email.com", "phone", "description", Set.of(role, role2));
         user.setId(id);

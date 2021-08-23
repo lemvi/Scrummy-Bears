@@ -1,7 +1,7 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.ActivityRepository;
+import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

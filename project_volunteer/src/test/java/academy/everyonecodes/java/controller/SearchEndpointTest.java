@@ -1,7 +1,6 @@
 package academy.everyonecodes.java.controller;
 
 import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.DTOs.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.service.SearchService;
@@ -16,10 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -40,7 +37,7 @@ public class SearchEndpointTest {
     public void search_Authorized() throws Exception {
         String input = "title";
         String url = "/search/";
-        User organizer = new User("username", "first", "last", "company");
+        User organizer = new User("username", "first", "last", Set.of(new Role("ROLE_COMPANY")));
         Activity a1 = new Activity("title1", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
 
         List<Activity> expected = List.of(a1);
@@ -56,7 +53,7 @@ public class SearchEndpointTest {
     public void search_UnAuthorized() throws Exception {
         String input = "title";
         String url = "/search/";
-        User organizer = new User("username", "first", "last", "company");
+        User organizer = new User("username", "first", "last", Set.of(new Role("ROLE_COMPANY")));
         Activity a1 = new Activity("title1", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
 
         List<Activity> expected = List.of(a1);

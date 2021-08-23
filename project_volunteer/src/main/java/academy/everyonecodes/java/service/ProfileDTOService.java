@@ -48,7 +48,7 @@ public class ProfileDTOService
         if (hasMaximumAmountOfRoles && roles.size() == minIdSum)
         {
             return Optional.of(userToProfileDTOTranslator.toCompanyProfileDTO(user));
-        } else if (roles.stream().map(Role::getId).filter(r-> r == minIdSum).findAny().isPresent())
+        } else if (roles.stream().map(Role::getId).anyMatch(r-> r == minIdSum))
         {
             return Optional.of(userToProfileDTOTranslator.toVolunteerProfileDTO(user));
         }
