@@ -1,7 +1,6 @@
 package academy.everyonecodes.java.data;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import net.bytebuddy.implementation.bind.annotation.Empty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;

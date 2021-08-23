@@ -23,6 +23,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
+import static org.mockito.Mockito.verify;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class ActivityServiceTest {
 
@@ -196,6 +198,20 @@ public class ActivityServiceTest {
         Assertions.assertEquals(List.of(), actual);
 
         Mockito.verify(activityRepository).findByOrganizer_Username(organizer.getUsername());
+    }
+
+    @Test
+    void findById() {
+        activityService.findById(1L);
+
+        verify(activityRepository).findById(1L);
+    }
+
+    @Test
+    void findAll() {
+        activityService.getAllActivities();
+
+        verify(activityRepository).findAll();
     }
 
 }

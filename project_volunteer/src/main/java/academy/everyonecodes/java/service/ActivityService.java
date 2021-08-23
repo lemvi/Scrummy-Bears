@@ -69,6 +69,10 @@ public class ActivityService
         return Optional.empty();
     }
 
+    public Optional<Activity> findById(Long id) {
+        return activityRepository.findById(id);
+    }
+
     public List<Activity> getAllActivities() {
         return activityRepository.findAll();
     }
