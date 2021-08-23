@@ -48,11 +48,11 @@ public class ProfileDTOService
         if (hasMaximumAmountOfRoles && roles.size() == minIdSum)
         {
             return Optional.of(userToProfileDTOTranslator.toCompanyProfileDTO(user));
-        } else if (!hasMaximumAmountOfRoles && roleIdSum == 2)
+        } else if (roles.stream().map(Role::getId).anyMatch(r-> r == minIdSum))
         {
-            return Optional.of(userToProfileDTOTranslator.toIndividualProfileDTO(user));
+            return Optional.of(userToProfileDTOTranslator.toVolunteerProfileDTO(user));
         }
 
-        return Optional.of(userToProfileDTOTranslator.toVolunteerProfileDTO(user));
+        return Optional.of(userToProfileDTOTranslator.toIndividualProfileDTO(user));
     }
 }
