@@ -24,7 +24,7 @@ class ActivityViewDTOCreatorTest {
     private ActivityViewDTOCreator creator;
 
     @MockBean
-    private RatingCalculator ratingCalculator;
+    private RatingService ratingService;
 
     @MockBean
     private StatusHandler statusHandler;
@@ -59,9 +59,9 @@ class ActivityViewDTOCreatorTest {
         activity.setOpenEnd(true);
 
         when(statusHandler.getStatusForSpecificActivityAndVolunteer(activity, userId)).thenReturn(status);
-        when(ratingCalculator.aggregateRating(organizerId)).thenReturn(rating);
-        when(ratingRepository.findByEventIdAndUser(activity.getId(), userOrganizer)).thenReturn(java.util.Optional.of(new Rating(3)));
-        when(ratingRepository.findByEventIdAndUser(activity.getId(), userVolunteer)).thenReturn(java.util.Optional.of(new Rating(3)));
+        when(ratingService.calculateAverageUserRating(organizerId)).thenReturn(rating);
+        when(ratingRepository.findByActivityAndUser(activity, userOrganizer)).thenReturn(java.util.Optional.of(new Rating(3)));
+        when(ratingRepository.findByActivityAndUser(activity, userVolunteer)).thenReturn(java.util.Optional.of(new Rating(3)));
 
         OrganizerViewForVolunteerActivityViewDTO organizerView = new OrganizerViewForVolunteerActivityViewDTO(
                 username,
@@ -113,9 +113,9 @@ class ActivityViewDTOCreatorTest {
         activity.setOpenEnd(true);
 
         when(statusHandler.getStatusForSpecificActivityAndVolunteer(activity, userId)).thenReturn(status);
-        when(ratingCalculator.aggregateRating(organizerId)).thenReturn(rating);
-        when(ratingRepository.findByEventIdAndUser(activity.getId(), userOrganizer)).thenReturn(Optional.empty());
-        when(ratingRepository.findByEventIdAndUser(activity.getId(), userVolunteer)).thenReturn(Optional.empty());
+        when(ratingService.calculateAverageUserRating(organizerId)).thenReturn(rating);
+        when(ratingRepository.findByActivityAndUser(activity, userOrganizer)).thenReturn(Optional.empty());
+        when(ratingRepository.findByActivityAndUser(activity, userVolunteer)).thenReturn(Optional.empty());
 
         OrganizerViewForVolunteerActivityViewDTO organizerView = new OrganizerViewForVolunteerActivityViewDTO(
                 username,

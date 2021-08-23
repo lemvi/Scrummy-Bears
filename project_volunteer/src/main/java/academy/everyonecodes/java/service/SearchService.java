@@ -10,11 +10,11 @@ import java.util.List;
 @Service
 public class SearchService {
     private final ActivityRepository activityRepository;
-    private final String activitisNotFound;
+    private final String activitiesNotFound;
 
-    public SearchService(ActivityRepository activityRepository, @Value("${errorMessages.activitisNotFound}") String activitisNotFound) {
+    public SearchService(ActivityRepository activityRepository, @Value("${errorMessages.activitiesNotFound}") String activitiesNotFound) {
         this.activityRepository = activityRepository;
-        this.activitisNotFound = activitisNotFound;
+        this.activitiesNotFound = activitiesNotFound;
     }
     public List<Activity> searchActivities(String text) {
         List<Activity> exactList = activityRepository.findFullTextSearchByText(text);
@@ -25,7 +25,7 @@ public class SearchService {
 
         List<Activity> returnList =  mergeLists(exactList, titleList, descriptionList, recommendedSkillList);
         if (returnList.isEmpty()) {
-            System.out.println(activitisNotFound + " " + text);
+            System.out.println(activitiesNotFound + " " + text);
         }
         return returnList;
     }

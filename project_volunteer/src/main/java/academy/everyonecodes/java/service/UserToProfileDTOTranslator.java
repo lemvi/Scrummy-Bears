@@ -12,7 +12,7 @@ public class UserToProfileDTOTranslator
 {
     private final AgeCalculator ageCalculator;
     @Autowired
-    RatingCalculator ratingCalculator;
+    RatingService ratingService;
     private final SkillService skillService;
 
 
@@ -35,7 +35,7 @@ public class UserToProfileDTOTranslator
                 user.getTelephoneNumber(),
                 user.getDescription(),
                 user.getRoles(),
-                ratingCalculator.aggregateRating(user.getId()),
+                ratingService.calculateAverageUserRating(user.getId()),
                 user.getCompanyName()
         );
     }
@@ -52,7 +52,7 @@ public class UserToProfileDTOTranslator
                 user.getTelephoneNumber(),
                 user.getDescription(),
                 user.getRoles(),
-                ratingCalculator.aggregateRating(user.getId()),
+                ratingService.calculateAverageUserRating(user.getId()),
                 user.getFirstNamePerson() + " " + user.getLastNamePerson(),
                 ageCalculator.calculate(user)
         );
@@ -70,7 +70,7 @@ public class UserToProfileDTOTranslator
                 user.getTelephoneNumber(),
                 user.getDescription(),
                 user.getRoles(),
-                ratingCalculator.aggregateRating(user.getId()),
+                ratingService.calculateAverageUserRating(user.getId()),
                 user.getFirstNamePerson() + " " + user.getLastNamePerson(),
                 ageCalculator.calculate(user),
                 skillService.collect(user)

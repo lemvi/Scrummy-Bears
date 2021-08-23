@@ -12,16 +12,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class RatingCalculatorTest {
+class RatingServiceTest {
 
 	@Autowired
-	RatingCalculator ratingCalculator;
+	RatingService ratingService;
 
 	@MockBean
 	RatingRepository ratingRepository;
 
 	@Test
-	void aggregateRating_FindNoRatings() {
+	void calculateAverageUserRating_FindNoRatings() {
 		Long userId = 1L;
 
 		List<Rating> ratings = List.of();
@@ -30,7 +30,7 @@ class RatingCalculatorTest {
 
 		Mockito.when(ratingRepository.findByUser_Id(userId)).thenReturn(ratings);
 
-		double result = ratingCalculator.aggregateRating(1L);
+		double result = ratingService.calculateAverageUserRating(1L);
 
 		Mockito.verify(ratingRepository).findByUser_Id(1L);
 		Mockito.verifyNoMoreInteractions(ratingRepository);
@@ -39,7 +39,7 @@ class RatingCalculatorTest {
 	}
 
 	@Test
-	void aggregateRating_FindOneRating() {
+	void calculateAverageUserRating_FindOneRating() {
 		Long userId = 1L;
 
 		List<Rating> ratings = List.of(
@@ -50,7 +50,7 @@ class RatingCalculatorTest {
 
 		Mockito.when(ratingRepository.findByUser_Id(userId)).thenReturn(ratings);
 
-		double result = ratingCalculator.aggregateRating(1L);
+		double result = ratingService.calculateAverageUserRating(1L);
 
 		Mockito.verify(ratingRepository).findByUser_Id(1L);
 		Mockito.verifyNoMoreInteractions(ratingRepository);
@@ -59,7 +59,7 @@ class RatingCalculatorTest {
 	}
 
 	@Test
-	void aggregateRating_FindSeveralRatings_ResultIsNatural() {
+	void calculateAverageUserRating_FindSeveralRatings_ResultIsNatural() {
 		Long userId = 1L;
 
 		List<Rating> ratings = List.of(
@@ -72,7 +72,7 @@ class RatingCalculatorTest {
 
 		Mockito.when(ratingRepository.findByUser_Id(userId)).thenReturn(ratings);
 
-		double result = ratingCalculator.aggregateRating(1L);
+		double result = ratingService.calculateAverageUserRating(1L);
 
 		Mockito.verify(ratingRepository).findByUser_Id(1L);
 		Mockito.verifyNoMoreInteractions(ratingRepository);
@@ -81,7 +81,7 @@ class RatingCalculatorTest {
 	}
 
 	@Test
-	void aggregateRating_FindSeveralRatings_ResultIsDecimal() {
+	void calculateAverageUserRating_FindSeveralRatings_ResultIsDecimal() {
 		Long userId = 1L;
 
 		List<Rating> ratings = List.of(
@@ -95,7 +95,7 @@ class RatingCalculatorTest {
 
 		Mockito.when(ratingRepository.findByUser_Id(userId)).thenReturn(ratings);
 
-		double result = ratingCalculator.aggregateRating(1L);
+		double result = ratingService.calculateAverageUserRating(1L);
 
 		Mockito.verify(ratingRepository).findByUser_Id(1L);
 		Mockito.verifyNoMoreInteractions(ratingRepository);

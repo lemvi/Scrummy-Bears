@@ -1,5 +1,6 @@
 package academy.everyonecodes.java.data.repositories;
 
+import academy.everyonecodes.java.data.Activity;
 import academy.everyonecodes.java.data.Rating;
 import academy.everyonecodes.java.data.RatingId;
 import academy.everyonecodes.java.data.User;
@@ -11,5 +12,5 @@ import java.util.Optional;
 public interface RatingRepository extends JpaRepository<Rating, RatingId> {
 	List<Rating> findByUser_Id(Long id);
 
-	Optional<Rating> findByEventIdAndUser(Long eventId, User user);
+	Optional<Rating> findByActivityAndUser(Activity activity, User user);
 }

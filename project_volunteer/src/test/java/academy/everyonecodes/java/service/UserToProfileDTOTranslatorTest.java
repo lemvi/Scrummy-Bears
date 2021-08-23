@@ -23,7 +23,7 @@
 //    private AgeCalculator ageCalculator;
 //
 //    @MockBean
-//    private RatingCalculator ratingCalculator;
+//    private RatingService ratingService;
 //
 //    @Test
 //    void toDTO_everything_existing()
@@ -49,7 +49,7 @@
 //
 //        Mockito.when(ageCalculator.calculate(user))
 //                .thenReturn(69);
-//        Mockito.when(ratingCalculator.aggregateRating(user.getId()))
+//        Mockito.when(ratingService.calculateAverageUserRating(user.getId()))
 //                .thenReturn(2.0);
 //
 //        var expected = profileDTO;
@@ -60,8 +60,8 @@
 //        Assertions.assertEquals(expected, actual);
 //
 //        Mockito.verify(ageCalculator).calculate(user);
-//        Mockito.verify(ratingCalculator).aggregateRating(user.getId());
-//        Mockito.verifyNoMoreInteractions(ageCalculator, ratingCalculator);
+//        Mockito.verify(ratingService).calculateAverageUserRating(user.getId());
+//        Mockito.verifyNoMoreInteractions(ageCalculator, ratingService);
 //    }
 //
 //    @Test
@@ -86,7 +86,7 @@
 //
 //        Mockito.when(ageCalculator.calculate(user))
 //                .thenReturn(69);
-//        Mockito.when(ratingCalculator.aggregateRating(user.getId()))
+//        Mockito.when(ratingService.calculateAverageUserRating(user.getId()))
 //                .thenReturn(2.0);
 //
 //        var expected = profileDTO;
@@ -94,8 +94,8 @@
 //        Assertions.assertEquals(expected, actual);
 //
 //        Mockito.verify(ageCalculator).calculate(user);
-//        Mockito.verify(ratingCalculator).aggregateRating(user.getId());
-//        Mockito.verifyNoMoreInteractions(ageCalculator, ratingCalculator);
+//        Mockito.verify(ratingService).calculateAverageUserRating(user.getId());
+//        Mockito.verifyNoMoreInteractions(ageCalculator, ratingService);
 //    }
 //
 //    @Test
@@ -120,7 +120,7 @@
 //
 //        Mockito.when(ageCalculator.calculate(user))
 //                .thenReturn(null);
-//        Mockito.when(ratingCalculator.aggregateRating(user.getId()))
+//        Mockito.when(ratingService.calculateAverageUserRating(user.getId()))
 //                .thenReturn(2.0);
 //
 //        var expected = profileDTO;
@@ -128,8 +128,8 @@
 //        Assertions.assertEquals(expected, actual);
 //
 //        Mockito.verify(ageCalculator).calculate(user);
-//        Mockito.verify(ratingCalculator).aggregateRating(user.getId());
-//        Mockito.verifyNoMoreInteractions(ageCalculator, ratingCalculator);
+//        Mockito.verify(ratingService).calculateAverageUserRating(user.getId());
+//        Mockito.verifyNoMoreInteractions(ageCalculator, ratingService);
 //    }
 //
 //    @Test
@@ -154,7 +154,7 @@
 //
 //        Mockito.when(ageCalculator.calculate(user))
 //                .thenReturn(69);
-//        Mockito.when(ratingCalculator.aggregateRating(user.getId()))
+//        Mockito.when(ratingService.calculateAverageUserRating(user.getId()))
 //                .thenReturn(2.0);
 //
 //        var expected = profileDTO;
@@ -162,8 +162,8 @@
 //        Assertions.assertEquals(expected, actual);
 //
 //        Mockito.verify(ageCalculator).calculate(user);
-//        Mockito.verify(ratingCalculator).aggregateRating(user.getId());
-//        Mockito.verifyNoMoreInteractions(ageCalculator, ratingCalculator);
+//        Mockito.verify(ratingService).calculateAverageUserRating(user.getId());
+//        Mockito.verifyNoMoreInteractions(ageCalculator, ratingService);
 //    }
 //
 //    @Test
@@ -186,7 +186,7 @@
 //
 //        Mockito.when(ageCalculator.calculate(user))
 //                .thenReturn(null);
-//        Mockito.when(ratingCalculator.aggregateRating(user.getId()))
+//        Mockito.when(ratingService.calculateAverageUserRating(user.getId()))
 //                .thenReturn(2.0);
 //
 //        var expected = profileDTO;
@@ -194,8 +194,8 @@
 //        Assertions.assertEquals(expected, actual);
 //
 //        Mockito.verify(ageCalculator).calculate(user);
-//        Mockito.verify(ratingCalculator).aggregateRating(user.getId());
-//        Mockito.verifyNoMoreInteractions(ageCalculator, ratingCalculator);
+//        Mockito.verify(ratingService).calculateAverageUserRating(user.getId());
+//        Mockito.verifyNoMoreInteractions(ageCalculator, ratingService);
 //    }
 //
 //    @Test
@@ -222,7 +222,7 @@
 //
 //        Mockito.when(ageCalculator.calculate(user))
 //                .thenReturn(69);
-//        Mockito.when(ratingCalculator.aggregateRating(user.getId()))
+//        Mockito.when(ratingService.calculateAverageUserRating(user.getId()))
 //                .thenReturn(Double.NaN);
 //
 //        var expected = profileDTO;
@@ -233,7 +233,7 @@
 //        Assertions.assertEquals(expected, actual);
 //
 //        Mockito.verify(ageCalculator).calculate(user);
-//        Mockito.verify(ratingCalculator).aggregateRating(user.getId());
-//        Mockito.verifyNoMoreInteractions(ageCalculator, ratingCalculator);
+//        Mockito.verify(ratingService).calculateAverageUserRating(user.getId());
+//        Mockito.verifyNoMoreInteractions(ageCalculator, ratingService);
 //    }
 //}
