@@ -1,7 +1,7 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.DTOs.ActivityViewDTO;
+import academy.everyonecodes.java.data.dtos.ActivityViewDTO;
 import academy.everyonecodes.java.data.Status;
 import academy.everyonecodes.java.data.User;
 import org.junit.jupiter.api.BeforeEach;

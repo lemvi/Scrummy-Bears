@@ -1,13 +1,12 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.DTOs.ActivityViewDTO;
+import academy.everyonecodes.java.data.dtos.ActivityViewDTO;
 import academy.everyonecodes.java.data.Status;
 import academy.everyonecodes.java.data.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
 
 import java.util.List;
 import java.util.Optional;

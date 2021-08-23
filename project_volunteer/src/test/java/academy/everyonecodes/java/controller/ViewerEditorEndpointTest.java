@@ -1,6 +1,6 @@
 package academy.everyonecodes.java.controller;
 
-import academy.everyonecodes.java.data.DTOs.IndividualVolunteerDTO;
+import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.service.ViewerEditorService;
 import org.junit.jupiter.api.Test;

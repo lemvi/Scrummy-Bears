@@ -1,7 +1,7 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.*;
-import academy.everyonecodes.java.data.DTOs.SkillDTO;
+import academy.everyonecodes.java.data.dtos.SkillDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

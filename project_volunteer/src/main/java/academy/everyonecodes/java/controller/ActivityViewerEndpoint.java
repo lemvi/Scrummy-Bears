@@ -1,6 +1,6 @@
 package academy.everyonecodes.java.controller;
 
-import academy.everyonecodes.java.data.DTOs.ActivityViewDTO;
+import academy.everyonecodes.java.data.dtos.ActivityViewDTO;
 import academy.everyonecodes.java.service.ActivityViewerService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;

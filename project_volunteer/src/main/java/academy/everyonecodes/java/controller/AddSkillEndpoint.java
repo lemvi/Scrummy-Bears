@@ -1,6 +1,6 @@
 package academy.everyonecodes.java.controller;
 
-import academy.everyonecodes.java.data.DTOs.SkillDTO;
+import academy.everyonecodes.java.data.dtos.SkillDTO;
 import academy.everyonecodes.java.service.AddSkillService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,6 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.DTOs.IndividualVolunteerDTO;
+import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;

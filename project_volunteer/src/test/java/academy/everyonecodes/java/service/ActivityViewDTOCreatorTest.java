@@ -1,16 +1,14 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.*;
-import academy.everyonecodes.java.data.DTOs.ActivityViewDTO;
-import academy.everyonecodes.java.data.DTOs.OrganizerViewForVolunteerActivityViewDTO;
+import academy.everyonecodes.java.data.dtos.ActivityViewDTO;
+import academy.everyonecodes.java.data.dtos.OrganizerViewForVolunteerActivityViewDTO;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;

@@ -1,7 +1,7 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.DTOs.CompanyDTO;
-import academy.everyonecodes.java.data.DTOs.IndividualVolunteerDTO;
+import academy.everyonecodes.java.data.dtos.CompanyDTO;
+import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
 import org.junit.jupiter.api.Assertions;
