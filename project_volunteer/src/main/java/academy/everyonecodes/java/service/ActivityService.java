@@ -85,8 +85,9 @@ public class ActivityService
         activity.setParticipants(new HashSet<>());
         if (activity.isOpenEnd())
             activity.setEndDateTime(activity.getStartDateTime());
-        if (!validateStartDateBeforeEndDate(activity))
-            userService.throwBadRequest(endDateBeforeStartDate);
+        else {
+            if (!validateStartDateBeforeEndDate(activity)) userService.throwBadRequest(endDateBeforeStartDate);
+        }
         return activityRepository.save(activity);
     }
 
@@ -98,6 +99,6 @@ public class ActivityService
     private boolean validateStartDateBeforeEndDate(Activity activity)
     {
         return activity.getStartDateTime().isBefore(activity.getEndDateTime())
-                || activity.getStartDateTime().equals(activity.getEndDateTime());
+                && !activity.getStartDateTime().equals(activity.getEndDateTime());
     }
 }
