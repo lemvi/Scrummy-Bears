@@ -44,6 +44,7 @@ class AgeCalculatorTest
         Mockito.when(dateProvider.getNow())
                 .thenReturn(LocalDate.of(2021, 8, 2));
         User user = new User(
+                null,
                 null
         );
 

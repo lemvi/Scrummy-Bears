@@ -44,7 +44,7 @@ public class ActivityDraftTranslator
         activity.getStartDateTime(),
         activity.getEndDateTime(),
         activity.isOpenEnd(),
-        activity.getOrganizer().getUsername()
+null
         );
     }
 
@@ -58,7 +58,7 @@ public class ActivityDraftTranslator
 
     private String getCategoriesString(List<String> categories)
     {
-        String categoriesString = "";
+        String categoriesString = null;
         if (categories != null && !categories.isEmpty())
             categoriesString = categories.stream().collect(Collectors.joining(";"));
         return categoriesString;
