@@ -39,6 +39,8 @@ errorMessages:
   activitiesNotFound: "Sorry, we found no Activities with the keyword:"
   endDateBeforeStartDate: "BAD_REQUEST: End date time must be after start date time"
   loggedInUserNotMatchingRequest: "BAD_REQUEST: Logged in user does not match the user you are trying to access"
+  activityAlreadyCompleted: "BAD_REQUEST: The Activity is already completed"
+  noParticipantsForActivity: "BAD_REQUEST: Their where no participants for this Activity, please edit or delete the Activity."
 
 
 

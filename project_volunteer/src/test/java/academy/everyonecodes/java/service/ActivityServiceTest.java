@@ -1,9 +1,6 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.Draft;
-import academy.everyonecodes.java.data.Role;
-import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import academy.everyonecodes.java.data.repositories.DraftRepository;
 import academy.everyonecodes.java.data.repositories.UserRepository;
@@ -13,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.Authentication;
@@ -46,8 +44,23 @@ public class ActivityServiceTest {
     @MockBean
     private UserService userService;
 
+    @MockBean
+    private ActivityStatusService activityStatusService;
+
+    @MockBean RatingService ratingService;
 
     private String endDateBeforeStartDate = "bad request";
+
+    @Value("${errorMessages.noMatchingActivityFound}")
+    private String noMatchingActivityFound;
+    @Value("${errorMessages.userNotAuthorizedToCompleteActivity}")
+    private String userNotAuthorizedToCompleteActivity;
+    @Value("${errorMessages.activityAlreadyCompleted}")
+    private String activityAlreadyCompleted;
+    @Value("${errorMessages.noParticipantsForActivity}")
+    private String noParticipantsForActivity;
+    @Value("${message.activitycompleted}")
+    private String activitycompletedmessage;
 
     @Mock
     private Authentication auth;
@@ -214,4 +227,151 @@ public class ActivityServiceTest {
         verify(activityRepository).findAll();
     }
 
+    @Test
+    void completeActivity_Activity_not_found() {
+        Long activityId = 1L;
+        Rating rating = new Rating();
+
+        Mockito.when(activityRepository.findById(activityId)).thenReturn(Optional.empty());
+
+        activityService.completeActivity(activityId, rating);
+
+        Mockito.verify(activityRepository).findById(activityId);
+        Mockito.verify(userService).throwBadRequest(noMatchingActivityFound);
+        Mockito.verifyNoMoreInteractions(activityRepository, userService);
+        Mockito.verifyNoInteractions(activityStatusService, ratingService, userRepository, draftRepository, translator);
+    }
+
+    @Test
+    void completeActivity_User_isNot_Organizer() {
+        Long activityId = 1L;
+        Activity activity = new Activity();
+        activity.setId(activityId);
+        activity.setOrganizer(organizer);
+        Rating rating = new Rating();
+
+        Mockito.when(activityRepository.findById(activityId)).thenReturn(Optional.of(activity));
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("noName");
+
+        activityService.completeActivity(activityId, rating);
+
+        Mockito.verify(activityRepository).findById(activityId);
+        Mockito.verify(userService).throwBadRequest(userNotAuthorizedToCompleteActivity);
+        Mockito.verifyNoMoreInteractions(activityRepository, userService);
+        Mockito.verifyNoInteractions(activityStatusService, ratingService, userRepository, draftRepository, translator);
+    }
+
+    @Test
+    void completeActivity_Activity_already_Completed() {
+        Long activityId = 1L;
+        Activity activity = new Activity();
+        activity.setId(activityId);
+        activity.setOrganizer(organizer);
+        Rating rating = new Rating();
+
+        Mockito.when(activityRepository.findById(activityId)).thenReturn(Optional.of(activity));
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
+        Mockito.when(activityStatusService.getActivityStatus(activityId)).thenReturn(Optional.of(new ActivityStatus(activityId, activity, Status.COMPLETED)));
+
+        activityService.completeActivity(activityId, rating);
+
+        Mockito.verify(activityRepository).findById(activityId);
+        Mockito.verify(activityStatusService).getActivityStatus(activityId);
+        Mockito.verify(userService).throwBadRequest(activityAlreadyCompleted);
+        Mockito.verifyNoMoreInteractions(activityRepository, userService, activityStatusService);
+        Mockito.verifyNoInteractions(ratingService, userRepository, draftRepository, translator);
+    }
+
+    @Test
+    void completeActivity_Activity_had_no_Participants() {
+        Long activityId = 1L;
+        Activity activity = new Activity();
+        activity.setId(activityId);
+        activity.setOrganizer(organizer);
+        activity.setParticipants(Set.of());
+        Rating rating = new Rating();
+
+        Mockito.when(activityRepository.findById(activityId)).thenReturn(Optional.of(activity));
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
+        Mockito.when(activityStatusService.getActivityStatus(activityId)).thenReturn(Optional.of(new ActivityStatus(activityId, activity, Status.PENDING)));
+
+        activityService.completeActivity(activityId, rating);
+
+        Mockito.verify(activityRepository).findById(activityId);
+        Mockito.verify(activityStatusService).getActivityStatus(activityId);
+        Mockito.verify(userService).throwBadRequest(noParticipantsForActivity);
+        Mockito.verifyNoMoreInteractions(activityRepository, userService, activityStatusService);
+        Mockito.verifyNoInteractions(ratingService, userRepository, draftRepository, translator);
+    }
+
+    @Test
+    void completeActivity_success_NoFeedback() {
+        // TODO: Include Check for sent Email when its done
+        Long activityId = 1L;
+        Activity activity = new Activity();
+        activity.setId(activityId);
+        activity.setOrganizer(organizer);
+        User participant = new User(
+                "particpant",
+                "password",
+                "email@email.com",
+                Set.of(new Role("ROLE_VOLUNTEER"))
+        );
+        participant.setId(activityId);
+        participants.add(participant);
+        activity.setParticipants(participants);
+        Rating rating = new Rating();
+
+        Mockito.when(activityRepository.findById(activityId)).thenReturn(Optional.of(activity));
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
+        Mockito.when(activityStatusService.getActivityStatus(activityId)).thenReturn(Optional.of(new ActivityStatus(activityId, activity, Status.ACTIVE)));
+        Mockito.when(ratingService.rateUserForActivity(rating, activityId)).thenReturn(rating);
+        Mockito.when(activityStatusService.changeActivityStatus(activity, Status.COMPLETED)).thenReturn(new ActivityStatus(activityId, activity, Status.COMPLETED));
+
+        activityService.completeActivity(activityId, rating);
+
+        Mockito.verify(activityRepository).findById(activityId);
+        Mockito.verify(activityStatusService).getActivityStatus(activityId);
+        Mockito.verify(ratingService).rateUserForActivity(rating, activityId);
+        Mockito.verify(activityStatusService).changeActivityStatus(activity, Status.COMPLETED);
+
+        Mockito.verifyNoMoreInteractions(activityRepository, activityStatusService, ratingService);
+        Mockito.verifyNoInteractions(userService, userRepository, draftRepository, translator);
+    }
+
+    @Test
+    void completeActivity_success_WithFeedback() {
+        // TODO: Include Check for sent Email when its done
+        Long activityId = 1L;
+        Activity activity = new Activity();
+        activity.setId(activityId);
+        activity.setOrganizer(organizer);
+        User participant = new User(
+                "particpant",
+                "password",
+                "email@email.com",
+                Set.of(new Role("ROLE_VOLUNTEER"))
+        );
+        participant.setId(activityId);
+        participants.add(participant);
+        activity.setParticipants(participants);
+        Rating rating = new Rating();
+        rating.setFeedback("ich bin ein Feedback");
+
+        Mockito.when(activityRepository.findById(activityId)).thenReturn(Optional.of(activity));
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
+        Mockito.when(activityStatusService.getActivityStatus(activityId)).thenReturn(Optional.of(new ActivityStatus(activityId, activity, Status.ACTIVE)));
+        Mockito.when(ratingService.rateUserForActivity(rating, activityId)).thenReturn(rating);
+        Mockito.when(activityStatusService.changeActivityStatus(activity, Status.COMPLETED)).thenReturn(new ActivityStatus(activityId, activity, Status.COMPLETED));
+
+        activityService.completeActivity(activityId, rating);
+
+        Mockito.verify(activityRepository).findById(activityId);
+        Mockito.verify(activityStatusService).getActivityStatus(activityId);
+        Mockito.verify(ratingService).rateUserForActivity(rating, activityId);
+        Mockito.verify(activityStatusService).changeActivityStatus(activity, Status.COMPLETED);
+
+        Mockito.verifyNoMoreInteractions(activityRepository, activityStatusService, ratingService);
+        Mockito.verifyNoInteractions(userService, userRepository, draftRepository, translator);
+    }
 }

@@ -26,10 +26,12 @@ public class ActivityService
     private final String userNotAuthorizedToCompleteActivity;
     private final String endDateBeforeStartDate;
     private final String activitycompletedmessage;
+    private final String activityAlreadyCompleted;
+    private final String noParticipantsForActivity;
     private final ActivityStatusService activityStatusService;
 
 
-    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, UserService userService, RatingService ratingService, @Value("${errorMessages.noMatchingActivityFound}") String noMatchingActivityFound, @Value("${errorMessages.userNotAuthorizedToCompleteActivity}") String userNotAuthorizedToCompleteActivity, @Value("${errorMessages.endDateBeforeStartDate}") String endDateBeforeStartDate, @Value("${message.activitycompleted}") String activitycompletedmessage, ActivityStatusService activityStatusService)
+    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, UserService userService, RatingService ratingService, @Value("${errorMessages.noMatchingActivityFound}") String noMatchingActivityFound, @Value("${errorMessages.userNotAuthorizedToCompleteActivity}") String userNotAuthorizedToCompleteActivity, @Value("${errorMessages.endDateBeforeStartDate}") String endDateBeforeStartDate, @Value("${message.activitycompleted}") String activitycompletedmessage, @Value("${errorMessages.activityAlreadyCompleted}") String activityAlreadyCompleted, @Value("${errorMessages.noParticipantsForActivity}")String noParticipantsForActivity, ActivityStatusService activityStatusService)
     {
         this.activityRepository = activityRepository;
         this.activityDraftTranslator = activityDraftTranslator;
@@ -41,6 +43,8 @@ public class ActivityService
         this.userNotAuthorizedToCompleteActivity = userNotAuthorizedToCompleteActivity;
         this.endDateBeforeStartDate = endDateBeforeStartDate;
         this.activitycompletedmessage = activitycompletedmessage;
+        this.activityAlreadyCompleted = activityAlreadyCompleted;
+        this.noParticipantsForActivity = noParticipantsForActivity;
         this.activityStatusService = activityStatusService;
     }
 
@@ -134,6 +138,18 @@ public class ActivityService
             return Optional.empty();
         }
 
+        Optional<ActivityStatus> optActivityStatus = activityStatusService.getActivityStatus(activityId);
+        if (optActivityStatus.isPresent() && optActivityStatus.get().getStatus().equals(Status.COMPLETED)) {
+            userService.throwBadRequest(activityAlreadyCompleted);
+            return Optional.empty();
+        }
+
+        // Check if Activity even had Participants
+        if (activity.getParticipants().isEmpty()) {
+            userService.throwBadRequest(noParticipantsForActivity);
+            return Optional.empty();
+        }
+
         // Check if Rating is done (or maybe sent with method), if both not, return Empty Optional (Maybe with Message?)
         // Save Rating and Feedback
         Rating ratingDone = ratingService.rateUserForActivity(rating, activityId);
@@ -150,7 +166,7 @@ public class ActivityService
         String text = activityCompletedMessageArray[1] + participant.getUsername() + activityCompletedMessageArray[2] + activity.getTitle() + activityCompletedMessageArray[3] + ratingDone.getRating();
         String feedback = activityCompletedMessageArray[4] + ratingDone.getFeedback();
         String completeText = text;
-        if (!ratingDone.getFeedback().isEmpty()) {
+        if ((null != ratingDone.getFeedback()) && (!ratingDone.getFeedback().isEmpty())) {
             completeText = text + "\n" + feedback;
         }
 
