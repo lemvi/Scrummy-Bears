@@ -23,10 +23,12 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class ActivityServiceTest {
+public class ActivityServiceTest
+{
 
     @Autowired
     ActivityService activityService;
@@ -53,7 +55,8 @@ public class ActivityServiceTest {
     private Authentication auth;
 
     @BeforeEach
-    public void initSecurityContext() {
+    public void initSecurityContext()
+    {
         SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
@@ -93,7 +96,8 @@ public class ActivityServiceTest {
             organizer.getUsername());
 
     @Test
-    void postActivity_valid() {
+    void postActivity_valid()
+    {
         Mockito.when(translator.toActivity(draft)).thenReturn(activity);
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
         Mockito.when(userRepository.findByUsername(organizer.getUsername())).thenReturn(Optional.of(organizer));
@@ -109,7 +113,8 @@ public class ActivityServiceTest {
     }
 
     @Test
-    void postDraft_valid() {
+    void postDraft_valid()
+    {
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
         Mockito.when(draftRepository.save(draft)).thenReturn(draft);
 
@@ -120,44 +125,46 @@ public class ActivityServiceTest {
     }
 
     @Test
-    void getDraftsOfOrganizer_valid() {
+    void getDraftsOfOrganizer_valid()
+    {
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
-      Mockito.when(draftRepository.findByOrganizer(organizer.getUsername())).thenReturn(List.of(draft));
+        Mockito.when(draftRepository.findByOrganizerUsername(organizer.getUsername())).thenReturn(List.of(draft));
 
-      List<Draft> actual = activityService.getDraftsOfOrganizer();
-      Assertions.assertEquals(List.of(draft), actual);
+        List<Draft> actual = activityService.getDraftsOfOrganizer();
+        Assertions.assertEquals(List.of(draft), actual);
 
-      Mockito.verify(draftRepository).findByOrganizer(organizer.getUsername());
+        Mockito.verify(draftRepository).findByOrganizerUsername(organizer.getUsername());
     }
 
 
     @Test
-    void editDraft_valid() {
+    void editDraft_valid()
+    {
         draft.setId(1L);
         Mockito.when(draftRepository.findById(draft.getId())).thenReturn(Optional.of(draft));
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
         Mockito.when(draftRepository.save(draft)).thenReturn(draft);
 
-        Optional<Draft> oDraft = activityService.editDraft(draft);
-        Assertions.assertEquals(Optional.of(draft), oDraft);
+        Draft actual = activityService.editDraft(draft);
+        Assertions.assertEquals(draft, actual);
         Mockito.verify(draftRepository).findById(draft.getId());
         Mockito.verify(draftRepository).save(draft);
 
     }
 
     @Test
-    void editDraft_isEmpty() {
+    void editDraft_isEmpty()
+    {
         draft.setId(1L);
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
         Mockito.when(draftRepository.findById(draft.getId())).thenReturn(Optional.empty());
-        Optional<Draft> oDraft = activityService.editDraft(draft);
-        Assertions.assertEquals(Optional.empty(), oDraft);
-        Mockito.verify(draftRepository).findById(draft.getId());
-        Mockito.verifyNoMoreInteractions(draftRepository);
-
+        Draft actual = activityService.editDraft(draft);
+        Mockito.verify(userService, times(1)).throwBadRequest("BAD_REQUEST: No matching draft was found.");
     }
 
     @Test
-    void saveDraftAsActivity_valid() {
+    void saveDraftAsActivity_valid()
+    {
         draft.setId(1L);
         Mockito.when(draftRepository.findById(draft.getId())).thenReturn(Optional.of(draft));
         Mockito.when(translator.toActivity(draft)).thenReturn(activity);
@@ -165,8 +172,9 @@ public class ActivityServiceTest {
         Mockito.when(userRepository.findByUsername(organizer.getUsername())).thenReturn(Optional.of(organizer));
         Mockito.when(activityRepository.save(activity)).thenReturn(activity);
 
-        Optional<Activity> oActivity = activityService.saveDraftAsActivity(draft.getId());
-        Assertions.assertEquals(Optional.of(activity), oActivity);
+
+        Activity actual = activityService.saveDraftAsActivity(draft.getId());
+        Assertions.assertEquals(activity, actual);
 
         Mockito.verify(translator).toActivity(draft);
         Mockito.verify(draftRepository).delete(draft);
@@ -176,39 +184,40 @@ public class ActivityServiceTest {
     }
 
     @Test
-    void saveDraftAsActivity_isEmpty() {
+    void saveDraftAsActivity_isEmpty()
+    {
         draft.setId(1L);
         Mockito.when(draftRepository.findById(draft.getId())).thenReturn(Optional.empty());
-        Optional<Activity> oActivity = activityService.saveDraftAsActivity(draft.getId());
-        Assertions.assertEquals(Optional.empty(), oActivity);
-        Mockito.verify(draftRepository).findById(draft.getId());
-        Mockito.verifyNoInteractions(translator);
-        Mockito.verifyNoMoreInteractions(draftRepository);
-        Mockito.verifyNoInteractions(userRepository);
-        Mockito.verifyNoInteractions(activityRepository);
-
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
+        Mockito.when(translator.toActivity(new Draft())).thenReturn(new Activity(true));
+        Activity actual = activityService.saveDraftAsActivity(draft.getId());
+        Mockito.verify(userService, times(1)).throwBadRequest("BAD_REQUEST: No matching draft was found.");
     }
 
     @Test
-    void getActivitiesOfOrganizer_valid() {
+    void getActivitiesOfOrganizer_valid()
+    {
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
         Mockito.when(activityRepository.findByOrganizer_Username(organizer.getUsername())).thenReturn(List.of());
 
-        List<Activity> actual = activityService.getActivitiesOfOrganizer();
+        List<Activity> actual = activityService.getActivitiesOfOrganizer("username");
         Assertions.assertEquals(List.of(), actual);
 
         Mockito.verify(activityRepository).findByOrganizer_Username(organizer.getUsername());
     }
 
     @Test
-    void findById() {
-        activityService.findById(1L);
+    void findById()
+    {
+        Mockito.when(activityRepository.findById(1L)).thenReturn(Optional.of(activity));
+        activityService.findActivityById(1L);
 
         verify(activityRepository).findById(1L);
     }
 
     @Test
-    void findAll() {
+    void findAll()
+    {
         activityService.getAllActivities();
 
         verify(activityRepository).findAll();

@@ -60,6 +60,11 @@ public class Activity {
     public Activity(){
     }
 
+    public Activity(Boolean openEnd)
+    {
+        this.openEnd = openEnd;
+    }
+
     public Activity(String title, String description, LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean openEnd, User organizer)
     {
         this.title = title;

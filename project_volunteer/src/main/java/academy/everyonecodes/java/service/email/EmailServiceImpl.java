@@ -21,20 +21,13 @@ import java.util.Objects;
 public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender emailSender;
-    private final String subject;
-    private final String text;
-    private final String pathToAttachment;
 
-    public EmailServiceImpl(JavaMailSender emailSender, @Value("${message.subject}") String subject, @Value("${message.text}") String text,
-                            @Value("${message.pathToAttachment}") String pathToAttachment) {
+    public EmailServiceImpl(JavaMailSender emailSender) {
         this.emailSender = emailSender;
-        this.subject = subject;
-        this.text = text;
-        this.pathToAttachment = pathToAttachment;
     }
 
     @Override
-    public void sendSimpleMessage(String to) {
+    public void sendSimpleMessage(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         //message.setFrom("scrummybears08@gmail.com");
         message.setTo(to);
@@ -45,7 +38,7 @@ public class EmailServiceImpl implements EmailService {
 
     //not sure about the exception IntelliJ provided here. https://www.baeldung.com/spring-email: says to maybe catch SendFailedException ??
     @Override
-    public void sendMessageWithAttachment(String to) throws MessagingException {
+    public void sendMessageWithAttachment(String to, String subject, String text, String pathToAttachment) throws MessagingException {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 

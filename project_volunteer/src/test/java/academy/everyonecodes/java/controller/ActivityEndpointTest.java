@@ -77,11 +77,11 @@ public class ActivityEndpointTest
     void getActivitiesOfOrganizer_valid_credentials() throws Exception
     {
         assertGetActivitiesOfOrganizerIsOK();
-        Mockito.verify(activityService).getActivitiesOfOrganizer();
+        Mockito.verify(activityService).getActivitiesOfOrganizer("test");
     }
 
     @Test
-    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_VOLUNTEER"})
+    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_DICTATOR"})
     void getActivitiesOfOrganizer_invalid_credentials() throws Exception
     {
         assertGetActivitiesOfOrganizerIsForbidden();
@@ -172,14 +172,14 @@ public class ActivityEndpointTest
 
     private void assertGetActivitiesOfOrganizerIsOK() throws Exception
     {
-        mvc.perform(get("/activities")
+        mvc.perform(get("/activities/test", String.class)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     private void assertGetActivitiesOfOrganizerIsForbidden() throws Exception
     {
-        mvc.perform(get("/activities")
+        mvc.perform(get("/activities/test")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }

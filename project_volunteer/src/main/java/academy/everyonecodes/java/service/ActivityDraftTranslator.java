@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Validated
@@ -33,11 +34,33 @@ public class ActivityDraftTranslator
         );
     }
 
+    public Draft toDraft(Activity activity)
+    {
+        return new Draft(
+                activity.getTitle(),
+        activity.getDescription(),
+        activity.getRecommendedSkills(),
+        getCategoriesString(activity.getCategories()),
+        activity.getStartDateTime(),
+        activity.getEndDateTime(),
+        activity.isOpenEnd(),
+        activity.getOrganizer().getUsername()
+        );
+    }
+
     private List<String> getCategories(String categoriesString)
     {
         List<String> categories = new ArrayList<>();
         if (categoriesString != null && !categoriesString.isEmpty())
             categories = Arrays.asList(categoriesString.split(";"));
         return categories;
+    }
+
+    private String getCategoriesString(List<String> categories)
+    {
+        String categoriesString = "";
+        if (categories != null && !categories.isEmpty())
+            categoriesString = categories.stream().collect(Collectors.joining(";"));
+        return categoriesString;
     }
 }

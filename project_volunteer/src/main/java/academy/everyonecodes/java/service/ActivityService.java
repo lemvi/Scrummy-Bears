@@ -6,6 +6,7 @@ import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import academy.everyonecodes.java.data.repositories.DraftRepository;
 import academy.everyonecodes.java.data.repositories.UserRepository;
+import academy.everyonecodes.java.service.email.EmailServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,19 @@ public class ActivityService
     private final UserService userService;
 
     private final String endDateBeforeStartDate;
+    private final String loggedInUserNotMatchingRequest;
+    private final String noMatchingActivityFound;
+    private final String deleteActivityWithParticipantsNotPossible;
 
-    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, UserService userService, @Value("${errorMessages.endDateBeforeStartDate}") String endDateBeforeStartDate)
+    private final String editActivityWithApplicantsOrParticipantsNotPossible;
+
+    private final String noMatchingDraftFound;
+    private final EmailServiceImpl emailService;
+
+    private final String subject;
+    private final String text;
+
+    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, UserService userService, @Value("${errorMessages.endDateBeforeStartDate}") String endDateBeforeStartDate, @Value("${errorMessages.loggedInUserNotMatchingRequest}") String loggedInUserNotMatchingRequest, @Value("${errorMessages.noMatchingActivityFound}") String noMatchingActivityFound, @Value("${errorMessages.deleteActivityWithParticipantsNotPossible}") String deleteActivityWithParticipantsNotPossible, @Value("${errorMessages.editActivityWithApplicantsOrParticipantsNotPossible}") String editActivityWithApplicantsOrParticipantsNotPossible, @Value("${errorMessages.noMatchingDraftFound}") String noMatchingDraftFound, EmailServiceImpl emailService, @Value("${activityDeletedEmail.subject}") String subject, @Value("${activityDeletedEmail.text}") String text)
     {
         this.activityRepository = activityRepository;
         this.activityDraftTranslator = activityDraftTranslator;
@@ -33,6 +45,35 @@ public class ActivityService
         this.userRepository = userRepository;
         this.userService = userService;
         this.endDateBeforeStartDate = endDateBeforeStartDate;
+        this.loggedInUserNotMatchingRequest = loggedInUserNotMatchingRequest;
+        this.noMatchingActivityFound = noMatchingActivityFound;
+        this.deleteActivityWithParticipantsNotPossible = deleteActivityWithParticipantsNotPossible;
+        this.editActivityWithApplicantsOrParticipantsNotPossible = editActivityWithApplicantsOrParticipantsNotPossible;
+        this.noMatchingDraftFound = noMatchingDraftFound;
+        this.emailService = emailService;
+        this.subject = subject;
+        this.text = text;
+    }
+
+    public List<Activity> getAllActivities()
+    {
+        return activityRepository.findAll();
+    }
+
+    public List<Activity> getActivitiesOfOrganizer(String organizerUsername)
+    {
+        return activityRepository.findByOrganizer_Username(organizerUsername);
+    }
+
+    public Activity findActivityById(Long id)
+    {
+        Optional<Activity> oActivity = activityRepository.findById(id);
+        Activity activity = new Activity();
+        if (oActivity.isEmpty())
+            userService.throwBadRequest(noMatchingActivityFound);
+        else
+            activity = oActivity.get();
+        return activity;
     }
 
     public Activity postActivity(Draft draft)
@@ -40,63 +81,98 @@ public class ActivityService
         return saveActivity(draft);
     }
 
-    public Draft postDraft(Draft draft)
+    public Activity editActivity(Activity activityNew)
     {
-        draft.setOrganizer(getAuthenticatedName());
-        return draftRepository.save(draft);
+        Activity activityOld = findActivityById(activityNew.getId());
+        authenticateLoggedInUserEqualsObjectOwner(activityOld.getOrganizer().getUsername());
+        if (!activityOld.getParticipants().isEmpty() || !activityOld.getApplicants().isEmpty())
+            userService.throwBadRequest(editActivityWithApplicantsOrParticipantsNotPossible);
+        return postActivity(activityDraftTranslator.toDraft(activityNew));
+    }
+
+    public void deleteActivity(Long activityId)
+    {
+        Activity activity = findActivityById(activityId);
+        authenticateLoggedInUserEqualsObjectOwner(activity.getOrganizer().getUsername());
+        if (activity.getParticipants().isEmpty())
+        {
+            activity.getApplicants().stream()
+                    .map(User::getEmailAddress)
+                    .forEach(e -> emailService.sendSimpleMessage(e, subject, text));
+            activityRepository.deleteById(activityId);
+        } else
+            userService.throwBadRequest(deleteActivityWithParticipantsNotPossible);
     }
 
     public List<Draft> getDraftsOfOrganizer()
     {
-        return draftRepository.findByOrganizer(getAuthenticatedName());
+        return draftRepository.findByOrganizerUsername(getAuthenticatedName());
     }
 
-    public Optional<Draft> editDraft(Draft draft)
+    public Draft findDraftById(Long id)
     {
-        Optional<Draft> oDraft = draftRepository.findById(draft.getId());
-        if (oDraft.isPresent())
-        {
-            return Optional.of(postDraft(draft));
-        }
-        return Optional.empty();
+        Optional<Draft> oDraft = draftRepository.findById(id);
+        Draft draft = new Draft();
+        if (oDraft.isEmpty())
+            userService.throwBadRequest(noMatchingDraftFound);
+        else
+            draft = oDraft.get();
+        authenticateLoggedInUserEqualsObjectOwner(draft.getOrganizerUsername());
+        return draft;
     }
 
-    public Optional<Activity> saveDraftAsActivity(Long draftId)
+    public Draft postDraft(Draft draft)
     {
-        Optional<Draft> oDraft = draftRepository.findById(draftId);
-        if (oDraft.isPresent())
-            return Optional.of(saveActivity(oDraft.get()));
-        return Optional.empty();
+        draft.setOrganizerUsername(getAuthenticatedName());
+        return draftRepository.save(draft);
     }
 
-    public Optional<Activity> findById(Long id) {
-        return activityRepository.findById(id);
-    }
-
-    public List<Activity> getAllActivities() {
-        return activityRepository.findAll();
-    }
-
-    public List<Activity> getActivitiesOfOrganizer()
+    public Draft editDraft(Draft draftNew)
     {
-        return activityRepository.findByOrganizer_Username(getAuthenticatedName());
+        findDraftById(draftNew.getId());
+        return postDraft(draftNew);
+    }
+
+    public Activity saveDraftAsActivity(Long draftId)
+    {
+        Draft draft = findDraftById(draftId);
+        return saveActivity(draft);
+    }
+
+    public void deleteDraft(Long draftId)
+    {
+        findDraftById(draftId);
+        draftRepository.deleteById(draftId);
     }
 
     private Activity saveActivity(Draft draft)
     {
+        User user = new User();
         Activity activity = activityDraftTranslator.toActivity(draft);
-        draftRepository.delete(draft);
-
         Optional<User> oUser = userRepository.findByUsername(getAuthenticatedName());
-        oUser.ifPresent(activity::setOrganizer);
+        if (oUser.isEmpty())
+            userService.throwBadRequest(loggedInUserNotMatchingRequest);
+        else
+            user = oUser.get();
+
+        activity.setOrganizer(user);
         activity.setApplicants(new HashSet<>());
         activity.setParticipants(new HashSet<>());
         if (activity.isOpenEnd())
             activity.setEndDateTime(activity.getStartDateTime());
-        else {
-            if (!validateStartDateBeforeEndDate(activity)) userService.throwBadRequest(endDateBeforeStartDate);
+        else
+        {
+            if (!validateStartDateBeforeEndDate(activity))
+                userService.throwBadRequest(endDateBeforeStartDate);
         }
+        draftRepository.delete(draft);
         return activityRepository.save(activity);
+    }
+
+    private boolean validateStartDateBeforeEndDate(Activity activity)
+    {
+        return activity.getStartDateTime().isBefore(activity.getEndDateTime())
+                && !activity.getStartDateTime().equals(activity.getEndDateTime());
     }
 
     private String getAuthenticatedName()
@@ -104,9 +180,9 @@ public class ActivityService
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
-    private boolean validateStartDateBeforeEndDate(Activity activity)
+    private void authenticateLoggedInUserEqualsObjectOwner(String organizerUsername)
     {
-        return activity.getStartDateTime().isBefore(activity.getEndDateTime())
-                && !activity.getStartDateTime().equals(activity.getEndDateTime());
+        if (!getAuthenticatedName().equals(organizerUsername))
+            userService.throwBadRequest(loggedInUserNotMatchingRequest);
     }
 }
