@@ -180,7 +180,7 @@ public class ActivityServiceTest
         Mockito.when(activityRepository.findById(activity.getId())).thenReturn(Optional.of(activity));
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
         Mockito.when(translator.toDraft(activity)).thenReturn(draft);
-        activity.setOrganizer(organizer);
+        Mockito.when(translator.toActivity(draft)).thenReturn(activity);
         Mockito.when(activityRepository.save(activity)).thenReturn(activity);
 
         Activity actual = activityService.editActivity(activity);
@@ -188,7 +188,30 @@ public class ActivityServiceTest
 
         Mockito.verify(activityRepository).findById(activity.getId());
         Mockito.verify(translator).toDraft(activity);
+        Mockito.verify(translator).toActivity(draft);
         Mockito.verify(activityRepository).save(activity);
+
+    }
+
+    @Test
+    void editActivity_ParticipantsApplicants()
+    {
+        activity.setId(1L);
+        Mockito.when(activityRepository.findById(activity.getId())).thenReturn(Optional.of(activity));
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
+        Mockito.when(translator.toDraft(activity)).thenReturn(draft);
+        Mockito.when(translator.toActivity(draft)).thenReturn(activity);
+        activity.setApplicants(Set.of(organizer));
+        activity.setParticipants(Set.of(organizer));
+        Mockito.when(activityRepository.save(activity)).thenReturn(activity);
+        activityService.editActivity(activity);
+
+        Mockito.verify(activityRepository).findById(activity.getId());
+        Mockito.verify(userService, times(1)).throwBadRequest("BAD_REQUEST: Editing Activity with applicants or accepted volunteers not possible.");
+    }
+
+    @Test
+    void deleteActivity() {
 
     }
 
