@@ -1,7 +1,6 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.Rating;
-import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.repositories.RatingRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ public class RatingService
         this.ratingRepository = ratingRepository;
     }
 
-    public Rating rateUserForActivity(Rating rating)
+    public Rating rateUserForActivity(Rating rating, Long activityId)
     {
         //authentication + implementation to be done
         return null;

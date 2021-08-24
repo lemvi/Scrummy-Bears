@@ -1,8 +1,6 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.Draft;
-import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import academy.everyonecodes.java.data.repositories.DraftRepository;
 import academy.everyonecodes.java.data.repositories.UserRepository;
@@ -10,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -22,17 +21,27 @@ public class ActivityService
     private final DraftRepository draftRepository;
     private final UserRepository userRepository;
     private final UserService userService;
-
+    private final RatingService ratingService;
+    private final String noMatchingActivityFound;
+    private final String userNotAuthorizedToCompleteActivity;
     private final String endDateBeforeStartDate;
+    private final List<String> activitycompletedmessage;
+    private final ActivityStatusService activityStatusService;
 
-    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, UserService userService, @Value("${errorMessages.endDateBeforeStartDate}") String endDateBeforeStartDate)
+
+    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, UserService userService, RatingService ratingService, @Value("${errorMessages.noMatchingActivityFound}") String noMatchingActivityFound, @Value("${errorMessages.userNotAuthorizedToCompleteActivity}") String userNotAuthorizedToCompleteActivity, @Value("${errorMessages.endDateBeforeStartDate}") String endDateBeforeStartDate, @Value("${message.activitycompleted}") List<String> activitycompletedmessage, ActivityStatusService activityStatusService)
     {
         this.activityRepository = activityRepository;
         this.activityDraftTranslator = activityDraftTranslator;
         this.draftRepository = draftRepository;
         this.userRepository = userRepository;
         this.userService = userService;
+        this.ratingService = ratingService;
+        this.noMatchingActivityFound = noMatchingActivityFound;
+        this.userNotAuthorizedToCompleteActivity = userNotAuthorizedToCompleteActivity;
         this.endDateBeforeStartDate = endDateBeforeStartDate;
+        this.activitycompletedmessage = activitycompletedmessage;
+        this.activityStatusService = activityStatusService;
     }
 
     public Activity postActivity(Draft draft)
@@ -108,5 +117,42 @@ public class ActivityService
     {
         return activity.getStartDateTime().isBefore(activity.getEndDateTime())
                 && !activity.getStartDateTime().equals(activity.getEndDateTime());
+    }
+
+    public Optional<ActivityStatus> completeActivity(Long activityId, Rating rating) {
+        // Get Activity, return Empty Optional if not found
+        Optional<Activity> oActivity = activityRepository.findById(activityId);
+        if (oActivity.isEmpty()) {
+            userService.throwBadRequest(noMatchingActivityFound);
+            return Optional.empty();
+        }
+        Activity activity = oActivity.get();
+        User organizer = activity.getOrganizer();
+        // Check if the logged in User is Owner of the Activity
+        if (!organizer.getUsername().equals(getAuthenticatedName())) {
+            userService.throwBadRequest(userNotAuthorizedToCompleteActivity);
+            return Optional.empty();
+        }
+
+        // Check if Rating is done (or maybe sent with method), if both not, return Empty Optional (Maybe with Message?)
+        // Save Rating and Feedback
+        Rating ratingDone = ratingService.rateUserForActivity(rating, activityId);
+
+        // Set Activity to Completed
+        ActivityStatus activityStatus = activityStatusService.changeActivityStatus(activity, Status.COMPLETED);
+
+        // Send Email including Rating and if there Feedback -> done in ratingService.rateUserForActivity(rating);?
+        // TODO: Link to refactored Email Method
+        User participant = new ArrayList<>(activity.getParticipants()).get(0);
+        String emailParticipant = participant.getEmailAddress();
+        String title = activitycompletedmessage.get(0) + activity.getTitle();
+        String text = activitycompletedmessage.get(1) + participant.getUsername() + activitycompletedmessage.get(2) + activity.getTitle() + activitycompletedmessage.get(3) + ratingDone.getRating();
+        String feedback = activitycompletedmessage.get(4) + ratingDone.getFeedback();
+        String completeText = text;
+        if (!ratingDone.getFeedback().isEmpty()) {
+            completeText = text + "\n" + feedback;
+        }
+
+        return Optional.of(activityStatus);
     }
 }

@@ -1,11 +1,14 @@
 package academy.everyonecodes.java.controller;
 
 import academy.everyonecodes.java.data.Activity;
+import academy.everyonecodes.java.data.ActivityStatus;
 import academy.everyonecodes.java.data.Draft;
+import academy.everyonecodes.java.data.Rating;
 import academy.everyonecodes.java.service.ActivityService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -58,5 +61,11 @@ public class ActivityEndpoint
     Activity saveDraftAsActivity(@PathVariable Long draftId)
     {
         return activityService.saveDraftAsActivity(draftId).orElse(null);
+    }
+
+    @PutMapping("/activities/complete/{activityId}")
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
+    ActivityStatus completeActivity(@PathVariable Long activityId, @RequestBody @Valid Rating rating) {
+        return activityService.completeActivity(activityId, rating).orElse(null);
     }
 }
