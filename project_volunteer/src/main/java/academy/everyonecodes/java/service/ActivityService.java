@@ -25,11 +25,11 @@ public class ActivityService
     private final String noMatchingActivityFound;
     private final String userNotAuthorizedToCompleteActivity;
     private final String endDateBeforeStartDate;
-    private final List<String> activitycompletedmessage;
+    private final String activitycompletedmessage;
     private final ActivityStatusService activityStatusService;
 
 
-    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, UserService userService, RatingService ratingService, @Value("${errorMessages.noMatchingActivityFound}") String noMatchingActivityFound, @Value("${errorMessages.userNotAuthorizedToCompleteActivity}") String userNotAuthorizedToCompleteActivity, @Value("${errorMessages.endDateBeforeStartDate}") String endDateBeforeStartDate, @Value("${message.activitycompleted}") List<String> activitycompletedmessage, ActivityStatusService activityStatusService)
+    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, UserService userService, RatingService ratingService, @Value("${errorMessages.noMatchingActivityFound}") String noMatchingActivityFound, @Value("${errorMessages.userNotAuthorizedToCompleteActivity}") String userNotAuthorizedToCompleteActivity, @Value("${errorMessages.endDateBeforeStartDate}") String endDateBeforeStartDate, @Value("${message.activitycompleted}") String activitycompletedmessage, ActivityStatusService activityStatusService)
     {
         this.activityRepository = activityRepository;
         this.activityDraftTranslator = activityDraftTranslator;
@@ -144,10 +144,11 @@ public class ActivityService
         // Send Email including Rating and if there Feedback -> done in ratingService.rateUserForActivity(rating);?
         // TODO: Link to refactored Email Method
         User participant = new ArrayList<>(activity.getParticipants()).get(0);
+        String[] activityCompletedMessageArray = activitycompletedmessage.split(";");
         String emailParticipant = participant.getEmailAddress();
-        String title = activitycompletedmessage.get(0) + activity.getTitle();
-        String text = activitycompletedmessage.get(1) + participant.getUsername() + activitycompletedmessage.get(2) + activity.getTitle() + activitycompletedmessage.get(3) + ratingDone.getRating();
-        String feedback = activitycompletedmessage.get(4) + ratingDone.getFeedback();
+        String title = activityCompletedMessageArray[0] + activity.getTitle();
+        String text = activityCompletedMessageArray[1] + participant.getUsername() + activityCompletedMessageArray[2] + activity.getTitle() + activityCompletedMessageArray[3] + ratingDone.getRating();
+        String feedback = activityCompletedMessageArray[4] + ratingDone.getFeedback();
         String completeText = text;
         if (!ratingDone.getFeedback().isEmpty()) {
             completeText = text + "\n" + feedback;

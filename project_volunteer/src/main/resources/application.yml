@@ -49,7 +49,7 @@ message:
   subject: Incorrect password for 5 times
   text: Was this you? Someone tried to login with an incorrect password for 5 times. Please reset your Password.
   pathToAttachment: project_volunteer/src/main/resources/Scrummy Bears Logo.jpg
-  activitycompleted: "Activity Completed: ", "Hello ", ", the Activity ",  " is completed, your Rating for this activity is: ", "Your Feedback for this Activity is: "
+  activitycompleted: "Activity Completed: ;Hello ;, the Activity ; is completed, your Rating for this activity is: ;Your Feedback for this Activity is: "
 
   #https://drive.google.com/file/d/1_0k1HyesHZC1R6oEZ2q3MY5FiaMhKPie/view?usp=sharing
 
