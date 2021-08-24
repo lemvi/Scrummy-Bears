@@ -1,5 +1,6 @@
 package academy.everyonecodes.java.controller;
 
+import academy.everyonecodes.java.data.Activity;
 import academy.everyonecodes.java.data.Draft;
 import academy.everyonecodes.java.service.ActivityService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -40,6 +41,56 @@ public class ActivityEndpointTest
             true,
             null);
 
+    Activity activity = new Activity();
+
+    @Test
+    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
+    void getAllActivities_valid_credentials() throws Exception
+    {
+        assertGetAllActivitiesIsOK();
+        Mockito.verify(activityService).getAllActivities();
+    }
+
+    @Test
+    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_DICTATOR"})
+    void getAllActivities_invalid_credentials() throws Exception
+    {
+        assertGetAllActivitiesIsForbidden();
+        Mockito.verifyNoInteractions(activityService);
+    }
+
+    @Test
+    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
+    void getActivitiesOfOrganizer_valid_credentials() throws Exception
+    {
+        assertGetActivitiesOfOrganizerIsOK();
+        Mockito.verify(activityService).getActivitiesOfOrganizer("test");
+    }
+
+    @Test
+    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_DICTATOR"})
+    void getActivitiesOfOrganizer_invalid_credentials() throws Exception
+    {
+        assertGetActivitiesOfOrganizerIsForbidden();
+        Mockito.verifyNoInteractions(activityService);
+    }
+
+    @Test
+    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
+    void findActivityById_valid_credentials() throws Exception
+    {
+        assertFindActivityByIdIsOK();
+        Mockito.verify(activityService).findActivityById(1L);
+    }
+
+    @Test
+    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_DICTATOR"})
+    void findActivityById_invalid_credentials() throws Exception
+    {
+        assertFindActivityByIdIsForbidden();
+        Mockito.verifyNoInteractions(activityService);
+    }
+
     @Test
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
     void postActivity_valid_credentials() throws Exception
@@ -74,33 +125,33 @@ public class ActivityEndpointTest
 
     @Test
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
-    void getActivitiesOfOrganizer_valid_credentials() throws Exception
+    void editActivity_valid_credentials() throws Exception
     {
-        assertGetActivitiesOfOrganizerIsOK();
-        Mockito.verify(activityService).getActivitiesOfOrganizer("test");
+        assertEditActivityIsOK(activity);
+        Mockito.verify(activityService).editActivity(activity);
     }
 
     @Test
-    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_DICTATOR"})
-    void getActivitiesOfOrganizer_invalid_credentials() throws Exception
+    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_VOLUNTEER"})
+    void editActivity_invalid_credentials() throws Exception
     {
-        assertGetActivitiesOfOrganizerIsForbidden();
+        assertEditActivityIsForbidden(activity);
         Mockito.verifyNoInteractions(activityService);
     }
 
     @Test
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
-    void postDraft_valid_credentials() throws Exception
+    void deleteActivity_valid_credentials() throws Exception
     {
-        assertPostDraftIsOK(draft);
-        Mockito.verify(activityService).postDraft(draft);
+        assertDeleteActivityIsOK();
+        Mockito.verify(activityService).deleteActivity(1L);
     }
 
     @Test
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_VOLUNTEER"})
-    void postDraft_invalid_credentials() throws Exception
+    void deleteActivity_invalid_credentials() throws Exception
     {
-        assertPostDraftIsForbidden(draft);
+        assertDeleteActivityIsForbidden();
         Mockito.verifyNoInteractions(activityService);
     }
 
@@ -117,6 +168,38 @@ public class ActivityEndpointTest
     void getDraftsOfOrganizer_invalid_credentials() throws Exception
     {
         assertGetDraftsOfOrganizerIsForbidden();
+        Mockito.verifyNoInteractions(activityService);
+    }
+
+    @Test
+    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
+    void findDraftById_valid_credentials() throws Exception
+    {
+        assertFindDraftByIdIsOK();
+        Mockito.verify(activityService).findDraftById(1L);
+    }
+
+    @Test
+    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_DICTATOR"})
+    void findDraftById_invalid_credentials() throws Exception
+    {
+        assertFindDraftByIdIsForbidden();
+        Mockito.verifyNoInteractions(activityService);
+    }
+
+    @Test
+    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
+    void postDraft_valid_credentials() throws Exception
+    {
+        assertPostDraftIsOK(draft);
+        Mockito.verify(activityService).postDraft(draft);
+    }
+
+    @Test
+    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_VOLUNTEER"})
+    void postDraft_invalid_credentials() throws Exception
+    {
+        assertPostDraftIsForbidden(draft);
         Mockito.verifyNoInteractions(activityService);
     }
 
@@ -152,20 +235,32 @@ public class ActivityEndpointTest
         Mockito.verifyNoInteractions(activityService);
     }
 
-    private void assertPostActivityIsOK(Draft draft) throws Exception
+    @Test
+    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
+    void deleteDraft_valid_credentials() throws Exception
     {
-        mvc.perform(post("/activities")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(getJsonOfDraft(draft))
+        assertDeleteDraftIsOK();
+        Mockito.verify(activityService).deleteDraft(1L);
+    }
+
+    @Test
+    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_VOLUNTEER"})
+    void deleteDraft_invalid_credentials() throws Exception
+    {
+        assertDeleteDraftIsForbidden();
+        Mockito.verifyNoInteractions(activityService);
+    }
+
+    private void assertGetAllActivitiesIsOK() throws Exception
+    {
+        mvc.perform(get("/activities", String.class)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
-    private void assertPostActivityIsForbidden(Draft draft) throws Exception
+    private void assertGetAllActivitiesIsForbidden() throws Exception
     {
-        mvc.perform(post("/activities")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(getJsonOfDraft(draft))
+        mvc.perform(get("/activities")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
@@ -184,20 +279,67 @@ public class ActivityEndpointTest
                 .andExpect(status().isForbidden());
     }
 
-    private void assertPostDraftIsOK(Draft draft) throws Exception
+    private void assertFindActivityByIdIsOK() throws Exception
     {
-        mvc.perform(post("/drafts")
+        mvc.perform(get("/activities/find/1", String.class)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    private void assertFindActivityByIdIsForbidden() throws Exception
+    {
+        mvc.perform(get("/activities/find/1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+
+    private void assertPostActivityIsOK(Draft draft) throws Exception
+    {
+        mvc.perform(post("/activities")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getJsonOfDraft(draft))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
-    private void assertPostDraftIsForbidden(Draft draft) throws Exception
+    private void assertPostActivityIsForbidden(Draft draft) throws Exception
     {
-        mvc.perform(post("/drafts")
+        mvc.perform(post("/activities")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getJsonOfDraft(draft))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    private void assertEditActivityIsOK(Activity activity) throws Exception
+    {
+        mvc.perform(put("/activities")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getJsonOfActivity(activity))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    private void assertEditActivityIsForbidden(Activity activity) throws Exception
+    {
+        mvc.perform(put("/activities")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getJsonOfActivity(activity))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    private void assertDeleteActivityIsOK() throws Exception
+    {
+        mvc.perform(delete("/activities/1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    private void assertDeleteActivityIsForbidden() throws Exception
+    {
+        mvc.perform(delete("/activities/1")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
@@ -212,6 +354,38 @@ public class ActivityEndpointTest
     private void assertGetDraftsOfOrganizerIsForbidden() throws Exception
     {
         mvc.perform(get("/drafts")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    private void assertFindDraftByIdIsOK() throws Exception
+    {
+        mvc.perform(get("/drafts/1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    private void assertFindDraftByIdIsForbidden() throws Exception
+    {
+        mvc.perform(get("/drafts/1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    private void assertPostDraftIsOK(Draft draft) throws Exception
+    {
+        mvc.perform(post("/drafts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getJsonOfDraft(draft))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    private void assertPostDraftIsForbidden(Draft draft) throws Exception
+    {
+        mvc.perform(post("/drafts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getJsonOfDraft(draft))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
@@ -248,10 +422,31 @@ public class ActivityEndpointTest
                 .andExpect(status().isForbidden());
     }
 
+    private void assertDeleteDraftIsOK() throws Exception
+    {
+        mvc.perform(delete("/drafts/1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    private void assertDeleteDraftIsForbidden() throws Exception
+    {
+        mvc.perform(delete("/drafts/1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
     private String getJsonOfDraft(Draft draft) throws JsonProcessingException
     {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         return objectMapper.writeValueAsString(draft);
+    }
+
+    private String getJsonOfActivity(Activity activity) throws JsonProcessingException
+    {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        return objectMapper.writeValueAsString(activity);
     }
 }

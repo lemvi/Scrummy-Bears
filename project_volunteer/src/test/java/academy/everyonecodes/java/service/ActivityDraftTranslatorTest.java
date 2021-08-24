@@ -4,6 +4,7 @@ import academy.everyonecodes.java.data.Activity;
 import academy.everyonecodes.java.data.Draft;
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
+import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,8 +97,7 @@ public class ActivityDraftTranslatorTest
     }
 
     @Test
-    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
-    void postActivity_TITLE_empty__too_long() throws Exception
+    void toActivity_TITLE_empty__too_long() throws Exception
     {
         Draft draft = new Draft(
                 "",
@@ -115,8 +115,7 @@ public class ActivityDraftTranslatorTest
     }
 
     @Test
-    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
-    void postActivity_DESCRIPTION_empty() throws Exception
+    void toActivity_DESCRIPTION_empty() throws Exception
     {
         Draft draft = new Draft(
                 "title",
@@ -132,8 +131,7 @@ public class ActivityDraftTranslatorTest
     }
 
     @Test
-    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
-    void postActivity_START_DATE_TIME_empty__not_in_future() throws Exception
+    void toActivity_START_DATE_TIME_empty__not_in_future() throws Exception
     {
         Draft draft = new Draft(
                 "title",
@@ -151,8 +149,7 @@ public class ActivityDraftTranslatorTest
     }
 
     @Test
-    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
-    void postActivity_END_DATE_TIME_empty__not_in_future() throws Exception
+    void toActivity_END_DATE_TIME_empty__not_in_future() throws Exception
     {
         Draft draft = new Draft(
                 "title",
@@ -170,8 +167,7 @@ public class ActivityDraftTranslatorTest
     }
 
     @Test
-    @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
-    void postActivity_IS_OPEN_END_empty__false() throws Exception
+    void toActivity_IS_OPEN_END_empty__false() throws Exception
     {
         Draft draft = new Draft(
                 "title",
@@ -185,6 +181,48 @@ public class ActivityDraftTranslatorTest
         assertViolations(draft);
         draft.setOpenEnd(false);
         assertNoViolations(draft);
+    }
+
+    @Test
+    void toDraft_valid_all_fields()
+    {
+        Activity activity = new Activity(
+                "title",
+                "description",
+                "recommendedSkills",
+                List.of("category1", "category2"),
+                LocalDateTime.of(LocalDate.MIN, LocalTime.MIN),
+                LocalDateTime.of(LocalDate.MAX, LocalTime.MAX),
+                true,
+                new User("username"),
+                new HashSet<>(),
+                new HashSet<>()
+        );
+
+        Draft expected = new Draft(
+                "title",
+                "description",
+                "recommendedSkills",
+                "category1;category2",
+                LocalDateTime.of(LocalDate.MIN, LocalTime.MIN),
+                LocalDateTime.of(LocalDate.MAX, LocalTime.MAX),
+                true,
+                null
+        );
+
+        Draft actual = translator.toDraft(activity);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void toDraft_valid_empty()
+    {
+        Activity activity = new Activity();
+
+        Draft expected = new Draft();
+
+        Draft actual = translator.toDraft(activity);
+        Assertions.assertEquals(expected, actual);
     }
 
     private void assertNoViolations(Draft draft)
