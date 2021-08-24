@@ -34,6 +34,8 @@ security:
 errorMessages:
   wrongRoles: "BAD_REQUEST: Roles are not set correctly"
   usernameNotFound: "BAD_REQUEST: Username doesn't exist"
+  noMatchingActivityFound: "BAD_REQUEST: No matching activity was found."
+  userNotAuthorizedToCompleteActivity: "BAD_REQUEST: User not authorized to complete this activity"
   activitiesNotFound: "Sorry, we found no Activities with the keyword:"
   endDateBeforeStartDate: "BAD_REQUEST: End date time must be after start date time"
   loggedInUserNotMatchingRequest: "BAD_REQUEST: Logged in user does not match the user you are trying to access"
