@@ -98,7 +98,7 @@ public class ActivityService
         {
             activity.getApplicants().stream()
                     .map(User::getEmailAddress)
-                    .forEach(e -> emailService.sendSimpleMessage(e, subject, text));
+                    .forEach(e -> emailService.sendSimpleMessage(e, subject, text + activity.getTitle()));
             activityRepository.deleteById(activityId);
         } else
             userService.throwBadRequest(deleteActivityWithParticipantsNotPossible);

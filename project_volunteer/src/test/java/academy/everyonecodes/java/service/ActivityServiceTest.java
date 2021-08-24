@@ -7,7 +7,10 @@ import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import academy.everyonecodes.java.data.repositories.DraftRepository;
 import academy.everyonecodes.java.data.repositories.UserRepository;
-import org.junit.jupiter.api.Assertions;
+import academy.everyonecodes.java.service.email.EmailServiceImpl;
+import com.icegreen.greenmail.junit4.GreenMailRule;
+import com.icegreen.greenmail.util.ServerSetupTest;
+import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -15,14 +18,19 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -48,6 +56,14 @@ public class ActivityServiceTest
     @MockBean
     private UserService userService;
 
+    @MockBean
+    private EmailServiceImpl emailService;
+
+    @MockBean
+    JavaMailSender emailSender;
+
+    @Rule
+    public final GreenMailRule greenMail = new GreenMailRule(ServerSetupTest.SMTP);
 
     private String endDateBeforeStartDate = "bad request";
 
@@ -97,18 +113,20 @@ public class ActivityServiceTest
 
 
     @Test
-    void getAllActivities_notEmpty() {
+    void getAllActivities_notEmpty()
+    {
         Mockito.when(activityRepository.findAll()).thenReturn(List.of(activity));
         List<Activity> actual = activityService.getAllActivities();
-        Assertions.assertEquals(List.of(activity), actual);
+        assertEquals(List.of(activity), actual);
         Mockito.verify(activityRepository).findAll();
     }
 
     @Test
-    void getAllActivities_Empty() {
+    void getAllActivities_Empty()
+    {
         Mockito.when(activityRepository.findAll()).thenReturn(List.of());
         List<Activity> actual = activityService.getAllActivities();
-        Assertions.assertEquals(List.of(), actual);
+        assertEquals(List.of(), actual);
         Mockito.verify(activityRepository).findAll();
     }
 
@@ -116,9 +134,19 @@ public class ActivityServiceTest
     void getActivitiesOfOrganizer_valid()
     {
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
+        Mockito.when(activityRepository.findByOrganizer_Username(organizer.getUsername())).thenReturn(List.of(activity));
+        List<Activity> actual = activityService.getActivitiesOfOrganizer("username");
+        assertEquals(List.of(activity), actual);
+        Mockito.verify(activityRepository).findByOrganizer_Username(organizer.getUsername());
+    }
+
+    @Test
+    void getActivitiesOfOrganizer_empty()
+    {
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
         Mockito.when(activityRepository.findByOrganizer_Username(organizer.getUsername())).thenReturn(List.of());
         List<Activity> actual = activityService.getActivitiesOfOrganizer("username");
-        Assertions.assertEquals(List.of(), actual);
+        assertEquals(List.of(), actual);
         Mockito.verify(activityRepository).findByOrganizer_Username(organizer.getUsername());
     }
 
@@ -131,7 +159,7 @@ public class ActivityServiceTest
     }
 
     @Test
-    void findActivityById_isEmpty()
+    void findActivityById_not_found()
     {
         Mockito.when(activityRepository.findById(1L)).thenReturn(Optional.empty());
         activityService.findActivityById(1L);
@@ -149,7 +177,7 @@ public class ActivityServiceTest
         Mockito.when(activityRepository.save(activity)).thenReturn(activity);
 
         Activity actual = activityService.postActivity(draft);
-        Assertions.assertEquals(activity, actual);
+        assertEquals(activity, actual);
 
         Mockito.verify(translator).toActivity(draft);
         Mockito.verify(draftRepository).delete(draft);
@@ -166,7 +194,7 @@ public class ActivityServiceTest
         Mockito.when(activityRepository.save(activity)).thenReturn(activity);
 
         Activity actual = activityService.postActivity(draft);
-        Assertions.assertEquals(activity, actual);
+        assertEquals(activity, actual);
 
         Mockito.verify(translator).toActivity(draft);
         Mockito.verify(userRepository).findByUsername(organizer.getUsername());
@@ -184,7 +212,7 @@ public class ActivityServiceTest
         Mockito.when(activityRepository.save(activity)).thenReturn(activity);
 
         Activity actual = activityService.editActivity(activity);
-        Assertions.assertEquals(activity, actual);
+        assertEquals(activity, actual);
 
         Mockito.verify(activityRepository).findById(activity.getId());
         Mockito.verify(translator).toDraft(activity);
@@ -194,15 +222,15 @@ public class ActivityServiceTest
     }
 
     @Test
-    void editActivity_ParticipantsApplicants()
+    void editActivity_invalid_because_there_are_already_participants_and_applicants()
     {
         activity.setId(1L);
+        activity.setApplicants(Set.of(organizer));
+        activity.setParticipants(Set.of(organizer));
         Mockito.when(activityRepository.findById(activity.getId())).thenReturn(Optional.of(activity));
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
         Mockito.when(translator.toDraft(activity)).thenReturn(draft);
         Mockito.when(translator.toActivity(draft)).thenReturn(activity);
-        activity.setApplicants(Set.of(organizer));
-        activity.setParticipants(Set.of(organizer));
         Mockito.when(activityRepository.save(activity)).thenReturn(activity);
         activityService.editActivity(activity);
 
@@ -211,20 +239,26 @@ public class ActivityServiceTest
     }
 
     @Test
-    void deleteActivity() {
-
+    void deleteActivity_valid()
+    {
+        activity.setId(1L);
+        activity.setApplicants(Set.of(organizer));
+        Mockito.when(activityRepository.findById(activity.getId())).thenReturn(Optional.of(activity));
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
+        activityService.deleteActivity(1L);
+        Mockito.verify(emailService).sendSimpleMessage(organizer.getEmailAddress(), "Activity was deleted", "The following activity was deleted by its creator: " + activity.getTitle());
+        Mockito.verify(activityRepository).deleteById(1L);
     }
 
     @Test
-    void postDraft_valid()
+    void deleteActivity_invalid_as_volunteers_have_already_been_accepted()
     {
+        activity.setId(1L);
+        activity.setParticipants(Set.of(organizer));
+        Mockito.when(activityRepository.findById(activity.getId())).thenReturn(Optional.of(activity));
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
-        Mockito.when(draftRepository.save(draft)).thenReturn(draft);
-
-        Draft actual = activityService.postDraft(draft);
-        Assertions.assertEquals(draft, actual);
-
-        Mockito.verify(draftRepository).save(draft);
+        activityService.deleteActivity(1L);
+        Mockito.verify(userService).throwBadRequest("BAD_REQUEST: Deleting an activity with accepted volunteers not possible.");
     }
 
     @Test
@@ -234,11 +268,54 @@ public class ActivityServiceTest
         Mockito.when(draftRepository.findByOrganizerUsername(organizer.getUsername())).thenReturn(List.of(draft));
 
         List<Draft> actual = activityService.getDraftsOfOrganizer();
-        Assertions.assertEquals(List.of(draft), actual);
+        assertEquals(List.of(draft), actual);
 
         Mockito.verify(draftRepository).findByOrganizerUsername(organizer.getUsername());
     }
 
+    @Test
+    void getDraftsOfOrganizer_emptyList()
+    {
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
+        Mockito.when(draftRepository.findByOrganizerUsername(organizer.getUsername())).thenReturn(List.of());
+
+        List<Draft> actual = activityService.getDraftsOfOrganizer();
+        assertEquals(List.of(), actual);
+
+        Mockito.verify(draftRepository).findByOrganizerUsername(organizer.getUsername());
+    }
+
+    @Test
+    void findDraftById_valid()
+    {
+        draft.setId(1L);
+        Mockito.when(draftRepository.findById(1L)).thenReturn(Optional.of(draft));
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
+        Draft actual = activityService.findDraftById(1L);
+        assertEquals(draft, actual);
+    }
+
+    @Test
+    void findDraftById_no_draft_found()
+    {
+        Mockito.when(draftRepository.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
+        activityService.findDraftById(1L);
+        verify(draftRepository).findById(1L);
+        Mockito.verify(userService, times(1)).throwBadRequest("BAD_REQUEST: No matching draft was found.");
+    }
+
+    @Test
+    void postDraft_valid()
+    {
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
+        Mockito.when(draftRepository.save(draft)).thenReturn(draft);
+
+        Draft actual = activityService.postDraft(draft);
+        assertEquals(draft, actual);
+
+        Mockito.verify(draftRepository).save(draft);
+    }
 
     @Test
     void editDraft_valid()
@@ -249,19 +326,19 @@ public class ActivityServiceTest
         Mockito.when(draftRepository.save(draft)).thenReturn(draft);
 
         Draft actual = activityService.editDraft(draft);
-        Assertions.assertEquals(draft, actual);
+        assertEquals(draft, actual);
         Mockito.verify(draftRepository).findById(draft.getId());
         Mockito.verify(draftRepository).save(draft);
 
     }
 
     @Test
-    void editDraft_isEmpty()
+    void editDraft_no_draft_found()
     {
         draft.setId(1L);
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
         Mockito.when(draftRepository.findById(draft.getId())).thenReturn(Optional.empty());
-        Draft actual = activityService.editDraft(draft);
+        activityService.editDraft(draft);
         Mockito.verify(userService, times(1)).throwBadRequest("BAD_REQUEST: No matching draft was found.");
     }
 
@@ -277,7 +354,7 @@ public class ActivityServiceTest
 
 
         Activity actual = activityService.saveDraftAsActivity(draft.getId());
-        Assertions.assertEquals(activity, actual);
+        assertEquals(activity, actual);
 
         Mockito.verify(translator).toActivity(draft);
         Mockito.verify(draftRepository).delete(draft);
@@ -297,8 +374,23 @@ public class ActivityServiceTest
         Mockito.verify(userService, times(1)).throwBadRequest("BAD_REQUEST: No matching draft was found.");
     }
 
+    @Test
+    void deleteDraft_valid()
+    {
+        Mockito.when(draftRepository.findById(draft.getId())).thenReturn(Optional.of(draft));
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
+        activityService.deleteDraft(1L);
+        Mockito.verify(draftRepository).deleteById(1L);
+    }
 
-
+    @Test
+    void deleteDraft_no_draft_found()
+    {
+        Mockito.when(draftRepository.findById(draft.getId())).thenReturn(Optional.empty());
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
+        activityService.deleteDraft(1L);
+        Mockito.verify(userService, times(1)).throwBadRequest("BAD_REQUEST: No matching draft was found.");
+    }
 
 
 }
