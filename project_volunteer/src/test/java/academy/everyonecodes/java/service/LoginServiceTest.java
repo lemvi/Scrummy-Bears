@@ -221,7 +221,7 @@ class LoginServiceTest {
 		Mockito.verify(invalidLoginCountRepository).save(new InvalidLoginCount(testUser, 5));
 
 		try {
-			Mockito.verify(emailService).sendMessageWithAttachment("test@testmail.com");
+			Mockito.verify(emailService).sendMessageWithAttachment("test@testmail.com", "Incorrect password for 5 times", "Was this you? Someone tried to login with an incorrect password for 5 times. Please reset your Password.", "project_volunteer/src/main/resources/Scrummy Bears Logo.jpg");
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}

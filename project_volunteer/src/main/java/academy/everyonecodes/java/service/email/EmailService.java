@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface EmailService {
 
-    void sendSimpleMessage(String to);
+    void sendSimpleMessage(String to, String subject, String text);
 
-    void sendMessageWithAttachment(String to) throws MessagingException;
+    void sendMessageWithAttachment(String to, String subject, String text, String pathToAttachment) throws MessagingException;
 }
