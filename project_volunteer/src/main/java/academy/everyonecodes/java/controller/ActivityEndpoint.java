@@ -16,9 +16,31 @@ import java.util.List;
 public class ActivityEndpoint
 {
     private final ActivityService activityService;
+
     public ActivityEndpoint(ActivityService activityService)
     {
         this.activityService = activityService;
+    }
+
+    @GetMapping("/activities")
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION", "ROLE_VOLUNTEER"})
+    List<Activity> getAllActivities()
+    {
+        return activityService.getAllActivities();
+    }
+
+    @GetMapping("/activities/{organizerUsername}")
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION", "ROLE_VOLUNTEER"})
+    List<Activity> getActivitiesOfOrganizer(@PathVariable String organizerUsername)
+    {
+        return activityService.getActivitiesOfOrganizer(organizerUsername);
+    }
+
+    @GetMapping("/activities/find/{id}")
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION", "ROLE_VOLUNTEER"})
+    Activity findActivityById(@PathVariable Long id)
+    {
+        return activityService.findActivityById(id);
     }
 
     @PostMapping("/activities")
@@ -28,18 +50,18 @@ public class ActivityEndpoint
         return activityService.postActivity(draft);
     }
 
-    @GetMapping("/activities")
+    @PutMapping("/activities")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
-    List<Activity> getActivitiesOfOrganizer()
+    Activity editActivity(@RequestBody Activity activity)
     {
-        return activityService.getActivitiesOfOrganizer();
+        return activityService.editActivity(activity);
     }
 
-    @PostMapping("/drafts")
+    @DeleteMapping("/activities/{activityId}")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
-    Draft postDraft(@RequestBody Draft draft)
+    void deleteActivity(@PathVariable Long activityId)
     {
-        return activityService.postDraft(draft);
+        activityService.deleteActivity(activityId);
     }
 
     @GetMapping("/drafts")
@@ -49,18 +71,39 @@ public class ActivityEndpoint
         return activityService.getDraftsOfOrganizer();
     }
 
+    @GetMapping("/drafts/{id}")
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
+    Draft findDraftById(@PathVariable Long id)
+    {
+        return activityService.findDraftById(id);
+    }
+
+    @PostMapping("/drafts")
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
+    Draft postDraft(@RequestBody Draft draft)
+    {
+        return activityService.postDraft(draft);
+    }
+
     @PutMapping("/drafts")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     Draft editDraft(@RequestBody Draft draft)
     {
-        return activityService.editDraft(draft).orElse(null);
+        return activityService.editDraft(draft);
     }
 
     @PutMapping("/drafts/{draftId}")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     Activity saveDraftAsActivity(@PathVariable Long draftId)
     {
-        return activityService.saveDraftAsActivity(draftId).orElse(null);
+        return activityService.saveDraftAsActivity(draftId);
+    }
+
+    @DeleteMapping("/drafts/{draftId}")
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
+    void deleteDraft(@PathVariable Long draftId)
+    {
+        activityService.deleteDraft(draftId);
     }
 
     @PutMapping("/activities/complete/{activityId}")

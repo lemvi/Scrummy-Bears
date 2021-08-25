@@ -1,9 +1,9 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.dtos.ActivityViewDTO;
 import academy.everyonecodes.java.data.Status;
 import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.dtos.ActivityViewDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -21,10 +20,11 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class ActivityViewerServiceTest {
+class ActivityViewerServiceTest
+{
 
     @Autowired
     private ActivityViewerService activityViewerService;
@@ -34,6 +34,9 @@ class ActivityViewerServiceTest {
 
     @MockBean
     private UserService userService;
+
+    @MockBean
+    ExceptionThrower exceptionThrower;
 
     @MockBean
     private ActivityService activityService;
@@ -48,35 +51,39 @@ class ActivityViewerServiceTest {
     private Authentication auth;
 
     @BeforeEach
-    public void initSecurityContext() {
+    public void initSecurityContext()
+    {
         SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
     @Test
-    void getListOfActivityViewDTOsForSpecificVolunteer_notLoggedInUser() {
+    void getListOfActivityViewDTOsForSpecificVolunteer_notLoggedInUser()
+    {
         String username = "username";
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
-        doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(loggedInUserNotMatchingRequestMessage);
-
-        assertThrows(HttpStatusCodeException.class, () -> activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer("wrongUser"), loggedInUserNotMatchingRequestMessage);
-        verify(userService).throwBadRequest(loggedInUserNotMatchingRequestMessage);
+        Exception exception = assertThrows(HttpStatusCodeException.class, () ->
+        {
+            activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer("wrongUser");
+        });
     }
 
     @Test
-    void getListOfActivityViewDTOsForSpecificVolunteer_usernameNotFound() {
+    void getListOfActivityViewDTOsForSpecificVolunteer_usernameNotFound()
+    {
         String username = "testUser";
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(Optional.empty());
-        doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(userNotFoundErrorMessage);
-
-        assertThrows(HttpStatusCodeException.class, () -> activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username), userNotFoundErrorMessage);
-        verify(userService).throwBadRequest(userNotFoundErrorMessage);
+        Exception exception = assertThrows(HttpStatusCodeException.class, () ->
+        {
+            activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username);
+        });
     }
 
     @Test
-    void getListOfActivityViewDTOsForSpecificVolunteer_valid() {
+    void getListOfActivityViewDTOsForSpecificVolunteer_valid()
+    {
         String username = "username";
 
         User volunteer = new User();
@@ -95,7 +102,6 @@ class ActivityViewerServiceTest {
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
         when(activityService.getAllActivities()).thenReturn(activities);
-        doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(userNotFoundErrorMessage);
         when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
 
         List<ActivityViewDTO> expected = List.of(activityViewDTO);
@@ -106,7 +112,8 @@ class ActivityViewerServiceTest {
     }
 
     @Test
-    void getListOfActivityViewDTOsForSpecificVolunteer_pending_valid() {
+    void getListOfActivityViewDTOsForSpecificVolunteer_pending_valid()
+    {
         String username = "username";
 
         User volunteer = new User();
@@ -126,7 +133,6 @@ class ActivityViewerServiceTest {
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
         when(activityService.getAllActivities()).thenReturn(activities);
-        doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(userNotFoundErrorMessage);
         when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
 
         List<ActivityViewDTO> expected = List.of(activityViewDTO);
@@ -137,7 +143,8 @@ class ActivityViewerServiceTest {
     }
 
     @Test
-    void getListOfActivityViewDTOsForSpecificVolunteer_completed_valid() {
+    void getListOfActivityViewDTOsForSpecificVolunteer_completed_valid()
+    {
         String username = "username";
 
         User volunteer = new User();
@@ -157,7 +164,6 @@ class ActivityViewerServiceTest {
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
         when(activityService.getAllActivities()).thenReturn(activities);
-        doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(userNotFoundErrorMessage);
         when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
 
         List<ActivityViewDTO> expected = List.of(activityViewDTO);
@@ -168,7 +174,8 @@ class ActivityViewerServiceTest {
     }
 
     @Test
-    void getListOfActivityViewDTOsForSpecificVolunteer_active_valid() {
+    void getListOfActivityViewDTOsForSpecificVolunteer_active_valid()
+    {
         String username = "username";
 
         User volunteer = new User();
@@ -188,7 +195,6 @@ class ActivityViewerServiceTest {
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
         when(activityService.getAllActivities()).thenReturn(activities);
-        doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(userNotFoundErrorMessage);
         when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
 
         List<ActivityViewDTO> expected = List.of(activityViewDTO);
@@ -199,7 +205,8 @@ class ActivityViewerServiceTest {
     }
 
     @Test
-    void getAllActivitiesForSpecificVolunteer() {
+    void getAllActivitiesForSpecificVolunteer()
+    {
         User volunteer1 = new User();
         volunteer1.setId(1L);
 

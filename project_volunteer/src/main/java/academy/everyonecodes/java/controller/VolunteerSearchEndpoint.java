@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
+ // TODO class is obsolete -> ActivityEndpoint includes this feature!!
 @RestController
 @RequestMapping("/volunteer/search")
 @Secured({"ROLE_VOLUNTEER"})

@@ -37,6 +37,18 @@ public class LoginService {
 	@Autowired
 	private EmailServiceImpl emailService;
 
+	private final String subject;
+	private final String text;
+	private final String pathToAttachment;
+
+	public LoginService(@Value("${failedLoginEmail.subject}") String subject, @Value("${failedLoginEmail.text}") String text,
+						@Value("${failedLoginEmail.pathToAttachment}") String pathToAttachment)
+	{
+		this.subject = subject;
+		this.text = text;
+		this.pathToAttachment = pathToAttachment;
+	}
+
 	public void runSuccessfulAuthenticationProcedure(AuthenticationSuccessEvent authenticationSuccessEvent) {
 		UserPrincipal userPrincipal = (UserPrincipal) authenticationSuccessEvent.getAuthentication().getPrincipal();
 
@@ -113,7 +125,7 @@ public class LoginService {
 	}
 
 	private void sendTooManyFailedLoginAttemptsEmail(String emailAddress) throws MessagingException {
-		emailService.sendMessageWithAttachment(emailAddress);
+		emailService.sendMessageWithAttachment(emailAddress, subject, text, pathToAttachment);
 	}
 
 	private InvalidLoginCount createInvalidLoginCount(User user) {

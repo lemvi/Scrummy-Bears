@@ -1,14 +1,14 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.*;
-import academy.everyonecodes.java.data.dtos.OrganizationDTO;
+import academy.everyonecodes.java.data.ErrorMessage;
+import academy.everyonecodes.java.data.Role;
+import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
+import academy.everyonecodes.java.data.dtos.OrganizationDTO;
 import academy.everyonecodes.java.data.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
 
 import java.util.Optional;
 import java.util.Set;
@@ -27,9 +27,7 @@ public class UserService
     private final int maxIdSum;
     private final int minIdSum;
 
-    private final String wrongRoles;
-
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, DtoTranslator dtoTranslator, Set<Role> roles, @Value("${security.maxIdSum}") int maxIdSum, @Value("${security.minIdSum}") int minIdSum, @Value("${errorMessages.wrongRoles}") String wrongRoles)
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, DtoTranslator dtoTranslator, Set<Role> roles, @Value("${security.maxIdSum}") int maxIdSum, @Value("${security.minIdSum}") int minIdSum)
     {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -37,7 +35,6 @@ public class UserService
         this.roles = roles;
         this.maxIdSum = maxIdSum;
         this.minIdSum = minIdSum;
-        this.wrongRoles = wrongRoles;
     }
 
     public User translateIndividualVolunteerDTOAndSaveUser(IndividualVolunteerDTO individualVolunteerDTO)
@@ -54,11 +51,13 @@ public class UserService
         return save(user);
     }
 
-    public Optional<User> findByUsername(String username) {
+    public Optional<User> findByUsername(String username)
+    {
         return userRepository.findByUsername(username);
     }
 
-    public Optional<User> findById(Long id) {
+    public Optional<User> findById(Long id)
+    {
         return userRepository.findById(id);
     }
 
@@ -80,7 +79,7 @@ public class UserService
         Set<String> rolesString = convertRoleSetToStringSet(roles);
 
         if (!rolesString.containsAll(userRolesString))
-            throwBadRequest(wrongRoles);
+            ExceptionThrower.badRequest(ErrorMessage.WRONG_ROLES);
 
         for (Role role : roles)
         {
@@ -94,24 +93,17 @@ public class UserService
         Long userRoleSum = getRoleIdSum(userRoles);
 
         if (!(minIdSum <= userRoleSum && userRoleSum <= maxIdSum))
-            throwBadRequest(wrongRoles);
+            ExceptionThrower.badRequest(ErrorMessage.WRONG_ROLES);
 
         if (userRoles.size() == minIdSum && userRoleSum == maxIdSum)
         {
             if (user.getOrganizationName() == null)
-                throwBadRequest(wrongRoles);
+                ExceptionThrower.badRequest(ErrorMessage.WRONG_ROLES);
         } else
         {
             if (user.getFirstNamePerson() == null)
-                throwBadRequest(wrongRoles);
+                ExceptionThrower.badRequest(ErrorMessage.WRONG_ROLES);
         }
-    }
-
-    protected void throwBadRequest(String errorMessage)
-    {
-        throw new HttpStatusCodeException(HttpStatus.BAD_REQUEST, errorMessage)
-        {
-        };
     }
 
 
