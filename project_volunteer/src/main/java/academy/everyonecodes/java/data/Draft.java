@@ -5,9 +5,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
-import java.util.Set;
+
 @Entity
 public class Draft
 {
@@ -33,23 +32,23 @@ public class Draft
 
     private Boolean openEnd;
 
-    private String organizer;
+    private String organizerUsername;
 
     public Draft()
     {
     }
 
-    public Draft(String title, String description, LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean openEnd, String organizer)
+    public Draft(String title, String description, LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean openEnd, String organizerUsername)
     {
         this.title = title;
         this.description = description;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.openEnd = openEnd;
-        this.organizer = organizer;
+        this.organizerUsername = organizerUsername;
     }
 
-    public Draft(String title, String description, String recommendedSkills, String categories, LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean openEnd, String organizer)
+    public Draft(String title, String description, String recommendedSkills, String categories, LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean openEnd, String organizerUsername)
     {
         this.title = title;
         this.description = description;
@@ -58,7 +57,7 @@ public class Draft
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.openEnd = openEnd;
-        this.organizer = organizer;
+        this.organizerUsername = organizerUsername;
     }
 
     public Long getId()
@@ -141,14 +140,14 @@ public class Draft
         this.openEnd = openEnd;
     }
 
-    public String getOrganizer()
+    public String getOrganizerUsername()
     {
-        return organizer;
+        return organizerUsername;
     }
 
-    public void setOrganizer(String organizer)
+    public void setOrganizerUsername(String organizerUsername)
     {
-        this.organizer = organizer;
+        this.organizerUsername = organizerUsername;
     }
 
     @Override
@@ -157,13 +156,13 @@ public class Draft
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Draft draft = (Draft) o;
-        return Objects.equals(id, draft.id) && Objects.equals(title, draft.title) && Objects.equals(description, draft.description) && Objects.equals(recommendedSkills, draft.recommendedSkills) && Objects.equals(categories, draft.categories) && Objects.equals(startDateTime, draft.startDateTime) && Objects.equals(endDateTime, draft.endDateTime) && Objects.equals(openEnd, draft.openEnd) && Objects.equals(organizer, draft.organizer);
+        return Objects.equals(id, draft.id) && Objects.equals(title, draft.title) && Objects.equals(description, draft.description) && Objects.equals(recommendedSkills, draft.recommendedSkills) && Objects.equals(categories, draft.categories) && Objects.equals(startDateTime, draft.startDateTime) && Objects.equals(endDateTime, draft.endDateTime) && Objects.equals(openEnd, draft.openEnd) && Objects.equals(organizerUsername, draft.organizerUsername);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(id, title, description, recommendedSkills, categories, startDateTime, endDateTime, openEnd, organizer);
+        return Objects.hash(id, title, description, recommendedSkills, categories, startDateTime, endDateTime, openEnd, organizerUsername);
     }
 
     @Override
@@ -178,7 +177,7 @@ public class Draft
                 ", startDateTime=" + startDateTime +
                 ", endDateTime=" + endDateTime +
                 ", openEnd=" + openEnd +
-                ", organizer='" + organizer + '\'' +
+                ", organizer='" + organizerUsername + '\'' +
                 '}';
     }
 }

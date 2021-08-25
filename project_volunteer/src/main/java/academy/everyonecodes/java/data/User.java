@@ -77,6 +77,17 @@ public class User
     public User() {
     }
 
+    public User(String username)
+    {
+        this.username = username;
+    }
+
+    public User(String username, LocalDate dateOfBirth)
+    {
+        this.username = username;
+        this.dateOfBirth = dateOfBirth;
+    }
+
     public User(String username, String password, String firstNamePerson, String lastNamePerson, String organizationName, LocalDate dateOfBirth, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
     {
         this.username = username;

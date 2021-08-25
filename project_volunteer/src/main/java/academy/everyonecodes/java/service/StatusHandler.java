@@ -1,6 +1,7 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.Activity;
+import academy.everyonecodes.java.data.ErrorMessage;
 import academy.everyonecodes.java.data.Status;
 import academy.everyonecodes.java.data.User;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,19 +14,16 @@ import java.util.Optional;
 public class StatusHandler {
     private final ActivityService activityService;
     private final UserService userService;
-    private final String userNotFoundErrorMessage;
-
-    public StatusHandler(ActivityService activityService, UserService userService, @Value("${errorMessages.usernameNotFound}") String userNotFoundErrorMessage) {
+    public StatusHandler(ActivityService activityService, UserService userService) {
         this.activityService = activityService;
         this.userService = userService;
-        this.userNotFoundErrorMessage = userNotFoundErrorMessage;
     }
 
     public Status getStatusForSpecificActivityAndVolunteer(Activity activity, Long userId) {
         Optional<User> optionalUser = userService.findById(userId);
 
         if (optionalUser.isEmpty()) {
-            userService.throwBadRequest(userNotFoundErrorMessage);
+            ExceptionThrower.badRequest(ErrorMessage.USERNAME_NOT_FOUND);
         }
         User user = optionalUser.get();
 
