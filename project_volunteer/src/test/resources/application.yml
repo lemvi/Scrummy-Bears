@@ -11,11 +11,12 @@ spring:
     port: 587
     username: scrummybears08@gmail.com
     password: ScrumProject0821!#
-    transport.protocol: smtp
-    smtp:
-      auth: true
-      starttls.enable: true
-    debug: true
+    properties.mail:
+      transport.protocol: smtp
+      smtp:
+        auth: true
+        starttls.enable: true
+      debug: true
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: false

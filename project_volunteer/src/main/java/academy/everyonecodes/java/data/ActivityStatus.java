@@ -22,9 +22,7 @@ public class ActivityStatus
     {
     }
 
-    public ActivityStatus(Long id, Activity activity, Status status)
-    {
-        this.id = id;
+    public ActivityStatus(Activity activity, Status status) {
         this.activity = activity;
         this.status = status;
     }

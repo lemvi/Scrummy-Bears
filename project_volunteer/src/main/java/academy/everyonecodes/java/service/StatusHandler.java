@@ -1,10 +1,7 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.ErrorMessage;
-import academy.everyonecodes.java.data.Status;
-import academy.everyonecodes.java.data.User;
-import org.springframework.beans.factory.annotation.Value;
+import academy.everyonecodes.java.data.*;
+import academy.everyonecodes.java.data.repositories.ActivityStatusRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -12,11 +9,12 @@ import java.util.Optional;
 
 @Service
 public class StatusHandler {
-    private final ActivityService activityService;
     private final UserService userService;
-    public StatusHandler(ActivityService activityService, UserService userService) {
-        this.activityService = activityService;
+    private final ActivityStatusRepository activityStatusRepository;
+
+    public StatusHandler(UserService userService, ActivityStatusRepository activityStatusRepository) {
         this.userService = userService;
+        this.activityStatusRepository = activityStatusRepository;
     }
 
     public Status getStatusForSpecificActivityAndVolunteer(Activity activity, Long userId) {
@@ -27,25 +25,40 @@ public class StatusHandler {
         }
         User user = optionalUser.get();
 
-        if (checkIfCompleted(activity)) {
+        if (checkIfCompleted(activity))
             return Status.COMPLETED;
-        } else if (checkIfUserIsPending(activity, user)) {
-            return Status.PENDING;
-        } else if (checkIfUserIsParticipant(activity, user))
+        else if (checkIfUserIsParticipantAndActivityIsActive(activity, user))
             return Status.ACTIVE;
+        else if (checkIfUserIsPending(activity, user))
+            return Status.PENDING;
+        else if (checkIfUserHasApplied(activity, user))
+            return Status.APPLIED;
+
+
 
         return Status.NOT_SET;
     }
 
+    private boolean checkIfCompleted(Activity activity) {
+        return getStatusOfActivity(activity).equals(Status.COMPLETED);
+    }
+
+    private boolean checkIfUserIsParticipantAndActivityIsActive(Activity activity, User user) {
+        return activity.getParticipants().contains(user) &&
+                (LocalDateTime.now().isAfter(activity.getStartDateTime()));
+    }
+
     private boolean checkIfUserIsPending(Activity activity, User user) {
+        return activity.getParticipants().contains(user) && LocalDateTime.now().isBefore(activity.getStartDateTime());
+    }
+
+    private boolean checkIfUserHasApplied(Activity activity, User user) {
         return activity.getApplicants().contains(user);
     }
 
-    private boolean checkIfCompleted(Activity activity) {
-        return LocalDateTime.now().isAfter(activity.getEndDateTime()) && !activity.isOpenEnd();
-    }
+public Status getStatusOfActivity(Activity activity) {
+    return activityStatusRepository.findByActivity(activity).orElse(Status.NOT_SET);
+}
 
-    private boolean checkIfUserIsParticipant(Activity activity, User user) {
-        return activity.getParticipants().contains(user);
-    }
+
 }
