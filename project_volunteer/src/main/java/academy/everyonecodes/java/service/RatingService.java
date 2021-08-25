@@ -17,31 +17,16 @@ public class RatingService
     private final UserService userService;
     private final ActivityService activityService;
     private final ActivityStatusService activityStatusService;
-    private final String activityDoesNotExist;
-    private final String usernameNotFound;
-    private final String userNotInvolvedInActivity;
-    private final String noStatusFound;
-    private final String activityNotCompletedYet;
 
     public RatingService(RatingRepository ratingRepository,
                          UserService userService,
                          ActivityService activityService,
-                         ActivityStatusService activityStatusService,
-                         @Value("${errorMessages.activityDoesNotExist}") String activityDoesNotExist,
-                         @Value("${errorMessages.usernameNotFound}") String usernameNotFound,
-                         @Value("${errorMessages.userNotInvolvedInActivity}") String userNotInvolvedInActivity,
-                         @Value("${errorMessages.noStatusFound}") String noStatusFound,
-                         @Value("${errorMessages.activityNotCompletedYet}") String activityNotCompletedYet)
+                         ActivityStatusService activityStatusService)
     {
         this.ratingRepository = ratingRepository;
         this.userService = userService;
         this.activityService = activityService;
         this.activityStatusService = activityStatusService;
-        this.activityDoesNotExist = activityDoesNotExist;
-        this.usernameNotFound = usernameNotFound;
-        this.userNotInvolvedInActivity = userNotInvolvedInActivity;
-        this.noStatusFound = noStatusFound;
-        this.activityNotCompletedYet = activityNotCompletedYet;
     }
 
     public double calculateAverageUserRating(Long userId)
@@ -56,11 +41,11 @@ public class RatingService
 
     public Rating rateUserForActivity(Rating rating, Long activityId)
     {
-        Activity activity = getActivity(activityId);
+        Activity activity = activityService.findActivityById(activityId);
         ActivityStatus activityStatus = getActivityStatus(activityId);
 
         if (!activityStatus.getStatus().equals(Status.COMPLETED)) {
-            userService.throwBadRequest(activityNotCompletedYet);
+            ExceptionThrower.badRequest(ErrorMessage.ACTIVITY_NOT_COMPLETED_YET);
         }
 
 
@@ -75,10 +60,14 @@ public class RatingService
         return saveRating(rating);
     }
 
+    public Optional<Rating> findByActivityAndUser(Activity activity, User user) {
+        return ratingRepository.findByActivityAndUser(activity, user);
+    }
+
     private User getUserToRate(Activity activity, User user) {
         var oUserToRate = determineUserToRate(checkUsersInvolvementInActivity(user, activity), activity);
         if (oUserToRate.isEmpty()) {
-            userService.throwBadRequest(userNotInvolvedInActivity);
+            ExceptionThrower.badRequest(ErrorMessage.USER_NOT_INVOLVED_IN_ACTIVITY);
         }
         return oUserToRate.get();
     }
@@ -87,38 +76,24 @@ public class RatingService
         String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
         var oUser = userService.findByUsername(currentPrincipalName);
         if (oUser.isEmpty()) {
-            userService.throwBadRequest(usernameNotFound);
+            ExceptionThrower.badRequest(ErrorMessage.USERNAME_NOT_FOUND);
         }
 
         User user = oUser.get();
         return user;
     }
 
-    private Activity getActivity(Long activityId) {
-        var oActivity = activityService.findById(activityId);
-        if (oActivity.isEmpty()) {
-            userService.throwBadRequest(activityDoesNotExist + activityId);
-        }
-
-        Activity activity = oActivity.get();
-        return activity;
-    }
-
     private ActivityStatus getActivityStatus(Long activityId) {
         var oActivityStatus = activityStatusService.findByActivity_id(activityId);
         if (oActivityStatus.isEmpty()) {
-            userService.throwBadRequest(noStatusFound);
+            ExceptionThrower.badRequest(ErrorMessage.NO_STATUS_FOUND);
         }
 
         ActivityStatus activityStatus = oActivityStatus.get();
         return activityStatus;
     }
 
-    public Rating saveRating(Rating rating) {
-//        rating.setUserId(user.getId());
-//        rating.setActivityId(activity.getId());
-//        rating.setUser(user);
-//        rating.setActivity(activity);
+    public Rating saveRating(Rating rating) {               //TODO: just for testing. make private later
         return ratingRepository.save(rating);
     }
 

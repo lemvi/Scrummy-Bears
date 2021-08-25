@@ -21,7 +21,7 @@ public class RatingEndpoint {
         return ratingService.rateUserForActivity(rating, activityId);
     }
 
-    @PostMapping("/rate")
+    @PostMapping("/rate")                                   //TODO: just for testing, remove later
     Rating postRating(@RequestBody @Valid Rating rating) {
         return ratingService.saveRating(rating);
     }
