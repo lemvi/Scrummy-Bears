@@ -37,6 +37,10 @@ errorMessages:
   activitiesNotFound: "Sorry, we found no Activities with the keyword:"
   endDateBeforeStartDate: "BAD_REQUEST: End date time must be after start date time"
   loggedInUserNotMatchingRequest: "BAD_REQUEST: Logged in user does not match the user you are trying to access"
+  userNotInvolvedInActivity: "BAD_REQUEST: This user has no involvement in the selected activity"
+  noStatusFound: "BAD_REQUEST: No status found for this activity"
+  activityNotCompletedYet: "BAD_REQUEST: To post a rating the activity has to be set to completed by the organizer first"
+  activityDoesNotExist: "BAD_REQUEST: Activity not found! Id: "
 
 
 constants:

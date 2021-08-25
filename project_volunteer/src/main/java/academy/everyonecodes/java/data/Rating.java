@@ -12,15 +12,22 @@ import java.util.Objects;
 public class Rating {
 
 	@Id
-	@MapsId
-	@ManyToOne
-	@JoinColumn
-	private User user;
+	@Column(name = "user_id", insertable = false, updatable = false)
+	private Long userId;
 
 	@Id
+	@Column(name = "activity_id", insertable = false, updatable = false)
+	private Long activityId;
+
 	@MapsId
-	@ManyToOne
-	@JoinColumn
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
+
+
+	@MapsId
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "activity_id")
 	private Activity activity;
 
 	@NotNull
@@ -39,6 +46,22 @@ public class Rating {
 		this.activity = activity;
 		this.rating = rating;
 		this.feedback = feedback;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public Long getActivityId() {
+		return activityId;
+	}
+
+	public void setActivityId(Long activityId) {
+		this.activityId = activityId;
 	}
 
 	public Rating(int rating) {
@@ -86,28 +109,15 @@ public class Rating {
 	}
 
 	@Override
-	public boolean equals(Object o)
-	{
+	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Rating rating1 = (Rating) o;
-		return rating == rating1.rating && Objects.equals(user, rating1.user) && Objects.equals(activity, rating1.activity) && Objects.equals(feedback, rating1.feedback);
+		return getRating() == rating1.getRating() && Objects.equals(userId, rating1.userId) && Objects.equals(activityId, rating1.activityId) && Objects.equals(getUser(), rating1.getUser()) && Objects.equals(getActivity(), rating1.getActivity()) && Objects.equals(getFeedback(), rating1.getFeedback());
 	}
 
 	@Override
-	public int hashCode()
-	{
-		return Objects.hash(user, activity, rating, feedback);
-	}
-
-	@Override
-	public String toString()
-	{
-		return "Rating{" +
-				"user=" + user +
-				", activity=" + activity +
-				", rating=" + rating +
-				", feedback='" + feedback + '\'' +
-				'}';
+	public int hashCode() {
+		return Objects.hash(userId, activityId, getUser(), getActivity(), getRating(), getFeedback());
 	}
 }
