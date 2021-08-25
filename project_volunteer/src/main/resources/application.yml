@@ -44,6 +44,7 @@ errorMessages:
   userNotInvolvedInActivity: "BAD_REQUEST: This user has no involvement in the selected activity"
   noStatusFound: "BAD_REQUEST: No status found for this activity"
   activityNotCompletedYet: "BAD_REQUEST: To post a rating the activity has to be set to completed by the organizer first"
+  volunteerIsNotApplicant: "BAD_REQUEST: The volunteer you selected has not applied for this activity"
 
 constants:
   how-many-failed-logins-cause-email-warning: 5
@@ -56,6 +57,14 @@ failedLoginEmail:
 activityDeletedEmail:
   subject: Activity was deleted
   text: "The following activity was deleted by its creator: "
+
+acceptedVolunteerEmail:
+  subject: Accepted for Activity
+  text: "You have been accepted as the one and only for the following activity: "
+
+rejectedVolunteerEmail:
+  subject: Help no longer needed
+  text: "We're happy to inform you that the following activity's creator has already received help: "
 
 
   #https://drive.google.com/file/d/1_0k1HyesHZC1R6oEZ2q3MY5FiaMhKPie/view?usp=sharing

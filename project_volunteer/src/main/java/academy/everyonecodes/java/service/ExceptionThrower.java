@@ -21,6 +21,7 @@ public class ExceptionThrower
     private static String userNotInvolvedInActivity;
     private static String noStatusFound;
     private static String activityNotCompletedYet;
+    private static String volunteerIsNotApplicant;
 
     public ExceptionThrower(@Value("${errorMessages.wrongRoles}") String wrongRoles,
                             @Value("${errorMessages.usernameNotFound}") String usernameNotFound,
@@ -33,7 +34,8 @@ public class ExceptionThrower
                             @Value("${errorMessages.editActivityWithApplicantsOrParticipantsNotPossible}") String editActivityWithApplicantsOrParticipantsNotPossible,
                             @Value("${errorMessages.userNotInvolvedInActivity}") String userNotInvolvedInActivity,
                             @Value("${errorMessages.noStatusFound}") String noStatusFound,
-                            @Value("${errorMessages.activityNotCompletedYet}") String activityNotCompletedYet)
+                            @Value("${errorMessages.activityNotCompletedYet}") String activityNotCompletedYet,
+                            @Value("${errorMessages.volunteerIsNotApplicant}") String volunteerIsNotApplicant)
     {
         ExceptionThrower.wrongRoles = wrongRoles;
         ExceptionThrower.usernameNotFound = usernameNotFound;
@@ -47,6 +49,7 @@ public class ExceptionThrower
         ExceptionThrower.userNotInvolvedInActivity = userNotInvolvedInActivity;
         ExceptionThrower.noStatusFound = noStatusFound;
         ExceptionThrower.activityNotCompletedYet = activityNotCompletedYet;
+        ExceptionThrower.volunteerIsNotApplicant = volunteerIsNotApplicant;
     }
 
     public static void badRequest(ErrorMessage errorMessage)
@@ -98,6 +101,8 @@ public class ExceptionThrower
             case ACTIVITY_NOT_COMPLETED_YET:
                 errorMessageString = activityNotCompletedYet;
                 break;
+            case VOLUNTEER_IS_NOT_APPLICANT:
+                errorMessageString = volunteerIsNotApplicant;
         }
         return errorMessageString;
     }

@@ -37,6 +37,8 @@ public class StatusHandler
             return Status.PENDING;
         else if (checkIfUserHasApplied(activity, user))
             return Status.APPLIED;
+        else if(checkIfUserIsRejected(activity, user))
+            return Status.REJECTED;
         return Status.NOT_SET;
     }
 
@@ -48,7 +50,7 @@ public class StatusHandler
     private boolean checkIfUserIsParticipantAndActivityIsActive(Activity activity, User user)
     {
         return activity.getParticipants().contains(user) &&
-                (LocalDateTime.now().isAfter(activity.getStartDateTime()));
+                (LocalDateTime.now().isAfter(activity.getStartDateTime()) || LocalDateTime.now().isEqual(activity.getStartDateTime()));
     }
 
     private boolean checkIfUserIsPending(Activity activity, User user)
@@ -59,6 +61,11 @@ public class StatusHandler
     private boolean checkIfUserHasApplied(Activity activity, User user)
     {
         return activity.getApplicants().contains(user);
+    }
+
+    private boolean checkIfUserIsRejected(Activity activity, User user)
+    {
+        return activity.getApplicants().contains(user) && !activity.getParticipants().isEmpty();
     }
 
     public Status getStatusOfActivity(Activity activity)
