@@ -70,8 +70,8 @@ public class StatusHandler
 
     public Status getStatusOfActivity(Activity activity)
     {
-        return activityStatusRepository.findByActivity(activity).orElse(Status.NOT_SET);
+         Optional<ActivityStatus> activityStatus = activityStatusRepository.findByActivity(activity);
+         Status status = activityStatus.isPresent() ? activityStatus.get().getStatus() : Status.NOT_SET;
+         return status;
     }
-
-
 }

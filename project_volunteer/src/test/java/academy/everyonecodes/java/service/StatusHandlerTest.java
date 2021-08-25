@@ -43,7 +43,7 @@ class StatusHandlerTest
         activity.setOpenEnd(false);
 
         when(userService.findById(1L)).thenReturn(Optional.of(new User()));
-        when(activityStatusRepository.findByActivity(activity)).thenReturn(Optional.of(Status.COMPLETED));
+        when(activityStatusRepository.findByActivity(activity)).thenReturn(Optional.of(new ActivityStatus(activity, Status.COMPLETED)));
 
         Status expected = Status.COMPLETED;
         Status actual = statusHandler.getStatusForSpecificActivityAndVolunteer(activity, 1L);
@@ -70,7 +70,7 @@ class StatusHandlerTest
         activity.setParticipants(Set.of(user));
 
         when(userService.findById(userId)).thenReturn(Optional.of(user));
-        when(activityStatusRepository.findByActivity(activity)).thenReturn(Optional.of(Status.NOT_SET));
+        when(activityStatusRepository.findByActivity(activity)).thenReturn(Optional.of(new ActivityStatus(activity, Status.NOT_SET)));
 
         Status expected = Status.ACTIVE;
         Status actual = statusHandler.getStatusForSpecificActivityAndVolunteer(activity, user.getId());

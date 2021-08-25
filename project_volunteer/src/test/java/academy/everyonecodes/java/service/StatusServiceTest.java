@@ -8,7 +8,6 @@ import academy.everyonecodes.java.service.email.EmailServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +21,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class StatusServiceTest
@@ -78,14 +79,15 @@ public class StatusServiceTest
         activity.setParticipants(new HashSet<>());
         activity.setTitle("title");
 
-        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(userToBeAccepted));
-        Mockito.when(activityRepository.findById(1L)).thenReturn(Optional.of(activity));
-        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
+        when(userRepository.findById(1L)).thenReturn(Optional.of(userToBeAccepted));
+        when(activityRepository.findById(1L)).thenReturn(Optional.of(activity));
+        when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
+        when(activityRepository.save(activity)).thenReturn(activity);
 
-        statusService.acceptVolunteer(1L,1L);
+        statusService.acceptVolunteer(1L, 1L);
 
-        Mockito.verify(emailServiceImpl).sendSimpleMessage(userToBeAccepted.getEmailAddress(), subjectAccepted, textAccepted + activity.getTitle());
-        Mockito.verify(emailServiceImpl).sendSimpleMessage(userToBeRejected.getEmailAddress(), subjectRejected, textRejected + activity.getTitle());
+        verify(emailServiceImpl).sendSimpleMessage(userToBeAccepted.getEmailAddress(), subjectAccepted, textAccepted + activity.getTitle());
+        verify(emailServiceImpl).sendSimpleMessage(userToBeRejected.getEmailAddress(), subjectRejected, textRejected + activity.getTitle());
 
     }
 
@@ -94,8 +96,8 @@ public class StatusServiceTest
     {
         activity.setApplicants(new HashSet<>());
         activity.getApplicants().add(userToBeAccepted);
-        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(userToBeAccepted));
-        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username2");
+        when(userRepository.findById(1L)).thenReturn(Optional.of(userToBeAccepted));
+        when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username2");
         assertThrows(HttpStatusCodeException.class, () ->
         {
             statusService.acceptVolunteer(1L, 1L);
@@ -107,9 +109,9 @@ public class StatusServiceTest
     {
         activity.setApplicants(new HashSet<>());
         activity.getApplicants().add(userToBeAccepted);
-        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
-        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.empty());
-        Mockito.when(activityRepository.findById(1L)).thenReturn(Optional.of(activity));
+        when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+        when(activityRepository.findById(1L)).thenReturn(Optional.of(activity));
         assertThrows(HttpStatusCodeException.class, () ->
         {
             statusService.acceptVolunteer(1L, 1L);
@@ -121,9 +123,9 @@ public class StatusServiceTest
     {
         activity.setApplicants(new HashSet<>());
         userToBeAccepted.setId(1L);
-        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
-        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(userToBeAccepted));
-        Mockito.when(activityRepository.findById(1L)).thenReturn(Optional.empty());
+        when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
+        when(userRepository.findById(1L)).thenReturn(Optional.of(userToBeAccepted));
+        when(activityRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(HttpStatusCodeException.class, () ->
         {
             statusService.acceptVolunteer(1L, 1L);
@@ -143,9 +145,9 @@ public class StatusServiceTest
         activity.setParticipants(new HashSet<>());
         activity.setTitle("title");
 
-        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(userToBeAccepted));
-        Mockito.when(activityRepository.findById(1L)).thenReturn(Optional.of(activity));
-        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
+        when(userRepository.findById(1L)).thenReturn(Optional.of(userToBeAccepted));
+        when(activityRepository.findById(1L)).thenReturn(Optional.of(activity));
+        when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
 
         assertThrows(HttpStatusCodeException.class, () ->
         {

@@ -50,7 +50,7 @@ public class StatusService
         emailServiceImpl.sendSimpleMessage(user.getEmailAddress(), subjectAccepted, textAccepted + activityTitle);
         applicants.stream()
                 .forEach(rejectedVolunteer -> emailServiceImpl.sendSimpleMessage(rejectedVolunteer.getEmailAddress(), subjectRejected, textRejected + activityTitle));
-        return activity;
+        return activityRepository.save(activity);
     }
 
     private User getUser(Long userId)
