@@ -4,7 +4,8 @@ import academy.everyonecodes.java.data.Activity;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import academy.everyonecodes.java.data.repositories.UserRepository;
-import academy.everyonecodes.java.service.email.EmailService;
+import academy.everyonecodes.java.service.email.EmailServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -16,7 +17,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.HttpStatusCodeException;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -33,7 +36,7 @@ public class StatusServiceTest
     UserRepository userRepository;
 
     @MockBean
-    EmailService emailService;
+    EmailServiceImpl emailServiceImpl;
 
     @Mock
     Authentication authentication;
@@ -53,27 +56,43 @@ public class StatusServiceTest
     User userToBeAccepted = new User("username");
     User userToBeRejected = new User("loser");
     Activity activity = new Activity();
+    Set<User> applicants = new HashSet<>();
+
+    @BeforeEach
+    public void initSecurityContext()
+    {
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
 
     @Test
     void acceptUser_valid()
     {
-        activity.getApplicants().add(userToBeAccepted);
-        activity.setTitle("title");
+        userToBeAccepted.setId(1L);
+        userToBeRejected.setId(2L);
         userToBeAccepted.setEmailAddress("email@email.com");
+        userToBeRejected.setEmailAddress("email@email.com");
+        applicants.add(userToBeAccepted);
+        applicants.add(userToBeRejected);
+        activity.setApplicants(applicants);
+        System.out.println(activity.getApplicants());
+        activity.setParticipants(new HashSet<>());
+        activity.setTitle("title");
+
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(userToBeAccepted));
         Mockito.when(activityRepository.findById(1L)).thenReturn(Optional.of(activity));
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
 
         statusService.acceptVolunteer(1L,1L);
 
-        Mockito.verify(emailService).sendSimpleMessage(userToBeAccepted.getEmailAddress(), subjectAccepted, textAccepted);
-        Mockito.verify(emailService).sendSimpleMessage(userToBeRejected.getEmailAddress(), subjectRejected, textRejected);
+        Mockito.verify(emailServiceImpl).sendSimpleMessage(userToBeAccepted.getEmailAddress(), subjectAccepted, textAccepted + activity.getTitle());
+        Mockito.verify(emailServiceImpl).sendSimpleMessage(userToBeRejected.getEmailAddress(), subjectRejected, textRejected + activity.getTitle());
 
     }
 
     @Test
     void acceptUser_INVALID_Authentication_Fail()
     {
+        activity.setApplicants(new HashSet<>());
         activity.getApplicants().add(userToBeAccepted);
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(userToBeAccepted));
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username2");
@@ -86,6 +105,7 @@ public class StatusServiceTest
     @Test
     void acceptUser_INVALID_User_Not_Found()
     {
+        activity.setApplicants(new HashSet<>());
         activity.getApplicants().add(userToBeAccepted);
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.empty());
@@ -99,6 +119,7 @@ public class StatusServiceTest
     @Test
     void acceptUser_INVALID_Activity_Not_Found()
     {
+        activity.setApplicants(new HashSet<>());
         userToBeAccepted.setId(1L);
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(userToBeAccepted));
@@ -110,15 +131,26 @@ public class StatusServiceTest
     }
 
     @Test
-    void acceptUser_INVALID_User_Has_Not_Applied()
+    void acceptUser_INVALID_User_Not_applied()
     {
+        userToBeAccepted.setId(1L);
+        userToBeRejected.setId(2L);
+        userToBeAccepted.setEmailAddress("email@email.com");
+        userToBeRejected.setEmailAddress("email@email.com");
+        applicants.add(userToBeRejected);
+        activity.setApplicants(applicants);
+        System.out.println(activity.getApplicants());
+        activity.setParticipants(new HashSet<>());
         activity.setTitle("title");
-        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
+
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(userToBeAccepted));
         Mockito.when(activityRepository.findById(1L)).thenReturn(Optional.of(activity));
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
+
         assertThrows(HttpStatusCodeException.class, () ->
         {
             statusService.acceptVolunteer(1L, 1L);
         });
+
     }
 }

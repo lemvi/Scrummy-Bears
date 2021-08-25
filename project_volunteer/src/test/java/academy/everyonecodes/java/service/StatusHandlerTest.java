@@ -21,7 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class StatusHandlerTest {
+class StatusHandlerTest
+{
 
     @Autowired
     private StatusHandler statusHandler;
@@ -33,7 +34,8 @@ class StatusHandlerTest {
     private ActivityStatusRepository activityStatusRepository;
 
     @Test
-    void getStatusForSpecificActivity_CompletedWhenOrganizerSetsStatusCompleted() {
+    void getStatusForSpecificActivity_CompletedWhenOrganizerSetsStatusCompleted()
+    {
         Activity activity = new Activity();
         activity.setEndDateTime(LocalDateTime.MIN);
         activity.setApplicants(Set.of());
@@ -55,7 +57,8 @@ class StatusHandlerTest {
     }
 
     @Test
-    void getStatusForSpecificActivityAndVolunteer_ActiveWhenStartDateInPastAndActivityHasOpenEndAndParticipant() {
+    void getStatusForSpecificActivityAndVolunteer_ActiveWhenStartDateInPastAndActivityHasOpenEndAndParticipant()
+    {
         User user = new User();
         Long userId = 1L;
         user.setId(userId);
@@ -81,7 +84,8 @@ class StatusHandlerTest {
 
 
     @Test
-    void getStatusForSpecificActivityAndVolunteer_ActiveWhenStartDateInPastAndEndDateInFutureAndParticipant() {
+    void getStatusForSpecificActivityAndVolunteer_ActiveWhenStartDateInPastAndEndDateInFutureAndParticipant()
+    {
         User user = new User();
         Long userId = 1L;
         user.setId(userId);
@@ -104,7 +108,8 @@ class StatusHandlerTest {
     }
 
     @Test
-    void getStatusForSpecificActivityAndVolunteer_AppliedWhenActivityStartDateInFutureAndApplicant() {
+    void getStatusForSpecificActivityAndVolunteer_AppliedWhenActivityStartDateInFutureAndApplicant()
+    {
         User user = new User();
         Long userId = 1L;
         user.setId(userId);
@@ -127,7 +132,8 @@ class StatusHandlerTest {
     }
 
     @Test
-    void getStatusForSpecificActivityAndVolunteer_PendingWhenActivityStartDateInFutureAndParticipant() {
+    void getStatusForSpecificActivityAndVolunteer_PendingWhenActivityStartDateInFutureAndParticipant()
+    {
         User user = new User();
         Long userId = 1L;
         user.setId(userId);
@@ -141,6 +147,30 @@ class StatusHandlerTest {
         when(userService.findById(userId)).thenReturn(Optional.of(user));
 
         Status expected = Status.PENDING;
+        Status actual = statusHandler.getStatusForSpecificActivityAndVolunteer(activity, user.getId());
+
+        assertEquals(expected, actual);
+
+        verify(userService).findById(userId);
+        verifyNoMoreInteractions(userService);
+    }
+
+    @Test
+    void getStatusForSpecificActivityAndVolunteer_Rejected()
+    {
+        User user = new User();
+        Long userId = 1L;
+        user.setId(userId);
+        Activity activity = new Activity();
+        activity.setStartDateTime(LocalDateTime.now().plusMinutes(1L));
+        activity.setEndDateTime(LocalDateTime.MAX);
+        activity.setOpenEnd(false);
+        activity.setApplicants(Set.of(user));
+        activity.setParticipants(Set.of(new User()));
+
+        when(userService.findById(userId)).thenReturn(Optional.of(user));
+
+        Status expected = Status.REJECTED;
         Status actual = statusHandler.getStatusForSpecificActivityAndVolunteer(activity, user.getId());
 
         assertEquals(expected, actual);

@@ -19,7 +19,7 @@ public class StatusEndpoint
         this.statusService = statusService;
     }
 
-    @PutMapping("/activities/{activityId/accept/{userId}")
+    @PutMapping("/activities/{activityId}/accept/{userId}")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     Activity acceptVolunteer(@PathVariable Long activityId, @PathVariable Long userId)
     {

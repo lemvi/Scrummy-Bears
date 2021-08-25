@@ -18,18 +18,18 @@ public class StatusService
 {
     private final ActivityRepository activityRepository;
     private final UserRepository userRepository;
-    private final EmailServiceImpl emailService;
+    private final EmailServiceImpl emailServiceImpl;
     private final String subjectAccepted;
     private final String textAccepted;
 
     private final String subjectRejected;
     private final String textRejected;
 
-    public StatusService(ActivityRepository activityRepository, UserRepository userRepository, EmailServiceImpl emailService, @Value("${acceptedVolunteerEmail.subject}") String subjectAccepted, @Value("${acceptedVolunteerEmail.text}") String textAccepted, @Value("${rejectedVolunteerEmail.subject}") String subjectRejected, @Value("${rejectedVolunteerEmail.text}") String textRejected)
+    public StatusService(ActivityRepository activityRepository, UserRepository userRepository, EmailServiceImpl emailServiceImpl, @Value("${acceptedVolunteerEmail.subject}") String subjectAccepted, @Value("${acceptedVolunteerEmail.text}") String textAccepted, @Value("${rejectedVolunteerEmail.subject}") String subjectRejected, @Value("${rejectedVolunteerEmail.text}") String textRejected)
     {
         this.activityRepository = activityRepository;
         this.userRepository = userRepository;
-        this.emailService = emailService;
+        this.emailServiceImpl = emailServiceImpl;
         this.subjectAccepted = subjectAccepted;
         this.textAccepted = textAccepted;
         this.subjectRejected = subjectRejected;
@@ -47,9 +47,9 @@ public class StatusService
             ExceptionThrower.badRequest(ErrorMessage.VOLUNTEER_IS_NOT_APPLICANT);
         activity.getParticipants().add(user);
         applicants.remove(user);
-        emailService.sendSimpleMessage(user.getEmailAddress(), subjectAccepted, textAccepted + activityTitle);
+        emailServiceImpl.sendSimpleMessage(user.getEmailAddress(), subjectAccepted, textAccepted + activityTitle);
         applicants.stream()
-                .forEach(rejectedVolunteer -> emailService.sendSimpleMessage(rejectedVolunteer.getEmailAddress(), subjectRejected, textRejected + activityTitle));
+                .forEach(rejectedVolunteer -> emailServiceImpl.sendSimpleMessage(rejectedVolunteer.getEmailAddress(), subjectRejected, textRejected + activityTitle));
         return activity;
     }
 
