@@ -41,7 +41,9 @@ errorMessages:
   noMatchingDraftFound: "BAD_REQUEST: No matching draft was found."
   deleteActivityWithParticipantsNotPossible: "BAD_REQUEST: Deleting an activity with accepted volunteers not possible."
   editActivityWithApplicantsOrParticipantsNotPossible: "BAD_REQUEST: Editing Activity with applicants or accepted volunteers not possible."
-
+  userNotInvolvedInActivity: "BAD_REQUEST: This user has no involvement in the selected activity"
+  noStatusFound: "BAD_REQUEST: No status found for this activity"
+  activityNotCompletedYet: "BAD_REQUEST: To post a rating the activity has to be set to completed by the organizer first"
 
 constants:
   how-many-failed-logins-cause-email-warning: 5

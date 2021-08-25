@@ -40,7 +40,6 @@ class StatusHandlerTest {
         activity.setApplicants(Set.of(user));
 
         when(userService.findById(userId)).thenReturn(Optional.of(user));
-        doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(userNotFoundErrorMessage);
 
         Status expected = Status.PENDING;
         Status actual = statusHandler.getStatusForSpecificActivityAndVolunteer(activity, user.getId());
@@ -62,7 +61,6 @@ class StatusHandlerTest {
         activity.setApplicants(Set.of(user));
 
         when(userService.findById(userId)).thenReturn(Optional.of(user));
-        doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(userNotFoundErrorMessage);
 
         Status expected = Status.PENDING;
         Status actual = statusHandler.getStatusForSpecificActivityAndVolunteer(activity, user.getId());
@@ -84,7 +82,6 @@ class StatusHandlerTest {
         activity.setOpenEnd(false);
 
         when(userService.findById(userId)).thenReturn(Optional.of(user));
-        doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(userNotFoundErrorMessage);
 
         Status expected = Status.COMPLETED;
         Status actual = statusHandler.getStatusForSpecificActivityAndVolunteer(activity, user.getId());
@@ -106,7 +103,6 @@ class StatusHandlerTest {
         activity.setParticipants(Set.of(user));
 
         when(userService.findById(userId)).thenReturn(Optional.of(user));
-        doThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {}).when(userService).throwBadRequest(userNotFoundErrorMessage);
 
         Status expected = Status.ACTIVE;
         Status actual = statusHandler.getStatusForSpecificActivityAndVolunteer(activity, user.getId());

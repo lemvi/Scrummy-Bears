@@ -2,6 +2,7 @@ package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.Activity;
 import academy.everyonecodes.java.data.Draft;
+import academy.everyonecodes.java.data.ErrorMessage;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import academy.everyonecodes.java.data.repositories.DraftRepository;
@@ -22,34 +23,16 @@ public class ActivityService
     private final ActivityDraftTranslator activityDraftTranslator;
     private final DraftRepository draftRepository;
     private final UserRepository userRepository;
-    private final UserService userService;
-
-    private final String endDateBeforeStartDate;
-    private final String loggedInUserNotMatchingRequest;
-    private final String noMatchingActivityFound;
-    private final String deleteActivityWithParticipantsNotPossible;
-
-    private final String editActivityWithApplicantsOrParticipantsNotPossible;
-
-    private final String noMatchingDraftFound;
     private final EmailServiceImpl emailService;
-
     private final String subject;
     private final String text;
 
-    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, UserService userService, @Value("${errorMessages.endDateBeforeStartDate}") String endDateBeforeStartDate, @Value("${errorMessages.loggedInUserNotMatchingRequest}") String loggedInUserNotMatchingRequest, @Value("${errorMessages.noMatchingActivityFound}") String noMatchingActivityFound, @Value("${errorMessages.deleteActivityWithParticipantsNotPossible}") String deleteActivityWithParticipantsNotPossible, @Value("${errorMessages.editActivityWithApplicantsOrParticipantsNotPossible}") String editActivityWithApplicantsOrParticipantsNotPossible, @Value("${errorMessages.noMatchingDraftFound}") String noMatchingDraftFound, EmailServiceImpl emailService, @Value("${activityDeletedEmail.subject}") String subject, @Value("${activityDeletedEmail.text}") String text)
+    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, EmailServiceImpl emailService, @Value("${activityDeletedEmail.subject}") String subject, @Value("${activityDeletedEmail.text}") String text)
     {
         this.activityRepository = activityRepository;
         this.activityDraftTranslator = activityDraftTranslator;
         this.draftRepository = draftRepository;
         this.userRepository = userRepository;
-        this.userService = userService;
-        this.endDateBeforeStartDate = endDateBeforeStartDate;
-        this.loggedInUserNotMatchingRequest = loggedInUserNotMatchingRequest;
-        this.noMatchingActivityFound = noMatchingActivityFound;
-        this.deleteActivityWithParticipantsNotPossible = deleteActivityWithParticipantsNotPossible;
-        this.editActivityWithApplicantsOrParticipantsNotPossible = editActivityWithApplicantsOrParticipantsNotPossible;
-        this.noMatchingDraftFound = noMatchingDraftFound;
         this.emailService = emailService;
         this.subject = subject;
         this.text = text;
@@ -70,7 +53,7 @@ public class ActivityService
         Optional<Activity> oActivity = activityRepository.findById(id);
         Activity activity = new Activity();
         if (oActivity.isEmpty())
-            userService.throwBadRequest(noMatchingActivityFound);
+            ExceptionThrower.badRequest(ErrorMessage.NO_MATCHING_ACTIVITY_FOUND);
         else
             activity = oActivity.get();
         return activity;
@@ -86,7 +69,7 @@ public class ActivityService
         Activity activityOld = findActivityById(activityNew.getId());
         authenticateLoggedInUserEqualsObjectOwner(activityOld.getOrganizer().getUsername());
         if (!activityOld.getParticipants().isEmpty() || !activityOld.getApplicants().isEmpty())
-            userService.throwBadRequest(editActivityWithApplicantsOrParticipantsNotPossible);
+            ExceptionThrower.badRequest(ErrorMessage.EDIT_ACTIVITY_WITH_APPLICANTS_OR_PARTICIPANTS_NOT_POSSIBLE);
         return postActivity(activityDraftTranslator.toDraft(activityNew));
     }
 
@@ -101,7 +84,7 @@ public class ActivityService
                     .forEach(e -> emailService.sendSimpleMessage(e, subject, text + activity.getTitle()));
             activityRepository.deleteById(activityId);
         } else
-            userService.throwBadRequest(deleteActivityWithParticipantsNotPossible);
+            ExceptionThrower.badRequest(ErrorMessage.DELETE_ACTIVITY_WITH_PARTICIPANTS_NOT_POSSIBLE);
     }
 
     public List<Draft> getDraftsOfOrganizer()
@@ -114,7 +97,7 @@ public class ActivityService
         Optional<Draft> oDraft = draftRepository.findById(id);
         Draft draft = new Draft();
         if (oDraft.isEmpty())
-            userService.throwBadRequest(noMatchingDraftFound);
+            ExceptionThrower.badRequest(ErrorMessage.NO_MATCHING_DRAFT_FOUND);
         else
             draft = oDraft.get();
         authenticateLoggedInUserEqualsObjectOwner(draft.getOrganizerUsername());
@@ -151,7 +134,7 @@ public class ActivityService
         Activity activity = activityDraftTranslator.toActivity(draft);
         Optional<User> oUser = userRepository.findByUsername(getAuthenticatedName());
         if (oUser.isEmpty())
-            userService.throwBadRequest(loggedInUserNotMatchingRequest);
+            ExceptionThrower.badRequest(ErrorMessage.LOGGED_IN_USER_NOT_MATCHING_REQUEST);
         else
             user = oUser.get();
 
@@ -163,7 +146,7 @@ public class ActivityService
         else
         {
             if (!validateStartDateBeforeEndDate(activity))
-                userService.throwBadRequest(endDateBeforeStartDate);
+                ExceptionThrower.badRequest(ErrorMessage.END_DATE_BEFORE_START_DATE);
         }
         draftRepository.delete(draft);
         return activityRepository.save(activity);
@@ -183,6 +166,6 @@ public class ActivityService
     private void authenticateLoggedInUserEqualsObjectOwner(String organizerUsername)
     {
         if (!getAuthenticatedName().equals(organizerUsername))
-            userService.throwBadRequest(loggedInUserNotMatchingRequest);
+            ExceptionThrower.badRequest(ErrorMessage.LOGGED_IN_USER_NOT_MATCHING_REQUEST);
     }
 }

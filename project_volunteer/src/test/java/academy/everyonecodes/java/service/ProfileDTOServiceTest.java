@@ -13,10 +13,13 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class ProfileDTOServiceTest {
@@ -43,8 +46,11 @@ class ProfileDTOServiceTest {
         Long id = 1L;
         user.setId(id);
         Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
-        profileDTOService.viewProfile(username);
 
+        Exception exception = assertThrows(HttpStatusCodeException.class, () ->
+        {
+            profileDTOService.viewProfile(username);
+        });
         Mockito.verify(userRepository).findByUsername(username);
         Mockito.verifyNoMoreInteractions(userRepository);
         Mockito.verifyNoInteractions(userToProfileDTOTranslator);

@@ -1,5 +1,6 @@
 package academy.everyonecodes.java.service;
 
+import academy.everyonecodes.java.data.ErrorMessage;
 import academy.everyonecodes.java.data.dtos.ProfileDTO;
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
@@ -18,17 +19,15 @@ public class ProfileDTOService
     private final int maxIdSum;
     private final int minIdSum;
     private final UserService userService;
-    private final String usernameNotFound;
 
 
-    public ProfileDTOService(UserRepository userRepository, UserToProfileDTOTranslator userToProfileDTOTranslator, @Value("${security.maxIdSum}") int maxIdSum, @Value("${security.minIdSum}") int minIdSum, UserService userService, @Value("${errorMessages.usernameNotFound}") String usernameNotFound)
+    public ProfileDTOService(UserRepository userRepository, UserToProfileDTOTranslator userToProfileDTOTranslator, @Value("${security.maxIdSum}") int maxIdSum, @Value("${security.minIdSum}") int minIdSum, UserService userService)
     {
         this.userRepository = userRepository;
         this.userToProfileDTOTranslator = userToProfileDTOTranslator;
         this.maxIdSum = maxIdSum;
         this.minIdSum = minIdSum;
         this.userService = userService;
-        this.usernameNotFound = usernameNotFound;
     }
 
     public Optional<ProfileDTO> viewProfile(String username)
@@ -36,7 +35,7 @@ public class ProfileDTOService
         User user = userRepository.findByUsername(username).orElse(null);
 
         if (user == null) {
-            userService.throwBadRequest(usernameNotFound);
+            ExceptionThrower.badRequest(ErrorMessage.USERNAME_NOT_FOUND);
             return Optional.empty();
         }
 
