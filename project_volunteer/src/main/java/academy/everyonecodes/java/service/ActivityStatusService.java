@@ -21,6 +21,14 @@ public class ActivityStatusService {
     }
 
     public ActivityStatus changeActivityStatus(Activity activity, Status status) {
-        return activityStatusRepository.save(new ActivityStatus(activity.getId(), activity, status));
+        Optional<ActivityStatus> oStatus = activityStatusRepository.findById(activity.getId());
+        ActivityStatus activityStatus = new ActivityStatus();
+        if (oStatus.isEmpty()){
+            return activityStatusRepository.save(new ActivityStatus(activity, status));
+        }
+        activityStatus = oStatus.get();
+        activityStatus.setStatus(status);
+
+        return activityStatusRepository.save(activityStatus);
     }
 }

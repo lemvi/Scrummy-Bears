@@ -20,7 +20,7 @@ public class RatingService
     public Rating rateUserForActivity(Rating rating, Long activityId)
     {
         //authentication + implementation to be done
-        return null;
+        return rating;
     }
 
     public double calculateAverageUserRating(Long userId)

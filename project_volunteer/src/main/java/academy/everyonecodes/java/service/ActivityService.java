@@ -29,13 +29,13 @@ public class ActivityService
     private final RatingService ratingService;
     private final String activitycompletedmessage;
     private final ActivityStatusService activityStatusService;
-    private final EmailServiceImpl emailService;
+    private final EmailServiceImpl emailServiceImpl;
     private final String subject;
     private final String text;
 
 
 
-    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, RatingService ratingService, @Value(("${activityCompletedEmail.subjectAndText}")) String activitycompletedmessage, ActivityStatusService activityStatusService, EmailServiceImpl emailService, @Value("${activityDeletedEmail.subject}") String subject, @Value("${activityDeletedEmail.text}") String text)
+    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, RatingService ratingService, @Value(("${activityCompletedEmail.subjectAndText}")) String activitycompletedmessage, ActivityStatusService activityStatusService, EmailServiceImpl emailServiceImpl, @Value("${activityDeletedEmail.subject}") String subject, @Value("${activityDeletedEmail.text}") String text)
     {
         this.activityRepository = activityRepository;
         this.activityDraftTranslator = activityDraftTranslator;
@@ -45,7 +45,7 @@ public class ActivityService
         this.activitycompletedmessage = activitycompletedmessage;
         this.activityStatusService = activityStatusService;
 
-        this.emailService = emailService;
+        this.emailServiceImpl = emailServiceImpl;
         this.subject = subject;
         this.text = text;
     }
@@ -93,7 +93,7 @@ public class ActivityService
         {
             activity.getApplicants().stream()
                     .map(User::getEmailAddress)
-                    .forEach(e -> emailService.sendSimpleMessage(e, subject, text + activity.getTitle()));
+                    .forEach(e -> emailServiceImpl.sendSimpleMessage(e, subject, text + activity.getTitle()));
             activityRepository.deleteById(activityId);
         } else
             ExceptionThrower.badRequest(ErrorMessage.DELETE_ACTIVITY_WITH_PARTICIPANTS_NOT_POSSIBLE);
@@ -164,7 +164,7 @@ public class ActivityService
         return activityRepository.save(activity);
     }
 
-    public Optional<ActivityStatus> completeActivity(Long activityId, Rating rating) throws MessagingException {
+    public Optional<ActivityStatus> completeActivity(Long activityId, Rating rating) {
         // Get Activity, return Empty Optional if not found
 
         Activity activity = findActivityById(activityId);
@@ -210,7 +210,7 @@ public class ActivityService
         if ((null != ratingDone.getFeedback()) && (!ratingDone.getFeedback().isEmpty())) {
             completeText = text + "\n" + feedback;
         }
-        emailService.sendSimpleMessage(emailParticipant, title, completeText);
+        emailServiceImpl.sendSimpleMessage(emailParticipant, title, completeText);
         //emailService.sendMessageWithAttachment(emailParticipant, title, completeText, "project_volunteer/src/main/resources/Scrummy Bears Logo.jpg");
 
         return Optional.of(activityStatus);

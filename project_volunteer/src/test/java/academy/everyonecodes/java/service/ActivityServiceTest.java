@@ -70,14 +70,7 @@ public class ActivityServiceTest
 
     private final String endDateBeforeStartDate = "bad request";
 
-    @Value("${errorMessages.noMatchingActivityFound}")
-    private String noMatchingActivityFound;
-    @Value("${errorMessages.userNotAuthorizedToCompleteActivity}")
-    private String userNotAuthorizedToCompleteActivity;
-    @Value("${errorMessages.activityAlreadyCompleted}")
-    private String activityAlreadyCompleted;
-    @Value("${errorMessages.noParticipantsForActivity}")
-    private String noParticipantsForActivity;
+
     @Value("${activityCompletedEmail.subjectAndText}")
     private String activitycompletedmessage;
 
@@ -476,7 +469,7 @@ public class ActivityServiceTest
 
         Mockito.when(activityRepository.findById(activityId)).thenReturn(Optional.of(activity));
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
-        Mockito.when(activityStatusService.getActivityStatus(activityId)).thenReturn(Optional.of(new ActivityStatus(activityId, activity, Status.COMPLETED)));
+        Mockito.when(activityStatusService.getActivityStatus(activityId)).thenReturn(Optional.of(new ActivityStatus(activity, Status.COMPLETED)));
 
         Exception exception = assertThrows(HttpStatusCodeException.class, () ->
         {
@@ -501,7 +494,7 @@ public class ActivityServiceTest
 
         Mockito.when(activityRepository.findById(activityId)).thenReturn(Optional.of(activity));
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
-        Mockito.when(activityStatusService.getActivityStatus(activityId)).thenReturn(Optional.of(new ActivityStatus(activityId, activity, Status.PENDING)));
+        Mockito.when(activityStatusService.getActivityStatus(activityId)).thenReturn(Optional.of(new ActivityStatus(activity, Status.PENDING)));
 
         Exception exception = assertThrows(HttpStatusCodeException.class, () ->
         {
@@ -530,16 +523,20 @@ public class ActivityServiceTest
         participant.setId(activityId);
         participants.add(participant);
         activity.setParticipants(participants);
-        Rating rating = new Rating();
+        Rating rating = new Rating(5);
+        String[] activityCompletedMessageArray = activitycompletedmessage.split(";");
+        String title = activityCompletedMessageArray[0] + activity.getTitle();
+        String text = activityCompletedMessageArray[1] + participant.getUsername() + activityCompletedMessageArray[2] + activity.getTitle() + activityCompletedMessageArray[3] + rating.getRating();
 
         Mockito.when(activityRepository.findById(activityId)).thenReturn(Optional.of(activity));
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
-        Mockito.when(activityStatusService.getActivityStatus(activityId)).thenReturn(Optional.of(new ActivityStatus(activityId, activity, Status.ACTIVE)));
+        Mockito.when(activityStatusService.getActivityStatus(activityId)).thenReturn(Optional.of(new ActivityStatus(activity, Status.ACTIVE)));
         Mockito.when(ratingService.rateUserForActivity(rating, activityId)).thenReturn(rating);
-        Mockito.when(activityStatusService.changeActivityStatus(activity, Status.COMPLETED)).thenReturn(new ActivityStatus(activityId, activity, Status.COMPLETED));
+        Mockito.when(activityStatusService.changeActivityStatus(activity, Status.COMPLETED)).thenReturn(new ActivityStatus(activity, Status.COMPLETED));
 
-        //activityService.completeActivity(activityId, rating);
+        activityService.completeActivity(activityId, rating);
 
+        Mockito.verify(emailService).sendSimpleMessage(participant.getEmailAddress(), title, text);
         Mockito.verify(activityRepository).findById(activityId);
         Mockito.verify(activityStatusService).getActivityStatus(activityId);
         Mockito.verify(ratingService).rateUserForActivity(rating, activityId);
@@ -551,7 +548,7 @@ public class ActivityServiceTest
 
     @Test
     void completeActivity_success_WithFeedback() {
-        // TODO: Include Check for sent Email when its done
+
         Long activityId = 1L;
         Activity activity = new Activity("title", "description", startDateTime,  endDateTime,  true,  organizer);
         activity.setId(activityId);
@@ -565,17 +562,23 @@ public class ActivityServiceTest
         participant.setId(activityId);
         participants.add(participant);
         activity.setParticipants(participants);
-        Rating rating = new Rating();
+        Rating rating = new Rating(5);
         rating.setFeedback("ich bin ein Feedback");
+        String[] activityCompletedMessageArray = activitycompletedmessage.split(";");
+        String title = activityCompletedMessageArray[0] + activity.getTitle();
+        String text = activityCompletedMessageArray[1] + participant.getUsername() + activityCompletedMessageArray[2] + activity.getTitle() + activityCompletedMessageArray[3] + rating.getRating();
+        String feedback = activityCompletedMessageArray[4] + rating.getFeedback();
+        text = text + "\n" + feedback;
 
         Mockito.when(activityRepository.findById(activityId)).thenReturn(Optional.of(activity));
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
-        Mockito.when(activityStatusService.getActivityStatus(activityId)).thenReturn(Optional.of(new ActivityStatus(activityId, activity, Status.ACTIVE)));
+        Mockito.when(activityStatusService.getActivityStatus(activityId)).thenReturn(Optional.of(new ActivityStatus(activity, Status.ACTIVE)));
         Mockito.when(ratingService.rateUserForActivity(rating, activityId)).thenReturn(rating);
-        Mockito.when(activityStatusService.changeActivityStatus(activity, Status.COMPLETED)).thenReturn(new ActivityStatus(activityId, activity, Status.COMPLETED));
+        Mockito.when(activityStatusService.changeActivityStatus(activity, Status.COMPLETED)).thenReturn(new ActivityStatus(activity, Status.COMPLETED));
 
-       // activityService.completeActivity(activityId, rating);
+       activityService.completeActivity(activityId, rating);
 
+        Mockito.verify(emailService).sendSimpleMessage(participant.getEmailAddress(), title, text);
         Mockito.verify(activityRepository).findById(activityId);
         Mockito.verify(activityStatusService).getActivityStatus(activityId);
         Mockito.verify(ratingService).rateUserForActivity(rating, activityId);

@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Optional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class ActivityStatusServiceTest {
@@ -32,14 +32,37 @@ class ActivityStatusServiceTest {
 	}
 
 	@Test
-	void changeActivityStatus() {
+	void changeActivityStatus_ActivityStatus_existing() {
 		Activity activity = new Activity();
 		activity.setId(1L);
 		Status status = Status.COMPLETED;
+		ActivityStatus activityStatusNotCompleted = new ActivityStatus(activity, Status.ACTIVE);
+		ActivityStatus activityStatus = new ActivityStatus(activity, status);
+
+		Mockito.when(activityStatusRepository.findById(activity.getId())).thenReturn(Optional.of(activityStatusNotCompleted));
+		Mockito.when(activityStatusRepository.save(activityStatus)).thenReturn(activityStatus);
 
 		activityStatusService.changeActivityStatus(activity, status);
 
-		Mockito.verify(activityStatusRepository).save(new ActivityStatus(activity.getId(), activity, status));
+		Mockito.verify(activityStatusRepository).findById(activity.getId());
+		Mockito.verify(activityStatusRepository).save(activityStatus);
+
+		Mockito.verifyNoMoreInteractions(activityStatusRepository);
+	}
+
+	@Test
+	void changeActivityStatus_ActivityStatus_empty() {
+		Activity activity = new Activity();
+		activity.setId(1L);
+		Status status = Status.COMPLETED;
+		ActivityStatus activityStatus = new ActivityStatus(activity, status);
+
+		Mockito.when(activityStatusRepository.findById(activity.getId())).thenReturn(Optional.empty());
+
+		activityStatusService.changeActivityStatus(activity, status);
+
+		Mockito.verify(activityStatusRepository).findById(activity.getId());
+		Mockito.verify(activityStatusRepository).save(new ActivityStatus(activity, status));
 		Mockito.verifyNoMoreInteractions(activityStatusRepository);
 	}
 }
