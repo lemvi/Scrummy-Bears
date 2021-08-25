@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -34,7 +35,7 @@ public class ActivityService
 
 
 
-    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, EmailServiceImpl emailService, @Value("${activityDeletedEmail.subject}") String subject, @Value("${activityDeletedEmail.text}") String text)
+    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, RatingService ratingService, @Value(("${activityCompletedEmail.subjectAndText}")) String activitycompletedmessage, ActivityStatusService activityStatusService, EmailServiceImpl emailService, @Value("${activityDeletedEmail.subject}") String subject, @Value("${activityDeletedEmail.text}") String text)
     {
         this.activityRepository = activityRepository;
         this.activityDraftTranslator = activityDraftTranslator;
@@ -43,6 +44,7 @@ public class ActivityService
         this.ratingService = ratingService;
         this.activitycompletedmessage = activitycompletedmessage;
         this.activityStatusService = activityStatusService;
+
         this.emailService = emailService;
         this.subject = subject;
         this.text = text;
@@ -162,30 +164,30 @@ public class ActivityService
         return activityRepository.save(activity);
     }
 
-    public Optional<ActivityStatus> completeActivity(Long activityId, Rating rating) {
+    public Optional<ActivityStatus> completeActivity(Long activityId, Rating rating) throws MessagingException {
         // Get Activity, return Empty Optional if not found
-        Optional<Activity> oActivity = activityRepository.findById(activityId);
-        if (oActivity.isEmpty()) {
-            userService.throwBadRequest(noMatchingActivityFound);
+
+        Activity activity = findActivityById(activityId);
+        if (activity.getTitle() == null) {
             return Optional.empty();
         }
-        Activity activity = oActivity.get();
+
         User organizer = activity.getOrganizer();
         // Check if the logged in User is Owner of the Activity
         if (!organizer.getUsername().equals(getAuthenticatedName())) {
-            userService.throwBadRequest(userNotAuthorizedToCompleteActivity);
+            ExceptionThrower.badRequest(ErrorMessage.USER_NOT_AUTHORIZED_TO_COMPLETE_ACTIVITY);
             return Optional.empty();
         }
 
         Optional<ActivityStatus> optActivityStatus = activityStatusService.getActivityStatus(activityId);
         if (optActivityStatus.isPresent() && optActivityStatus.get().getStatus().equals(Status.COMPLETED)) {
-            userService.throwBadRequest(activityAlreadyCompleted);
+            ExceptionThrower.badRequest(ErrorMessage.ACTIVITY_ALREADY_COMPLETED);
             return Optional.empty();
         }
 
         // Check if Activity even had Participants
         if (activity.getParticipants().isEmpty()) {
-            userService.throwBadRequest(noParticipantsForActivity);
+            ExceptionThrower.badRequest(ErrorMessage.NO_PARTICIPANTS_FOR_ACTIVITY);
             return Optional.empty();
         }
 
@@ -208,6 +210,8 @@ public class ActivityService
         if ((null != ratingDone.getFeedback()) && (!ratingDone.getFeedback().isEmpty())) {
             completeText = text + "\n" + feedback;
         }
+        emailService.sendSimpleMessage(emailParticipant, title, completeText);
+        //emailService.sendMessageWithAttachment(emailParticipant, title, completeText, "project_volunteer/src/main/resources/Scrummy Bears Logo.jpg");
 
         return Optional.of(activityStatus);
     }

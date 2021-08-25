@@ -57,7 +57,7 @@ failedLoginEmail:
   pathToAttachment: project_volunteer/src/main/resources/Scrummy Bears Logo.jpg
 
 activityCompletedEmail:
-  activitycompleted: "Activity Completed: ;Hello ;, the Activity ; is completed, your Rating for this activity is: ;Your Feedback for this Activity is: "
+  subjectAndText: "Activity Completed: ;Hello ;, the Activity ; is completed, your Rating for this activity is: ;Your Feedback for this Activity is: "
 
 activityDeletedEmail:
   subject: Activity was deleted

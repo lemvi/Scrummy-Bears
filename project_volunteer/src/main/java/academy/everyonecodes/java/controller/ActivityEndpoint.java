@@ -8,6 +8,7 @@ import academy.everyonecodes.java.service.ActivityService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -108,7 +109,7 @@ public class ActivityEndpoint
 
     @PutMapping("/activities/complete/{activityId}")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
-    ActivityStatus completeActivity(@PathVariable Long activityId, @RequestBody @Valid Rating rating) {
+    ActivityStatus completeActivity(@PathVariable Long activityId, @RequestBody @Valid Rating rating) throws MessagingException {
         return activityService.completeActivity(activityId, rating).orElse(null);
     }
 }
