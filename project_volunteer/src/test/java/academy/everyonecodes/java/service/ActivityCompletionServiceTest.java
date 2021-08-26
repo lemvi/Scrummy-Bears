@@ -106,22 +106,6 @@ public class ActivityCompletionServiceTest {
             organizer.getUsername());
 
 
-    //Complete Activity Tests------------------------------------------------------------------------------
-//    @Test
-//    void completeActivity_Activity_not_found() {
-//        Long activityId = 1L;
-//        Rating rating = new Rating();
-//
-////        Mockito.when(activityService.findActivityById(activityId)).thenThrow();
-//        Exception exception = assertThrows(HttpStatusCodeException.class, () ->
-//        {
-//
-//            activityCompletionService.completeActivity(1L, rating);
-//        });
-//
-//        Mockito.verify(activityService).findActivityById(activityId);
-//        Mockito.verifyNoInteractions(activityStatusService, ratingService);
-//    }
 
     @Test
     void completeActivity_User_isNot_Organizer() {
