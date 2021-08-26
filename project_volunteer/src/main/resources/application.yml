@@ -48,6 +48,7 @@ errorMessages:
   userNotInvolvedInActivity: "BAD_REQUEST: This user has no involvement in the selected activity"
   noStatusFound: "BAD_REQUEST: No status found for this activity"
   activityNotCompletedYet: "BAD_REQUEST: To post a rating the activity has to be set to completed by the organizer first"
+  tooManyCharactersMax800: "BAD_REQUEST: Too many characters, max. 800 allowed"
   volunteerIsNotApplicant: "BAD_REQUEST: The volunteer you selected has not applied for this activity"
 
 constants:
@@ -64,6 +65,9 @@ activityCompletedEmail:
 activityDeletedEmail:
   subject: Activity was deleted
   text: "The following activity was deleted by its creator: "
+
+applicationEmail:
+  subject: " applied for your activity: "
 
 ratingEmail:
   subject: You received a rating

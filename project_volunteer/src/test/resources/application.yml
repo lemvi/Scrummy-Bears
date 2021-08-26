@@ -48,6 +48,7 @@ errorMessages:
   userNotInvolvedInActivity: "BAD_REQUEST: This user has no involvement in the selected activity"
   noStatusFound: "BAD_REQUEST: No status found for this activity"
   activityNotCompletedYet: "BAD_REQUEST: To post a rating the activity has to be set to completed by the organizer first"
+  tooManyCharactersMax800: "BAD_REQUEST: Too many characters, max. 800 allowed"
   volunteerIsNotApplicant: "BAD_REQUEST: The volunteer you selected has not applied for this activity"
 
 constants:
@@ -64,6 +65,13 @@ activityCompletedEmail:
 activityDeletedEmail:
   subject: Activity was deleted
   text: "The following activity was deleted by its creator: "
+
+applicationEmail:
+  subject: " applied for your activity: "
+
+text800Chars: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies
+
+text801Chars: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies+
 
 ratingEmail:
   subject: You received a rating
