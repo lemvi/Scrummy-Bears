@@ -35,19 +35,19 @@ public class ActivityCompletionService {
         // Check if the logged in User is Owner of the Activity
         if (!organizer.getUsername().equals(getAuthenticatedName())) {
             ExceptionThrower.badRequest(ErrorMessage.USER_NOT_AUTHORIZED_TO_COMPLETE_ACTIVITY);
-            return Optional.empty();
+            //return Optional.empty();
         }
 
         Optional<ActivityStatus> optActivityStatus = activityStatusService.getActivityStatus(activityId);
         if (optActivityStatus.isPresent() && optActivityStatus.get().getStatus().equals(Status.COMPLETED)) {
             ExceptionThrower.badRequest(ErrorMessage.ACTIVITY_ALREADY_COMPLETED);
-            return Optional.empty();
+            //return Optional.empty();
         }
 
         // Check if Activity even had Participants
         if (activity.getParticipants().isEmpty()) {
             ExceptionThrower.badRequest(ErrorMessage.NO_PARTICIPANTS_FOR_ACTIVITY);
-            return Optional.empty();
+           // return Optional.empty();
         }
 
         // Check if Rating is done (or maybe sent with method), if both not, return Empty Optional (Maybe with Message?)
