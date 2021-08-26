@@ -23,17 +23,19 @@ public class ActivityService
     private final ActivityDraftTranslator activityDraftTranslator;
     private final DraftRepository draftRepository;
     private final UserRepository userRepository;
-    private final EmailServiceImpl emailService;
+    private final EmailServiceImpl emailServiceImpl;
     private final String subject;
     private final String text;
 
-    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, EmailServiceImpl emailService, @Value("${activityDeletedEmail.subject}") String subject, @Value("${activityDeletedEmail.text}") String text)
+
+
+    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, EmailServiceImpl emailServiceImpl, @Value("${activityDeletedEmail.subject}") String subject, @Value("${activityDeletedEmail.text}") String text)
     {
         this.activityRepository = activityRepository;
         this.activityDraftTranslator = activityDraftTranslator;
         this.draftRepository = draftRepository;
         this.userRepository = userRepository;
-        this.emailService = emailService;
+         this.emailServiceImpl = emailServiceImpl;
         this.subject = subject;
         this.text = text;
     }
@@ -81,7 +83,7 @@ public class ActivityService
         {
             activity.getApplicants().stream()
                     .map(User::getEmailAddress)
-                    .forEach(e -> emailService.sendSimpleMessage(e, subject, text + activity.getTitle()));
+                    .forEach(e -> emailServiceImpl.sendSimpleMessage(e, subject, text + activity.getTitle()));
             activityRepository.deleteById(activityId);
         } else
             ExceptionThrower.badRequest(ErrorMessage.DELETE_ACTIVITY_WITH_PARTICIPANTS_NOT_POSSIBLE);
@@ -151,6 +153,8 @@ public class ActivityService
         draftRepository.delete(draft);
         return activityRepository.save(activity);
     }
+
+
 
     private boolean validateStartDateBeforeEndDate(Activity activity)
     {

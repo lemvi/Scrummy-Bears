@@ -251,6 +251,8 @@ public class ActivityEndpointTest
         Mockito.verifyNoInteractions(activityService);
     }
 
+
+
     private void assertGetAllActivitiesIsOK() throws Exception
     {
         mvc.perform(get("/activities", String.class)
@@ -435,6 +437,8 @@ public class ActivityEndpointTest
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
+
+
 
     private String getJsonOfDraft(Draft draft) throws JsonProcessingException
     {

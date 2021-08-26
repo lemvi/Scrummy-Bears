@@ -4,15 +4,31 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class RatingId implements Serializable {
-	private User user;
-	private Activity activity;
+	private Long userId;
+	private Long activityId;
 
 	public RatingId() {}
 
-	public RatingId(User user, Activity activity)
+	public RatingId(Long userId, Long activityId)
 	{
-		this.user = user;
-		this.activity = activity;
+		this.userId = userId;
+		this.activityId = activityId;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public Long getActivityId() {
+		return activityId;
+	}
+
+	public void setActivityId(Long activityId) {
+		this.activityId = activityId;
 	}
 
 	@Override
@@ -21,12 +37,12 @@ public class RatingId implements Serializable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		RatingId ratingId = (RatingId) o;
-		return Objects.equals(user, ratingId.user) && Objects.equals(activity, ratingId.activity);
+		return Objects.equals(userId, ratingId.userId) && Objects.equals(activityId, ratingId.activityId);
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(user, activity);
+		return Objects.hash(userId, activityId);
 	}
 }

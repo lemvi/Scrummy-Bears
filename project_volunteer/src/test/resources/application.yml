@@ -35,10 +35,13 @@ security:
 errorMessages:
   wrongRoles: "BAD_REQUEST: Roles are not set correctly"
   usernameNotFound: "BAD_REQUEST: Username doesn't exist"
+  noMatchingActivityFound: "BAD_REQUEST: No matching activity was found."
+  userNotAuthorizedToCompleteActivity: "BAD_REQUEST: User not authorized to complete this activity"
   activitiesNotFound: "Sorry, we found no Activities with the keyword:"
   endDateBeforeStartDate: "BAD_REQUEST: End date time must be after start date time"
   loggedInUserNotMatchingRequest: "BAD_REQUEST: Logged in user does not match the user you are trying to access"
-  noMatchingActivityFound: "BAD_REQUEST: No matching activity was found."
+  activityAlreadyCompleted: "BAD_REQUEST: The Activity is already completed"
+  noParticipantsForActivity: "BAD_REQUEST: Their where no participants for this Activity, please edit or delete the Activity."
   noMatchingDraftFound: "BAD_REQUEST: No matching draft was found."
   deleteActivityWithParticipantsNotPossible: "BAD_REQUEST: Deleting an activity with accepted volunteers not possible."
   editActivityWithApplicantsOrParticipantsNotPossible: "BAD_REQUEST: Editing Activity with applicants or accepted volunteers not possible."
@@ -55,10 +58,16 @@ failedLoginEmail:
   text: Was this you? Someone tried to login with an incorrect password for 5 times. Please reset your Password.
   pathToAttachment: project_volunteer/src/main/resources/Scrummy Bears Logo.jpg
 
+activityCompletedEmail:
+  subjectAndText: "Activity Completed: ;Hello ;, the Activity ; is completed, your Rating for this activity is: ;Your Feedback for this Activity is: "
+
 activityDeletedEmail:
   subject: Activity was deleted
   text: "The following activity was deleted by its creator: "
 
+ratingEmail:
+  subject: You received a rating
+  text: A user has submitted a rating to one of your activities.
 acceptedVolunteerEmail:
   subject: Accepted for Activity
   text: "You have been accepted as the one and only for the following activity: "

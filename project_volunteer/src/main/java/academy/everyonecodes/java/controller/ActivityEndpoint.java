@@ -1,11 +1,15 @@
 package academy.everyonecodes.java.controller;
 
 import academy.everyonecodes.java.data.Activity;
+import academy.everyonecodes.java.data.ActivityStatus;
 import academy.everyonecodes.java.data.Draft;
+import academy.everyonecodes.java.data.Rating;
 import academy.everyonecodes.java.service.ActivityService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -102,4 +106,6 @@ public class ActivityEndpoint
     {
         activityService.deleteDraft(draftId);
     }
+
+
 }
