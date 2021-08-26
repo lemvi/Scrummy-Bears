@@ -1,9 +1,5 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.Draft;
-import academy.everyonecodes.java.data.ErrorMessage;
-import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import academy.everyonecodes.java.data.repositories.DraftRepository;
@@ -13,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -199,7 +194,6 @@ public class ActivityService
         ActivityStatus activityStatus = activityStatusService.changeActivityStatus(activity, Status.COMPLETED);
 
         // Send Email including Rating and if there Feedback -> done in ratingService.rateUserForActivity(rating);?
-        // TODO: Link to refactored Email Method
         User participant = new ArrayList<>(activity.getParticipants()).get(0);
         String[] activityCompletedMessageArray = activitycompletedmessage.split(";");
         String emailParticipant = participant.getEmailAddress();
