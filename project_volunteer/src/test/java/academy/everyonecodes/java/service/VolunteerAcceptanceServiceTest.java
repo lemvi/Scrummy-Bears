@@ -25,10 +25,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class StatusServiceTest
+public class VolunteerAcceptanceServiceTest
 {
     @Autowired
-    StatusService statusService;
+    VolunteerAcceptanceService volunteerAcceptanceService;
 
     @MockBean
     ActivityRepository activityRepository;
@@ -84,7 +84,7 @@ public class StatusServiceTest
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
         when(activityRepository.save(activity)).thenReturn(activity);
 
-        statusService.acceptVolunteer(1L, 1L);
+        volunteerAcceptanceService.acceptVolunteer(1L, 1L);
 
         verify(emailServiceImpl).sendSimpleMessage(userToBeAccepted.getEmailAddress(), subjectAccepted, textAccepted + activity.getTitle());
         verify(emailServiceImpl).sendSimpleMessage(userToBeRejected.getEmailAddress(), subjectRejected, textRejected + activity.getTitle());
@@ -100,7 +100,7 @@ public class StatusServiceTest
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username2");
         assertThrows(HttpStatusCodeException.class, () ->
         {
-            statusService.acceptVolunteer(1L, 1L);
+            volunteerAcceptanceService.acceptVolunteer(1L, 1L);
         });
     }
 
@@ -114,7 +114,7 @@ public class StatusServiceTest
         when(activityRepository.findById(1L)).thenReturn(Optional.of(activity));
         assertThrows(HttpStatusCodeException.class, () ->
         {
-            statusService.acceptVolunteer(1L, 1L);
+            volunteerAcceptanceService.acceptVolunteer(1L, 1L);
         });
     }
 
@@ -128,7 +128,7 @@ public class StatusServiceTest
         when(activityRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(HttpStatusCodeException.class, () ->
         {
-            statusService.acceptVolunteer(1L, 1L);
+            volunteerAcceptanceService.acceptVolunteer(1L, 1L);
         });
     }
 
@@ -151,7 +151,7 @@ public class StatusServiceTest
 
         assertThrows(HttpStatusCodeException.class, () ->
         {
-            statusService.acceptVolunteer(1L, 1L);
+            volunteerAcceptanceService.acceptVolunteer(1L, 1L);
         });
 
     }

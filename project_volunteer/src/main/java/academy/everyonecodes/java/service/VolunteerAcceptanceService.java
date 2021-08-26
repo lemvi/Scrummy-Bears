@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class StatusService
+public class VolunteerAcceptanceService
 {
     private final ActivityRepository activityRepository;
     private final UserRepository userRepository;
@@ -25,7 +25,7 @@ public class StatusService
     private final String subjectRejected;
     private final String textRejected;
 
-    public StatusService(ActivityRepository activityRepository, UserRepository userRepository, EmailServiceImpl emailServiceImpl, @Value("${acceptedVolunteerEmail.subject}") String subjectAccepted, @Value("${acceptedVolunteerEmail.text}") String textAccepted, @Value("${rejectedVolunteerEmail.subject}") String subjectRejected, @Value("${rejectedVolunteerEmail.text}") String textRejected)
+    public VolunteerAcceptanceService(ActivityRepository activityRepository, UserRepository userRepository, EmailServiceImpl emailServiceImpl, @Value("${acceptedVolunteerEmail.subject}") String subjectAccepted, @Value("${acceptedVolunteerEmail.text}") String textAccepted, @Value("${rejectedVolunteerEmail.subject}") String subjectRejected, @Value("${rejectedVolunteerEmail.text}") String textRejected)
     {
         this.activityRepository = activityRepository;
         this.userRepository = userRepository;

@@ -1,7 +1,7 @@
 package academy.everyonecodes.java.controller;
 
 import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.service.StatusService;
+import academy.everyonecodes.java.service.VolunteerAcceptanceService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping
-public class StatusEndpoint
+public class VolunteerAcceptanceEndpoint
 {
-    private final StatusService statusService;
+    private final VolunteerAcceptanceService volunteerAcceptanceService;
 
-    public StatusEndpoint(StatusService statusService)
+    public VolunteerAcceptanceEndpoint(VolunteerAcceptanceService volunteerAcceptanceService)
     {
-        this.statusService = statusService;
+        this.volunteerAcceptanceService = volunteerAcceptanceService;
     }
 
     @PutMapping("/activities/{activityId}/accept/{userId}")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     Activity acceptVolunteer(@PathVariable Long activityId, @PathVariable Long userId)
     {
-        return statusService.acceptVolunteer(activityId, userId);
+        return volunteerAcceptanceService.acceptVolunteer(activityId, userId);
     }
 }
