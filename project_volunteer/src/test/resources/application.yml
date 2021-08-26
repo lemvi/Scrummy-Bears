@@ -64,6 +64,9 @@ activityDeletedEmail:
   subject: Activity was deleted
   text: "The following activity was deleted by its creator: "
 
+ratingEmail:
+  subject: You received a rating
+  text: A user has submitted a rating to one of your activities.
   #https://drive.google.com/file/d/1_0k1HyesHZC1R6oEZ2q3MY5FiaMhKPie/view?usp=sharing
 
 webapptreelist:

@@ -107,9 +107,5 @@ public class ActivityEndpoint
         activityService.deleteDraft(draftId);
     }
 
-    @PutMapping("/activities/complete/{activityId}")
-    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
-    ActivityStatus completeActivity(@PathVariable Long activityId, @RequestBody @Valid Rating rating) throws MessagingException {
-        return activityService.completeActivity(activityId, rating).orElse(null);
-    }
+
 }

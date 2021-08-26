@@ -1,6 +1,9 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.*;
+import academy.everyonecodes.java.data.Activity;
+import academy.everyonecodes.java.data.Draft;
+import academy.everyonecodes.java.data.ErrorMessage;
+import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import academy.everyonecodes.java.data.repositories.DraftRepository;
 import academy.everyonecodes.java.data.repositories.UserRepository;
@@ -9,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -21,26 +23,19 @@ public class ActivityService
     private final ActivityDraftTranslator activityDraftTranslator;
     private final DraftRepository draftRepository;
     private final UserRepository userRepository;
-    private final RatingService ratingService;
-    private final String activitycompletedmessage;
-    private final ActivityStatusService activityStatusService;
     private final EmailServiceImpl emailServiceImpl;
     private final String subject;
     private final String text;
 
 
 
-    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, RatingService ratingService, @Value(("${activityCompletedEmail.subjectAndText}")) String activitycompletedmessage, ActivityStatusService activityStatusService, EmailServiceImpl emailServiceImpl, @Value("${activityDeletedEmail.subject}") String subject, @Value("${activityDeletedEmail.text}") String text)
+    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, EmailServiceImpl emailServiceImpl, @Value("${activityDeletedEmail.subject}") String subject, @Value("${activityDeletedEmail.text}") String text)
     {
         this.activityRepository = activityRepository;
         this.activityDraftTranslator = activityDraftTranslator;
         this.draftRepository = draftRepository;
         this.userRepository = userRepository;
-        this.ratingService = ratingService;
-        this.activitycompletedmessage = activitycompletedmessage;
-        this.activityStatusService = activityStatusService;
-
-        this.emailServiceImpl = emailServiceImpl;
+         this.emailServiceImpl = emailServiceImpl;
         this.subject = subject;
         this.text = text;
     }
@@ -159,56 +154,7 @@ public class ActivityService
         return activityRepository.save(activity);
     }
 
-    public Optional<ActivityStatus> completeActivity(Long activityId, Rating rating) {
-        // Get Activity, return Empty Optional if not found
 
-        Activity activity = findActivityById(activityId);
-        if (activity.getTitle() == null) {
-            return Optional.empty();
-        }
-
-        User organizer = activity.getOrganizer();
-        // Check if the logged in User is Owner of the Activity
-        if (!organizer.getUsername().equals(getAuthenticatedName())) {
-            ExceptionThrower.badRequest(ErrorMessage.USER_NOT_AUTHORIZED_TO_COMPLETE_ACTIVITY);
-            return Optional.empty();
-        }
-
-        Optional<ActivityStatus> optActivityStatus = activityStatusService.getActivityStatus(activityId);
-        if (optActivityStatus.isPresent() && optActivityStatus.get().getStatus().equals(Status.COMPLETED)) {
-            ExceptionThrower.badRequest(ErrorMessage.ACTIVITY_ALREADY_COMPLETED);
-            return Optional.empty();
-        }
-
-        // Check if Activity even had Participants
-        if (activity.getParticipants().isEmpty()) {
-            ExceptionThrower.badRequest(ErrorMessage.NO_PARTICIPANTS_FOR_ACTIVITY);
-            return Optional.empty();
-        }
-
-        // Check if Rating is done (or maybe sent with method), if both not, return Empty Optional (Maybe with Message?)
-        // Save Rating and Feedback
-        Rating ratingDone = ratingService.rateUserForActivity(rating, activityId);
-
-        // Set Activity to Completed
-        ActivityStatus activityStatus = activityStatusService.changeActivityStatus(activity, Status.COMPLETED);
-
-        // Send Email including Rating and if there Feedback -> done in ratingService.rateUserForActivity(rating);?
-        User participant = new ArrayList<>(activity.getParticipants()).get(0);
-        String[] activityCompletedMessageArray = activitycompletedmessage.split(";");
-        String emailParticipant = participant.getEmailAddress();
-        String title = activityCompletedMessageArray[0] + activity.getTitle();
-        String text = activityCompletedMessageArray[1] + participant.getUsername() + activityCompletedMessageArray[2] + activity.getTitle() + activityCompletedMessageArray[3] + ratingDone.getRating();
-        String feedback = activityCompletedMessageArray[4] + ratingDone.getFeedback();
-        String completeText = text;
-        if ((null != ratingDone.getFeedback()) && (!ratingDone.getFeedback().isEmpty())) {
-            completeText = text + "\n" + feedback;
-        }
-        emailServiceImpl.sendSimpleMessage(emailParticipant, title, completeText);
-        //emailService.sendMessageWithAttachment(emailParticipant, title, completeText, "project_volunteer/src/main/resources/Scrummy Bears Logo.jpg");
-
-        return Optional.of(activityStatus);
-    }
 
     private boolean validateStartDateBeforeEndDate(Activity activity)
     {

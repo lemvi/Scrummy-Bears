@@ -19,7 +19,9 @@ public class ActivityStatusService {
     public Optional<ActivityStatus> getActivityStatus(Long activityId) {
         return activityStatusRepository.findById(activityId);
     }
-
+    public Optional<ActivityStatus> findByActivity_id(Long activityId) {
+        return activityStatusRepository.findByActivity_Id(activityId);
+    }
     public ActivityStatus changeActivityStatus(Activity activity, Status status) {
         Optional<ActivityStatus> oStatus = activityStatusRepository.findById(activity.getId());
         ActivityStatus activityStatus = new ActivityStatus();
