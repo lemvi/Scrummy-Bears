@@ -1,7 +1,10 @@
 package academy.everyonecodes.java.service;
 
+import academy.everyonecodes.java.data.Activity;
 import academy.everyonecodes.java.data.Rating;
+import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.repositories.RatingRepository;
+import academy.everyonecodes.java.service.email.EmailServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -10,6 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
+import java.util.Optional;
+
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class RatingServiceTest {
@@ -20,6 +26,18 @@ class RatingServiceTest {
 	@MockBean
 	RatingRepository ratingRepository;
 
+	@MockBean
+	UserService userService;
+
+	@MockBean
+	ActivityService activityService;
+
+	@MockBean
+	ActivityStatusService activityStatusService;
+
+	@MockBean
+	EmailServiceImpl emailService;
+
 	@Test
 	void calculateAverageUserRating_FindNoRatings() {
 		Long userId = 1L;
@@ -28,12 +46,12 @@ class RatingServiceTest {
 
 		double expected = Double.NaN;
 
-		Mockito.when(ratingRepository.findByUser_Id(userId)).thenReturn(ratings);
+		when(ratingRepository.findByUser_Id(userId)).thenReturn(ratings);
 
 		double result = ratingService.calculateAverageUserRating(1L);
 
-		Mockito.verify(ratingRepository).findByUser_Id(1L);
-		Mockito.verifyNoMoreInteractions(ratingRepository);
+		verify(ratingRepository).findByUser_Id(1L);
+		verifyNoMoreInteractions(ratingRepository);
 
 		Assertions.assertEquals(expected, result);
 	}
@@ -48,12 +66,12 @@ class RatingServiceTest {
 
 		double expected = 3;
 
-		Mockito.when(ratingRepository.findByUser_Id(userId)).thenReturn(ratings);
+		when(ratingRepository.findByUser_Id(userId)).thenReturn(ratings);
 
 		double result = ratingService.calculateAverageUserRating(1L);
 
-		Mockito.verify(ratingRepository).findByUser_Id(1L);
-		Mockito.verifyNoMoreInteractions(ratingRepository);
+		verify(ratingRepository).findByUser_Id(1L);
+		verifyNoMoreInteractions(ratingRepository);
 
 		Assertions.assertEquals(expected, result);
 	}
@@ -70,12 +88,12 @@ class RatingServiceTest {
 
 		double expected = 2;
 
-		Mockito.when(ratingRepository.findByUser_Id(userId)).thenReturn(ratings);
+		when(ratingRepository.findByUser_Id(userId)).thenReturn(ratings);
 
 		double result = ratingService.calculateAverageUserRating(1L);
 
-		Mockito.verify(ratingRepository).findByUser_Id(1L);
-		Mockito.verifyNoMoreInteractions(ratingRepository);
+		verify(ratingRepository).findByUser_Id(1L);
+		verifyNoMoreInteractions(ratingRepository);
 
 		Assertions.assertEquals(expected, result);
 	}
@@ -93,13 +111,31 @@ class RatingServiceTest {
 
 		double expected = 2.5;
 
-		Mockito.when(ratingRepository.findByUser_Id(userId)).thenReturn(ratings);
+		when(ratingRepository.findByUser_Id(userId)).thenReturn(ratings);
 
 		double result = ratingService.calculateAverageUserRating(1L);
 
-		Mockito.verify(ratingRepository).findByUser_Id(1L);
-		Mockito.verifyNoMoreInteractions(ratingRepository);
+		verify(ratingRepository).findByUser_Id(1L);
+		verifyNoMoreInteractions(ratingRepository);
 
 		Assertions.assertEquals(expected, result);
+	}
+
+	@Test
+	void findByActivityAndUser() {
+		Activity activity = new Activity();
+		User user = new User();
+
+		ratingService.findByActivityAndUser(activity, user);
+
+		verify(ratingRepository).findByActivityAndUser(activity, user);
+	}
+
+	@Test
+	void rateUserForActivity_noActivityStatusFound() {
+		Long activityId = 1L;
+		Activity activity = new Activity();
+		when(activityService.findActivityById(activityId)).thenReturn(activity);
+		when(activityStatusService.findByActivity_id(activityId)).thenReturn(Optional.empty());
 	}
 }

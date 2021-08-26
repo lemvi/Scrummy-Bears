@@ -53,7 +53,7 @@ public class RatingService
         return ratingRepository.findByActivityAndUser(activity, user);
     }
 
-    public Rating saveRating(Rating rating) {               //TODO: just for testing. make private later
+    private Rating saveRating(Rating rating) {               //TODO: just for testing. make private later
         return ratingRepository.save(rating);
     }
 
@@ -69,8 +69,8 @@ public class RatingService
         User user = getCurrentlyLoggedInUser();
         User userToRate = getUserToRate(activity, user);
 
-//        rating.setActivity(activity);
-//        rating.setUser(userToRate);
+        rating.setActivity(activity);
+        rating.setUser(userToRate);
         rating.setActivityId(activityId);
         rating.setUserId(userToRate.getId());
 
