@@ -39,7 +39,7 @@ public class ExceptionThrower
                             @Value("${errorMessages.noStatusFound}") String noStatusFound,
                             @Value("${errorMessages.userNotAuthorizedToCompleteActivity}") String userNotAuthorizedToCompleteActivity,
                             @Value("${errorMessages.activityAlreadyCompleted}") String activityAlreadyCompleted,
-                            @Value("${errorMessages.noParticipantsForActivity}") String noParticipantsForActivity)
+                            @Value("${errorMessages.noParticipantsForActivity}") String noParticipantsForActivity,
                             @Value("${errorMessages.activityNotCompletedYet}") String activityNotCompletedYet,
                             @Value("${errorMessages.volunteerIsNotApplicant}") String volunteerIsNotApplicant)
     {

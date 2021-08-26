@@ -50,12 +50,13 @@ public class ActivityCompletionService {
            // return Optional.empty();
         }
 
+        // Set Activity to Completed
+        ActivityStatus activityStatus = activityStatusService.changeActivityStatus(activity, Status.COMPLETED);
+
         // Check if Rating is done (or maybe sent with method), if both not, return Empty Optional (Maybe with Message?)
         // Save Rating and Feedback
         Rating ratingDone = ratingService.rateUserForActivity(rating, activityId);
 
-        // Set Activity to Completed
-        ActivityStatus activityStatus = activityStatusService.changeActivityStatus(activity, Status.COMPLETED);
 
         // Send Email including Rating and if there Feedback -> done in ratingService.rateUserForActivity(rating);?
         User participant = new ArrayList<>(activity.getParticipants()).get(0);
