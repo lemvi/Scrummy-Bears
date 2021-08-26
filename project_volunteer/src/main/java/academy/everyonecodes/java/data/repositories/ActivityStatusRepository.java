@@ -10,6 +10,6 @@ import java.util.Optional;
 
 public interface ActivityStatusRepository extends JpaRepository<ActivityStatus, Long> {
 
-    Optional<ActivityStatus> findByActivity(Activity activity);
+    Optional<Status> findByActivity(Activity activity);
     Optional<ActivityStatus> findByActivity_Id(Long activityId);
 }

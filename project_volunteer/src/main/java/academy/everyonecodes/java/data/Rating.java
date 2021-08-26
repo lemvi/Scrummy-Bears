@@ -48,6 +48,15 @@ public class Rating {
 		this.feedback = feedback;
 	}
 
+	public Rating(int rating) {
+		this.rating = rating;
+	}
+
+	public Rating(int rating, String feedback) {
+		this.rating = rating;
+		this.feedback = feedback;
+	}
+
 	public Long getUserId() {
 		return userId;
 	}
@@ -62,10 +71,6 @@ public class Rating {
 
 	public void setActivityId(Long activityId) {
 		this.activityId = activityId;
-	}
-
-	public Rating(int rating) {
-		this.rating = rating;
 	}
 
 	public User getUser()

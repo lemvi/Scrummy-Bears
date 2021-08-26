@@ -2,6 +2,7 @@ package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.repositories.RatingRepository;
+import academy.everyonecodes.java.service.email.EmailServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -17,16 +18,25 @@ public class RatingService
     private final UserService userService;
     private final ActivityService activityService;
     private final ActivityStatusService activityStatusService;
+    private final EmailServiceImpl emailService;
+    private final String ratedSubject;
+    private final String ratedText;
 
     public RatingService(RatingRepository ratingRepository,
                          UserService userService,
                          ActivityService activityService,
-                         ActivityStatusService activityStatusService)
+                         ActivityStatusService activityStatusService,
+                         EmailServiceImpl emailService,
+                         @Value("${ratingEmail.subject}") String ratedSubject,
+                         @Value("${ratingEmail.text}") String ratedText)
     {
         this.ratingRepository = ratingRepository;
         this.userService = userService;
         this.activityService = activityService;
         this.activityStatusService = activityStatusService;
+        this.emailService = emailService;
+        this.ratedSubject = ratedSubject;
+        this.ratedText = ratedText;
     }
 
     public double calculateAverageUserRating(Long userId)
@@ -39,6 +49,14 @@ public class RatingService
                 .orElse(Double.NaN);
     }
 
+    public Optional<Rating> findByActivityAndUser(Activity activity, User user) {
+        return ratingRepository.findByActivityAndUser(activity, user);
+    }
+
+    public Rating saveRating(Rating rating) {               //TODO: just for testing. make private later
+        return ratingRepository.save(rating);
+    }
+
     public Rating rateUserForActivity(Rating rating, Long activityId)
     {
         Activity activity = activityService.findActivityById(activityId);
@@ -48,7 +66,6 @@ public class RatingService
             ExceptionThrower.badRequest(ErrorMessage.ACTIVITY_NOT_COMPLETED_YET);
         }
 
-
         User user = getCurrentlyLoggedInUser();
         User userToRate = getUserToRate(activity, user);
 
@@ -57,12 +74,11 @@ public class RatingService
         rating.setActivityId(activityId);
         rating.setUserId(userToRate.getId());
 
+        sendEmailToRatedUser(userToRate, activity, rating);
+
         return saveRating(rating);
     }
 
-    public Optional<Rating> findByActivityAndUser(Activity activity, User user) {
-        return ratingRepository.findByActivityAndUser(activity, user);
-    }
 
     private User getUserToRate(Activity activity, User user) {
         var oUserToRate = determineUserToRate(checkUsersInvolvementInActivity(user, activity), activity);
@@ -93,8 +109,16 @@ public class RatingService
         return activityStatus;
     }
 
-    public Rating saveRating(Rating rating) {               //TODO: just for testing. make private later
-        return ratingRepository.save(rating);
+    private String checkUsersInvolvementInActivity(User user, Activity activity) {
+        var participants = activity.getParticipants();
+        var organizer = activity.getOrganizer();
+        if (participants.contains(user)) {
+            return "participant";
+        }
+        if (organizer.equals(user)) {
+            return "organizer";
+        }
+        return "no involvement";
     }
 
     private Optional<User> determineUserToRate(String involvementString, Activity activity) {
@@ -107,16 +131,13 @@ public class RatingService
         return Optional.empty();
     }
 
-    private String checkUsersInvolvementInActivity(User user, Activity activity) {
-        var participants = activity.getParticipants();
-        var organizer = activity.getOrganizer();
-        if (participants.contains(user)) {
-            return "participant";
-        }
-        if (organizer.equals(user)) {
-            return "organizer";
-        }
-        return "no involvement";
+
+    private void sendEmailToRatedUser(User ratedUser, Activity activity, Rating rating) {
+        String text = "\n Activity Id: " + activity.getId() +
+                "\n Activity title: " + activity.getTitle() +
+                "\n Rating: " + rating.getRating() +
+                "\n Feedback: " + rating.getFeedback();
+        emailService.sendSimpleMessage(ratedUser.getEmailAddress(), ratedSubject, ratedText + text);
     }
 
 }
