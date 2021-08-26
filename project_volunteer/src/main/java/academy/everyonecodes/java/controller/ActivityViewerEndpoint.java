@@ -1,5 +1,6 @@
 package academy.everyonecodes.java.controller;
 
+import academy.everyonecodes.java.data.Status;
 import academy.everyonecodes.java.data.dtos.ActivityViewDTO;
 import academy.everyonecodes.java.service.ActivityViewerService;
 import org.springframework.security.access.annotation.Secured;
@@ -25,21 +26,9 @@ public class ActivityViewerEndpoint {
         return activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username);
     }
 
-    @GetMapping("/{username}/activities/pending")
+    @GetMapping("/{username}/activities/{status}")
     @Secured("ROLE_VOLUNTEER")
-    List<ActivityViewDTO> getMyActivities_asVolunteer_pending(@PathVariable String username) {
-        return activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer_pending(username);
-    }
-
-    @GetMapping("/{username}/activities/completed")
-    @Secured("ROLE_VOLUNTEER")
-    List<ActivityViewDTO> getMyActivities_asVolunteer_completed(@PathVariable String username) {
-        return activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer_completed(username);
-    }
-
-    @GetMapping("/{username}/activities/active")
-    @Secured("ROLE_VOLUNTEER")
-    List<ActivityViewDTO> getMyActivities_asVolunteer_active(@PathVariable String username) {
-        return activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer_active(username);
+    List<ActivityViewDTO> getMyActivities_asVolunteer(@PathVariable String username, @PathVariable Status status) {
+        return activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username, status);
     }
 }
