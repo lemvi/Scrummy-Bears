@@ -5,5 +5,6 @@ public enum Status {
     PENDING,
     ACTIVE,
     APPLIED,
+    REJECTED,
     NOT_SET
 }

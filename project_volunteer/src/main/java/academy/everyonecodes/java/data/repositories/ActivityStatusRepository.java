@@ -1,6 +1,5 @@
 package academy.everyonecodes.java.data.repositories;
 
-import academy.everyonecodes.java.data.ActivityStatus;
 import academy.everyonecodes.java.data.Activity;
 import academy.everyonecodes.java.data.ActivityStatus;
 import academy.everyonecodes.java.data.Status;
@@ -10,6 +9,5 @@ import java.util.Optional;
 
 public interface ActivityStatusRepository extends JpaRepository<ActivityStatus, Long> {
 
-    Optional<Status> findByActivity(Activity activity);
-    Optional<ActivityStatus> findByActivity_Id(Long activityId);
+    Optional<ActivityStatus> findByActivity(Activity activity);
 }

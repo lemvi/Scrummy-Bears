@@ -1,5 +1,6 @@
 package academy.everyonecodes.java.controller;
 
+import academy.everyonecodes.java.data.Status;
 import academy.everyonecodes.java.service.ActivityViewerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +81,7 @@ class ActivityViewerEndpointTest {
         mvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-        verify(activityViewerService).getListOfActivityViewDTOsForSpecificVolunteer_pending(username);
+        verify(activityViewerService).getListOfActivityViewDTOsForSpecificVolunteer(username, Status.PENDING);
     }
 
     @Test
@@ -91,7 +92,7 @@ class ActivityViewerEndpointTest {
         mvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-        verify(activityViewerService).getListOfActivityViewDTOsForSpecificVolunteer_active(username);
+        verify(activityViewerService).getListOfActivityViewDTOsForSpecificVolunteer(username, Status.ACTIVE);
     }
 
     @Test
@@ -102,8 +103,29 @@ class ActivityViewerEndpointTest {
         mvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-        verify(activityViewerService).getListOfActivityViewDTOsForSpecificVolunteer_completed(username);
+        verify(activityViewerService).getListOfActivityViewDTOsForSpecificVolunteer(username, Status.COMPLETED);
     }
 
+    @Test
+    @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_VOLUNTEER"})
+    void getMyActivities_asVolunteer_applied_valid() throws Exception {
+        String username = "username";
+        String url = "/" + username + "/activities/applied";
+        mvc.perform(get(url)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        verify(activityViewerService).getListOfActivityViewDTOsForSpecificVolunteer(username, Status.APPLIED);
+    }
+
+    @Test
+    @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_VOLUNTEER"})
+    void getMyActivities_asVolunteer_rejected_valid() throws Exception {
+        String username = "username";
+        String url = "/" + username + "/activities/rejected";
+        mvc.perform(get(url)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        verify(activityViewerService).getListOfActivityViewDTOsForSpecificVolunteer(username, Status.REJECTED);
+    }
 
 }
