@@ -70,7 +70,7 @@ public class ExceptionThrower
         };
     }
 
-    private static String extractString(ErrorMessage errorMessage)
+    public static String extractString(ErrorMessage errorMessage)
     {
         String errorMessageString = "BAD_REQUEST: UNKNOWN ERROR";
         switch (errorMessage)

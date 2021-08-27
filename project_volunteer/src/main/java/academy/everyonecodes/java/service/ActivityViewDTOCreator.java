@@ -3,7 +3,6 @@ package academy.everyonecodes.java.service;
 import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.dtos.ActivityViewDTO;
 import academy.everyonecodes.java.data.dtos.OrganizerViewForVolunteerActivityViewDTO;
-import academy.everyonecodes.java.data.repositories.RatingRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,13 +13,11 @@ public class ActivityViewDTOCreator {
 
     private final RatingService ratingService;
     private final StatusHandler statusHandler;
-    private final RatingRepository ratingRepository;
 
 
-    public ActivityViewDTOCreator(RatingService ratingService, StatusHandler statusHandler, UserService userService, RatingRepository ratingRepository) {
+    public ActivityViewDTOCreator(RatingService ratingService, StatusHandler statusHandler, UserService userService) {
         this.ratingService = ratingService;
         this.statusHandler = statusHandler;
-        this.ratingRepository = ratingRepository;
     }
 
     public ActivityViewDTO createActivityViewDTO_forVolunteer(Activity activity, User user) {
@@ -32,6 +29,8 @@ public class ActivityViewDTOCreator {
 
         int ratingGivenToOrganizerAsInt = getRatingAsInt(activity, userOrganizer);
         int ratingReceivedByOrganizerAsInt = getRatingAsInt(activity, user);
+        String feedbackGivenToOrganizer = getFeedbackAsString(activity, userOrganizer);
+        String feedbackReceivedByOrganizer = getFeedbackAsString(activity, user);
 
         return new ActivityViewDTO(
                 activity.getTitle(),
@@ -41,9 +40,9 @@ public class ActivityViewDTOCreator {
                 activity.isOpenEnd(),
                 organizer,
                 ratingGivenToOrganizerAsInt,
-                "feedback given",                     // TODO since we don't have feedback implemented yet i used a placeholder for now
+                feedbackGivenToOrganizer,
                 ratingReceivedByOrganizerAsInt,
-                "feedback received");               // same as above
+                feedbackReceivedByOrganizer);
     }
 
     private OrganizerViewForVolunteerActivityViewDTO translateFromUser(User user) {
@@ -55,16 +54,29 @@ public class ActivityViewDTOCreator {
     }
 
     private int getRatingAsInt(Activity activity, User user) {
-        Optional<Rating> oRating = ratingRepository.findByActivityAndUser(activity, user);
         int ratingAsInt = -1;
+        Optional<Rating> oRating = getRating(activity, user);
         if (oRating.isPresent()) {
             Rating rating = oRating.get();
-            ratingAsInt = rating.getRating();
+            ratingAsInt = rating.getRatingValue();
         }
         return ratingAsInt;
     }
 
+    private String getFeedbackAsString(Activity activity, User user) {
+        String feedbackString = "no feedback yet";
+        Optional<Rating> oRating = getRating(activity, user);
+        if (oRating.isPresent()) {
+            Rating rating = oRating.get();
+            feedbackString = rating.getFeedback();
+        }
+        return feedbackString;
+    }
 
+    private Optional<Rating> getRating(Activity activity, User user) {
+        Optional<Rating> oRating = ratingService.findByActivityAndUser(activity, user);
+        return oRating;
+    }
 
 
 }

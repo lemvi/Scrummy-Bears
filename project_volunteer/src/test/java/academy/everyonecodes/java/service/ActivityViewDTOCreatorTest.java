@@ -29,9 +29,6 @@ class ActivityViewDTOCreatorTest {
     @MockBean
     private StatusHandler statusHandler;
 
-    @MockBean
-    private RatingRepository ratingRepository;
-
     @Test
     void createActivityViewDTO_forVolunteer_valid() {
         Activity activity = new Activity();
@@ -60,8 +57,8 @@ class ActivityViewDTOCreatorTest {
 
         when(statusHandler.getStatusForSpecificActivityAndVolunteer(activity, userId)).thenReturn(status);
         when(ratingService.calculateAverageUserRating(organizerId)).thenReturn(rating);
-        when(ratingRepository.findByActivityAndUser(activity, userOrganizer)).thenReturn(java.util.Optional.of(new Rating(3)));
-        when(ratingRepository.findByActivityAndUser(activity, userVolunteer)).thenReturn(java.util.Optional.of(new Rating(3)));
+        when(ratingService.findByActivityAndUser(activity, userOrganizer)).thenReturn(java.util.Optional.of(new Rating(3, "feedback given")));
+        when(ratingService.findByActivityAndUser(activity, userVolunteer)).thenReturn(java.util.Optional.of(new Rating(3, "feedback received")));
 
         OrganizerViewForVolunteerActivityViewDTO organizerView = new OrganizerViewForVolunteerActivityViewDTO(
                 username,
@@ -114,8 +111,8 @@ class ActivityViewDTOCreatorTest {
 
         when(statusHandler.getStatusForSpecificActivityAndVolunteer(activity, userId)).thenReturn(status);
         when(ratingService.calculateAverageUserRating(organizerId)).thenReturn(rating);
-        when(ratingRepository.findByActivityAndUser(activity, userOrganizer)).thenReturn(Optional.empty());
-        when(ratingRepository.findByActivityAndUser(activity, userVolunteer)).thenReturn(Optional.empty());
+        when(ratingService.findByActivityAndUser(activity, userOrganizer)).thenReturn(Optional.empty());
+        when(ratingService.findByActivityAndUser(activity, userVolunteer)).thenReturn(Optional.empty());
 
         OrganizerViewForVolunteerActivityViewDTO organizerView = new OrganizerViewForVolunteerActivityViewDTO(
                 username,
@@ -130,12 +127,11 @@ class ActivityViewDTOCreatorTest {
                 true,
                 organizerView,
                 singleRating,
-                "feedback given",
+                "no feedback yet",
                 singleRating,
-                "feedback received");
+                "no feedback yet");
 
         ActivityViewDTO actual = creator.createActivityViewDTO_forVolunteer(activity, userVolunteer);
-
         assertEquals(expected, actual);
 
     }

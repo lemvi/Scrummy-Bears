@@ -33,27 +33,27 @@ public class Rating {
 	@NotNull
 	@Min(1)
 	@Max(5)
-	private int rating;
+	private int ratingValue;
 
 	@Size(max = 800, message = "Maximum of 800 characters!")
 	private String feedback;
 
 	public Rating() {}
 
-	public Rating(User user, Activity activity, int rating, String feedback)
+	public Rating(User user, Activity activity, int ratingValue, String feedback)
 	{
 		this.user = user;
 		this.activity = activity;
-		this.rating = rating;
+		this.ratingValue = ratingValue;
 		this.feedback = feedback;
 	}
 
-	public Rating(int rating) {
-		this.rating = rating;
+	public Rating(int ratingValue) {
+		this.ratingValue = ratingValue;
 	}
 
-	public Rating(int rating, String feedback) {
-		this.rating = rating;
+	public Rating(int ratingValue, String feedback) {
+		this.ratingValue = ratingValue;
 		this.feedback = feedback;
 	}
 
@@ -93,14 +93,14 @@ public class Rating {
 		this.activity = activity;
 	}
 
-	public int getRating()
+	public int getRatingValue()
 	{
-		return rating;
+		return ratingValue;
 	}
 
-	public void setRating(int rating)
+	public void setRatingValue(int ratingValue)
 	{
-		this.rating = rating;
+		this.ratingValue = ratingValue;
 	}
 
 	public String getFeedback()
@@ -118,11 +118,11 @@ public class Rating {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Rating rating1 = (Rating) o;
-		return getRating() == rating1.getRating() && Objects.equals(userId, rating1.userId) && Objects.equals(activityId, rating1.activityId) && Objects.equals(getUser(), rating1.getUser()) && Objects.equals(getActivity(), rating1.getActivity()) && Objects.equals(getFeedback(), rating1.getFeedback());
+		return getRatingValue() == rating1.getRatingValue() && Objects.equals(userId, rating1.userId) && Objects.equals(activityId, rating1.activityId) && Objects.equals(getUser(), rating1.getUser()) && Objects.equals(getActivity(), rating1.getActivity()) && Objects.equals(getFeedback(), rating1.getFeedback());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(userId, activityId, getUser(), getActivity(), getRating(), getFeedback());
+		return Objects.hash(userId, activityId, getUser(), getActivity(), getRatingValue(), getFeedback());
 	}
 }
