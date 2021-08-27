@@ -2,6 +2,7 @@ package academy.everyonecodes.java.controller;
 
 import academy.everyonecodes.java.data.Rating;
 import academy.everyonecodes.java.service.RatingService;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,12 +18,8 @@ public class RatingEndpoint {
     }
 
     @PostMapping("/activities/{activityId}/rate")
+    @Secured({"ROLE_VOLUNTEER", "ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"  })
     Rating postRating(@PathVariable Long activityId, @RequestBody @Valid Rating rating) {
         return ratingService.rateUserForActivity(rating, activityId);
     }
-
-//    @PostMapping("/rate")                                   //TODO: just for testing, remove later
-//    Rating postRating(@RequestBody @Valid Rating rating) {
-//        return ratingService.saveRating(rating);
-//    }
 }
