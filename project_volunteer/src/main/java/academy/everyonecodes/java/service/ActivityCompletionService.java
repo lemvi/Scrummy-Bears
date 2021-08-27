@@ -63,7 +63,7 @@ public class ActivityCompletionService {
         String[] activityCompletedMessageArray = activitycompletedmessage.split(";");
         String emailParticipant = participant.getEmailAddress();
         String title = activityCompletedMessageArray[0] + activity.getTitle();
-        String text = activityCompletedMessageArray[1] + participant.getUsername() + activityCompletedMessageArray[2] + activity.getTitle() + activityCompletedMessageArray[3] + ratingDone.getRating();
+        String text = activityCompletedMessageArray[1] + participant.getUsername() + activityCompletedMessageArray[2] + activity.getTitle() + activityCompletedMessageArray[3] + ratingDone.getRatingValue();
         String feedback = activityCompletedMessageArray[4] + ratingDone.getFeedback();
         String completeText = text;
         if ((null != ratingDone.getFeedback()) && (!ratingDone.getFeedback().isEmpty())) {

@@ -198,7 +198,7 @@ public class ActivityCompletionServiceTest {
         Rating rating = new Rating(5);
         String[] activityCompletedMessageArray = activitycompletedmessage.split(";");
         String title = activityCompletedMessageArray[0] + activity.getTitle();
-        String text = activityCompletedMessageArray[1] + participant.getUsername() + activityCompletedMessageArray[2] + activity.getTitle() + activityCompletedMessageArray[3] + rating.getRating();
+        String text = activityCompletedMessageArray[1] + participant.getUsername() + activityCompletedMessageArray[2] + activity.getTitle() + activityCompletedMessageArray[3] + rating.getRatingValue();
 
         Mockito.when(activityService.findActivityById(activityId)).thenReturn(activity);
 
@@ -238,7 +238,7 @@ public class ActivityCompletionServiceTest {
         rating.setFeedback("ich bin ein Feedback");
         String[] activityCompletedMessageArray = activitycompletedmessage.split(";");
         String title = activityCompletedMessageArray[0] + activity.getTitle();
-        String text = activityCompletedMessageArray[1] + participant.getUsername() + activityCompletedMessageArray[2] + activity.getTitle() + activityCompletedMessageArray[3] + rating.getRating();
+        String text = activityCompletedMessageArray[1] + participant.getUsername() + activityCompletedMessageArray[2] + activity.getTitle() + activityCompletedMessageArray[3] + rating.getRatingValue();
         String feedback = activityCompletedMessageArray[4] + rating.getFeedback();
         text = text + "\n" + feedback;
 
