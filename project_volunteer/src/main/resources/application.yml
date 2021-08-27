@@ -50,6 +50,7 @@ errorMessages:
   activityNotCompletedYet: "BAD_REQUEST: To post a rating the activity has to be set to completed by the organizer first"
   tooManyCharactersMax800: "BAD_REQUEST: Too many characters, max. 800 allowed"
   volunteerIsNotApplicant: "BAD_REQUEST: The volunteer you selected has not applied for this activity"
+  alreadyApplied: "BAD_REQUEST: You have already applied for this activity"
 
 constants:
   how-many-failed-logins-cause-email-warning: 5

@@ -3,6 +3,7 @@ package academy.everyonecodes.java.controller;
 import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.dtos.OrganizationDTO;
 import academy.everyonecodes.java.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -426,5 +427,30 @@ class UserEndpointTest
         String actual = restTemplate.postForEntity("/register?individual", user, User.class)
                 .getStatusCode().toString();
         assertEquals(expected400BadRequest, actual);
+    }
+
+    @Test
+    void saveOrganization_ORGANIZATION_NAME_empty()
+    {
+        OrganizationDTO user = new OrganizationDTO
+                (
+                        "username",
+                        "password",
+                        "",
+                        "1111",
+                        "city",
+                        "street",
+                        "streetnumber",
+                        "email@email.com",
+                        "0123456789",
+                        "description",
+                        Set.of(new Role("ROLE_ORGANIZATION"))
+                );
+
+
+        String actual = restTemplate.postForEntity("/register?organization", user, User.class)
+                .getStatusCode().toString();
+        assertEquals(expected400BadRequest, actual);
+
     }
 }

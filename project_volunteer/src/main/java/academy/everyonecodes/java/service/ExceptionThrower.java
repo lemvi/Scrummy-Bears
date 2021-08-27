@@ -26,6 +26,7 @@ public class ExceptionThrower
     private static String userNotAuthorizedToCompleteActivity;
     private static String activityAlreadyCompleted;
     private static String noParticipantsForActivity;
+    private static String alreadyApplied;
     public ExceptionThrower(@Value("${errorMessages.wrongRoles}") String wrongRoles,
                             @Value("${errorMessages.usernameNotFound}") String usernameNotFound,
                             @Value("${errorMessages.activitiesNotFound}") String activitiesNotFound,
@@ -41,7 +42,8 @@ public class ExceptionThrower
                             @Value("${errorMessages.activityAlreadyCompleted}") String activityAlreadyCompleted,
                             @Value("${errorMessages.noParticipantsForActivity}") String noParticipantsForActivity,
                             @Value("${errorMessages.activityNotCompletedYet}") String activityNotCompletedYet,
-                            @Value("${errorMessages.volunteerIsNotApplicant}") String volunteerIsNotApplicant)
+                            @Value("${errorMessages.volunteerIsNotApplicant}") String volunteerIsNotApplicant,
+                            @Value("${errorMessages.alreadyApplied}") String alreadyApplied)
     {
         ExceptionThrower.wrongRoles = wrongRoles;
         ExceptionThrower.usernameNotFound = usernameNotFound;
@@ -58,8 +60,8 @@ public class ExceptionThrower
         ExceptionThrower.userNotAuthorizedToCompleteActivity = userNotAuthorizedToCompleteActivity;
         ExceptionThrower.activityAlreadyCompleted = activityAlreadyCompleted;
         ExceptionThrower.noParticipantsForActivity = noParticipantsForActivity;
-
         ExceptionThrower.volunteerIsNotApplicant = volunteerIsNotApplicant;
+        ExceptionThrower.alreadyApplied = alreadyApplied;
     }
 
     public static void badRequest(ErrorMessage errorMessage)
@@ -122,6 +124,8 @@ public class ExceptionThrower
                 break;
             case VOLUNTEER_IS_NOT_APPLICANT:
                 errorMessageString = volunteerIsNotApplicant;
+            case ALREADY_APPLIED:
+                errorMessageString = alreadyApplied;
         }
         return errorMessageString;
     }
