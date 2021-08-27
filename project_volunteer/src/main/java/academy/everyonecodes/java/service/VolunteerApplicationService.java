@@ -40,6 +40,9 @@ public class VolunteerApplicationService {
         User user = getUser(userId);
         authenticateLoggedInUserEqualsObjectOwner(user.getUsername());
 
+        if (activity.getApplicants().contains(user))
+            ExceptionThrower.badRequest(ErrorMessage.ALREADY_APPLIED);
+
         activity.getApplicants().add(user);
         activityRepository.save(activity);
 

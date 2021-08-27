@@ -1,5 +1,6 @@
 package academy.everyonecodes.java.controller;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,8 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginEndpoint {
 
 	@GetMapping
+	@Secured({"ROLE_VOLUNTEER", "ROLE_ORGANIZATION", "ROLE_INDIVIDUAL"})
 	public String getMessage() {
-		// TODO: Call Method to show your own profile
+		//TODO: Call method to return profile
 		return "You were logged in";
 	}
 }
