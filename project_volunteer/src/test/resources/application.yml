@@ -35,16 +35,21 @@ security:
 errorMessages:
   wrongRoles: "BAD_REQUEST: Roles are not set correctly"
   usernameNotFound: "BAD_REQUEST: Username doesn't exist"
+  noMatchingActivityFound: "BAD_REQUEST: No matching activity was found."
+  userNotAuthorizedToCompleteActivity: "BAD_REQUEST: User not authorized to complete this activity"
   activitiesNotFound: "Sorry, we found no Activities with the keyword:"
   endDateBeforeStartDate: "BAD_REQUEST: End date time must be after start date time"
   loggedInUserNotMatchingRequest: "BAD_REQUEST: Logged in user does not match the user you are trying to access"
-  noMatchingActivityFound: "BAD_REQUEST: No matching activity was found."
+  activityAlreadyCompleted: "BAD_REQUEST: The Activity is already completed"
+  noParticipantsForActivity: "BAD_REQUEST: Their where no participants for this Activity, please edit or delete the Activity."
   noMatchingDraftFound: "BAD_REQUEST: No matching draft was found."
   deleteActivityWithParticipantsNotPossible: "BAD_REQUEST: Deleting an activity with accepted volunteers not possible."
   editActivityWithApplicantsOrParticipantsNotPossible: "BAD_REQUEST: Editing Activity with applicants or accepted volunteers not possible."
   userNotInvolvedInActivity: "BAD_REQUEST: This user has no involvement in the selected activity"
   noStatusFound: "BAD_REQUEST: No status found for this activity"
   activityNotCompletedYet: "BAD_REQUEST: To post a rating the activity has to be set to completed by the organizer first"
+  tooManyCharactersMax800: "BAD_REQUEST: Too many characters, max. 800 allowed"
+  volunteerIsNotApplicant: "BAD_REQUEST: The volunteer you selected has not applied for this activity"
 
 constants:
   how-many-failed-logins-cause-email-warning: 5
@@ -54,13 +59,31 @@ failedLoginEmail:
   text: Was this you? Someone tried to login with an incorrect password for 5 times. Please reset your Password.
   pathToAttachment: project_volunteer/src/main/resources/Scrummy Bears Logo.jpg
 
+activityCompletedEmail:
+  subjectAndText: "Activity Completed: ;Hello ;, the Activity ; is completed, your Rating for this activity is: ;Your Feedback for this Activity is: "
+
 activityDeletedEmail:
   subject: Activity was deleted
   text: "The following activity was deleted by its creator: "
 
+applicationEmail:
+  subject: " applied for your activity: "
+
+text800Chars: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies
+
+text801Chars: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies+
+
 ratingEmail:
   subject: You received a rating
   text: A user has submitted a rating to one of your activities.
+acceptedVolunteerEmail:
+  subject: Accepted for Activity
+  text: "You have been accepted as the one and only for the following activity: "
+
+rejectedVolunteerEmail:
+  subject: Help no longer needed
+  text: "We're happy to inform you that the following activity's creator has already received help: "
+
   #https://drive.google.com/file/d/1_0k1HyesHZC1R6oEZ2q3MY5FiaMhKPie/view?usp=sharing
 
 webapptreelist:

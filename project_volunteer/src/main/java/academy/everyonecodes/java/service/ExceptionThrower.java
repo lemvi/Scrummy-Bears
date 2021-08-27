@@ -21,7 +21,11 @@ public class ExceptionThrower
     private static String userNotInvolvedInActivity;
     private static String noStatusFound;
     private static String activityNotCompletedYet;
+    private static String volunteerIsNotApplicant;
 
+    private static String userNotAuthorizedToCompleteActivity;
+    private static String activityAlreadyCompleted;
+    private static String noParticipantsForActivity;
     public ExceptionThrower(@Value("${errorMessages.wrongRoles}") String wrongRoles,
                             @Value("${errorMessages.usernameNotFound}") String usernameNotFound,
                             @Value("${errorMessages.activitiesNotFound}") String activitiesNotFound,
@@ -33,7 +37,11 @@ public class ExceptionThrower
                             @Value("${errorMessages.editActivityWithApplicantsOrParticipantsNotPossible}") String editActivityWithApplicantsOrParticipantsNotPossible,
                             @Value("${errorMessages.userNotInvolvedInActivity}") String userNotInvolvedInActivity,
                             @Value("${errorMessages.noStatusFound}") String noStatusFound,
-                            @Value("${errorMessages.activityNotCompletedYet}") String activityNotCompletedYet)
+                            @Value("${errorMessages.userNotAuthorizedToCompleteActivity}") String userNotAuthorizedToCompleteActivity,
+                            @Value("${errorMessages.activityAlreadyCompleted}") String activityAlreadyCompleted,
+                            @Value("${errorMessages.noParticipantsForActivity}") String noParticipantsForActivity,
+                            @Value("${errorMessages.activityNotCompletedYet}") String activityNotCompletedYet,
+                            @Value("${errorMessages.volunteerIsNotApplicant}") String volunteerIsNotApplicant)
     {
         ExceptionThrower.wrongRoles = wrongRoles;
         ExceptionThrower.usernameNotFound = usernameNotFound;
@@ -47,6 +55,11 @@ public class ExceptionThrower
         ExceptionThrower.userNotInvolvedInActivity = userNotInvolvedInActivity;
         ExceptionThrower.noStatusFound = noStatusFound;
         ExceptionThrower.activityNotCompletedYet = activityNotCompletedYet;
+        ExceptionThrower.userNotAuthorizedToCompleteActivity = userNotAuthorizedToCompleteActivity;
+        ExceptionThrower.activityAlreadyCompleted = activityAlreadyCompleted;
+        ExceptionThrower.noParticipantsForActivity = noParticipantsForActivity;
+
+        ExceptionThrower.volunteerIsNotApplicant = volunteerIsNotApplicant;
     }
 
     public static void badRequest(ErrorMessage errorMessage)
@@ -98,6 +111,17 @@ public class ExceptionThrower
             case ACTIVITY_NOT_COMPLETED_YET:
                 errorMessageString = activityNotCompletedYet;
                 break;
+            case USER_NOT_AUTHORIZED_TO_COMPLETE_ACTIVITY:
+                errorMessageString = userNotAuthorizedToCompleteActivity;
+                break;
+            case ACTIVITY_ALREADY_COMPLETED:
+                errorMessageString = activityAlreadyCompleted;
+                break;
+            case NO_PARTICIPANTS_FOR_ACTIVITY:
+                errorMessageString = noParticipantsForActivity;
+                break;
+            case VOLUNTEER_IS_NOT_APPLICANT:
+                errorMessageString = volunteerIsNotApplicant;
         }
         return errorMessageString;
     }

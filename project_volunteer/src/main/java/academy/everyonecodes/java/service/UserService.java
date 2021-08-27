@@ -58,7 +58,11 @@ public class UserService
 
     public Optional<User> findById(Long id)
     {
-        return userRepository.findById(id);
+        Optional<User> oUser = userRepository.findById(id);
+        User user = new User();
+        if (oUser.isEmpty())
+            ExceptionThrower.badRequest(ErrorMessage.USERNAME_NOT_FOUND);
+        return oUser;
     }
 
     private User save(User user)

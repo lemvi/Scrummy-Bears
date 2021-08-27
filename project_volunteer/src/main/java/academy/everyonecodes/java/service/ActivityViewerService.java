@@ -6,8 +6,11 @@ import academy.everyonecodes.java.data.dtos.ActivityViewDTO;
 import academy.everyonecodes.java.data.Status;
 import academy.everyonecodes.java.data.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,31 +52,13 @@ public class ActivityViewerService
         return activities.stream()
                 .filter(activity -> activity.getApplicants().contains(user) || activity.getParticipants().contains(user))
                 .collect(Collectors.toList());
-
     }
 
-    public List<ActivityViewDTO> getListOfActivityViewDTOsForSpecificVolunteer_pending(String username)
+    public List<ActivityViewDTO> getListOfActivityViewDTOsForSpecificVolunteer(String username, Status status)
     {
         List<ActivityViewDTO> activityViewDTOS = getListOfActivityViewDTOsForSpecificVolunteer(username);
         return activityViewDTOS.stream()
-                .filter(activityViewDTO -> activityViewDTO.getStatus().equals(Status.PENDING))
+                .filter(activityViewDTO -> activityViewDTO.getStatus().equals(status))
                 .collect(Collectors.toList());
-    }
-
-    public List<ActivityViewDTO> getListOfActivityViewDTOsForSpecificVolunteer_completed(String username)
-    {
-        List<ActivityViewDTO> activityViewDTOS = getListOfActivityViewDTOsForSpecificVolunteer(username);
-        return activityViewDTOS.stream()
-                .filter(activityViewDTO -> activityViewDTO.getStatus().equals(Status.COMPLETED))
-                .collect(Collectors.toList());
-    }
-
-    public List<ActivityViewDTO> getListOfActivityViewDTOsForSpecificVolunteer_active(String username)
-    {
-        List<ActivityViewDTO> activityViewDTOS = getListOfActivityViewDTOsForSpecificVolunteer(username);
-        return activityViewDTOS.stream()
-                .filter(activityViewDTO -> activityViewDTO.getStatus().equals(Status.ACTIVE))
-                .collect(Collectors.toList());
-
     }
 }

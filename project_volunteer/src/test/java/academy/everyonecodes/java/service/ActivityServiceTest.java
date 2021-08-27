@@ -1,9 +1,6 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.Draft;
-import academy.everyonecodes.java.data.Role;
-import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import academy.everyonecodes.java.data.repositories.DraftRepository;
 import academy.everyonecodes.java.data.repositories.UserRepository;
@@ -11,15 +8,14 @@ import academy.everyonecodes.java.service.email.EmailServiceImpl;
 import com.icegreen.greenmail.junit4.GreenMailRule;
 import com.icegreen.greenmail.util.ServerSetupTest;
 import org.junit.Rule;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,7 +31,6 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -66,10 +61,18 @@ public class ActivityServiceTest
     @MockBean
     JavaMailSender emailSender;
 
+    @MockBean
+    private ActivityStatusService activityStatusService;
+
+    @MockBean RatingService ratingService;
     @Rule
     public final GreenMailRule greenMail = new GreenMailRule(ServerSetupTest.SMTP);
 
     private final String endDateBeforeStartDate = "bad request";
+
+
+    @Value("${activityCompletedEmail.subjectAndText}")
+    private String activitycompletedmessage;
 
     @Mock
     private Authentication auth;
@@ -415,6 +418,4 @@ public class ActivityServiceTest
             activityService.deleteDraft(1L);
         });
     }
-
-
 }
