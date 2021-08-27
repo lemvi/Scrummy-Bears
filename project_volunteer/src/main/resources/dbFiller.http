@@ -1,0 +1,293 @@
+### Create volunteer1
+POST http://localhost:8080/register?individual
+Content-Type: application/json
+
+{
+  "username": "volunteer1",
+  "password": "pw",
+  "firstNamePerson": "firstName",
+  "lastNamePerson": "lastName",
+  "emailAddress": "volunteer1@oida.icu",
+  "roles": [{
+    "role": "ROLE_VOLUNTEER"
+  }]
+}
+
+### Create volunteer2
+POST http://localhost:8080/register?individual
+Content-Type: application/json
+
+{
+  "username": "volunteer2",
+  "password": "pw",
+  "firstNamePerson": "firstName",
+  "lastNamePerson": "lastName",
+  "emailAddress": "volunteer2@oida.icu",
+  "roles": [{
+    "role": "ROLE_VOLUNTEER"
+  }]
+}
+
+### Create individual1
+POST http://localhost:8080/register?individual
+Content-Type: application/json
+
+{
+  "username": "individual1",
+  "password": "pw",
+  "firstNamePerson": "firstName",
+  "lastNamePerson": "lastName",
+  "emailAddress": "individual1@oida.icu",
+  "roles": [{
+    "role": "ROLE_INDIVIDUAL"
+  }]
+}
+
+### Create individual2
+POST http://localhost:8080/register?individual
+Content-Type: application/json
+
+{
+  "username": "individual2",
+  "password": "pw",
+  "firstNamePerson": "firstName",
+  "lastNamePerson": "lastName",
+  "emailAddress": "individual2@oida.icu",
+  "roles": [{
+    "role": "ROLE_INDIVIDUAL"
+  }]
+}
+
+### Create individual+volunteer
+POST http://localhost:8080/register?individual
+Content-Type: application/json
+
+{
+  "username": "individualVolunteer",
+  "password": "pw",
+  "firstNamePerson": "firstName",
+  "lastNamePerson": "lastName",
+  "emailAddress": "individualVolunteer@oida.icu",
+  "roles": [{
+    "role": "ROLE_INDIVIDUAL"
+  }, {
+    "role": "ROLE_VOLUNTEER"
+  }]
+}
+
+### Create organization1
+POST http://localhost:8080/register?organization
+Content-Type: application/json
+
+{
+  "username": "organization1",
+  "password": "pw",
+  "organizationName": "Organization1 GmbH",
+  "emailAddress": "organization1@oida.icu",
+  "roles": [{
+    "role": "ROLE_ORGANIZATION"
+  }]
+}
+
+### Create organization2
+POST http://localhost:8080/register?organization
+Content-Type: application/json
+
+{
+  "username": "organization2",
+  "password": "pw",
+  "organizationName": "Organization2 GmbH",
+  "emailAddress": "organization2@oida.icu",
+  "roles": [{
+    "role": "ROLE_ORGANIZATION"
+  }]
+}
+
+### Add skills to volunteer1
+POST http://localhost:8080/addSkill/volunteer1
+Content-Type: application/json
+Authorization: Basic volunteer1 pw
+
+{
+  "skill": "gardening"
+}
+
+### Add skills to volunteer2
+POST http://localhost:8080/addSkill/volunteer2
+Content-Type: application/json
+Authorization: Basic volunteer2 pw
+
+{
+  "skill": "heavy lifting"
+}
+
+### Add skills to volunteer2
+POST http://localhost:8080/addSkill/volunteer2
+Content-Type: application/json
+Authorization: Basic volunteer2 pw
+
+{
+  "skill": "garden work"
+}
+
+### Create activity1 as organization1
+POST http://localhost:8080/activities
+Content-Type: application/json
+Authorization: Basic organization1 pw
+
+{
+  "title": "activity1 title",
+  "description": "awesome description of this activity1",
+  "recommendedSkills": "recommendedSkills",
+  "categories": "category",
+  "startDateTime": "01-01-2022 10:10:10",
+  "endDateTime": "01-01-2023 10:10:10",
+  "openEnd": true
+
+}
+
+### Create activity2 as organization1
+POST http://localhost:8080/activities
+Content-Type: application/json
+Authorization: Basic organization1 pw
+
+{
+  "title": "activity2 title",
+  "description": "awesome description of this activity2",
+  "recommendedSkills": "recommendedSkills",
+  "categories": "category",
+  "startDateTime": "01-01-2022 10:10:10",
+  "endDateTime": "01-01-2023 10:10:10",
+  "openEnd": false
+
+}
+
+### Create activity3 as individual1
+POST http://localhost:8080/activities
+Content-Type: application/json
+Authorization: Basic individual1 pw
+
+{
+  "title": "activity3 title",
+  "description": "awesome description of this activity3",
+  "recommendedSkills": "recommendedSkills",
+  "categories": "category",
+  "startDateTime": "01-01-2022 10:10:10",
+  "endDateTime": "01-01-2023 10:10:10",
+  "openEnd": true
+
+}
+
+### Create activity4 as individual1
+POST http://localhost:8080/activities
+Content-Type: application/json
+Authorization: Basic individual1 pw
+
+{
+  "title": "activity4 title",
+  "description": "awesome description of this activity4",
+  "recommendedSkills": "recommendedSkills",
+  "categories": "category",
+  "startDateTime": "01-01-2022 10:10:10",
+  "endDateTime": "01-01-2023 10:10:10",
+  "openEnd": false
+
+}
+
+### Create activity5 as individual+volunteer
+POST http://localhost:8080/activities
+Content-Type: application/json
+Authorization: Basic individualVolunteer pw
+
+{
+  "title": "activity5 title",
+  "description": "awesome description of this activity5",
+  "recommendedSkills": "recommendedSkills",
+  "categories": "category",
+  "startDateTime": "01-01-2022 10:10:10",
+  "endDateTime": "01-01-2023 10:10:10",
+  "openEnd": true
+
+}
+
+### Create activity6 as individual+volunteer
+POST http://localhost:8080/activities
+Content-Type: application/json
+Authorization: Basic individualVolunteer pw
+
+{
+  "title": "activity6 title",
+  "description": "awesome description of this activity6",
+  "recommendedSkills": "recommendedSkills",
+  "categories": "category",
+  "startDateTime": "01-01-2022 10:10:10",
+  "endDateTime": "01-01-2023 10:10:10",
+  "openEnd": false
+
+}
+
+### Apply for activity1 as volunteer1
+POST http://localhost:8080/activities/1/1
+Content-Type: application/json
+Authorization: Basic volunteer1 pw
+
+"Hello, I would like to apply for your activity because I think I would be a good fit. Have a nice day!"
+
+### Apply for activity2 as volunteer1
+POST http://localhost:8080/activities/2/1
+Content-Type: application/json
+Authorization: Basic volunteer1 pw
+
+"Hello, I would like to apply for your activity because I think I would be a good fit. Have a nice day!"
+
+### Apply for activity3 as volunteer1
+POST http://localhost:8080/activities/3/1
+Content-Type: application/json
+Authorization: Basic volunteer1 pw
+
+"Hello, I would like to apply for your activity because I think I would be a good fit. Have a nice day!"
+
+### Apply for activity1 as volunteer2
+POST http://localhost:8080/activities/1/2
+Content-Type: application/json
+Authorization: Basic volunteer2 pw
+
+"Hello, I would like to apply for your activity because I think I would be a good fit. Have a nice day!"
+
+### Apply for activity4 as volunteer2
+POST http://localhost:8080/activities/4/2
+Content-Type: application/json
+Authorization: Basic volunteer2 pw
+
+"Hello, I would like to apply for your activity because I think I would be a good fit. Have a nice day!"
+
+### Accept volunteer1 for activity1 as organization1
+PUT http://localhost:8080/activities/1/accept/1
+Content-Type: application/json
+Authorization: Basic organization1 pw
+
+### Accept volunteer2 for activity4 as individual1
+PUT http://localhost:8080/activities/1/accept/1
+Content-Type: application/json
+Authorization: Basic individual1 pw
+
+### Complete activity1 as organization1
+PUT http://localhost:8080/activities/complete/1
+Content-Type: application/json
+Authorization: Basic organization1 pw
+
+{
+  "rating": 5
+}
+
+### Complete activity2 as organization1
+PUT http://localhost:8080/activities/complete/1
+Content-Type: application/json
+Authorization: Basic organization1 pw
+
+{
+  "rating": 5,
+  "feedback": "awesome work there!"
+}
+
+
