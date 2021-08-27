@@ -47,9 +47,13 @@ public class VolunteerApplicationService {
         activityRepository.save(activity);
 
         String individualizedSubject = user.getUsername() + subject + activity.getTitle();
-        if (isValidTextMax800Chars(text))
-            emailServiceImpl.sendSimpleMessage(activity.getOrganizer().getEmailAddress(), individualizedSubject, text);
-        }
+
+        if (!isValidTextMax800Chars(text))
+            ExceptionThrower.badRequest(ErrorMessage.TOO_MANY_CHARACTERS_MAX_800);
+
+        emailServiceImpl.sendSimpleMessage(activity.getOrganizer().getEmailAddress(), individualizedSubject, text);
+    }
+
 
     private boolean isValidTextMax800Chars(String text) {
        if (text.length() > 800) {
