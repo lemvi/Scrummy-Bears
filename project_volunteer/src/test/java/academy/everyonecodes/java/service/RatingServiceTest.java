@@ -3,11 +3,9 @@ package academy.everyonecodes.java.service;
 import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.repositories.RatingRepository;
 import academy.everyonecodes.java.service.email.EmailServiceImpl;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -242,7 +240,7 @@ class RatingServiceTest {
 		activityStatus.setStatus(Status.COMPLETED);
 		String text = "\n Activity Id: " + activity.getId() +
 				"\n Activity title: " + activity.getTitle() +
-				"\n Rating: " + rating.getRating() +
+				"\n Rating: " + rating.getRatingValue() +
 				"\n Feedback: " + rating.getFeedback();
 
 		when(activityService.findActivityById(activityId)).thenReturn(activity);

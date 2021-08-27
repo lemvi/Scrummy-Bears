@@ -43,7 +43,7 @@ public class RatingService
     {
         List<Rating> ratings = ratingRepository.findByUser_Id(userId);
         return ratings.stream()
-                .map(Rating::getRating)
+                .map(Rating::getRatingValue)
                 .mapToDouble(rating -> rating)
                 .average()
                 .orElse(Double.NaN);
@@ -135,7 +135,7 @@ public class RatingService
     private void sendEmailToRatedUser(User ratedUser, Activity activity, Rating rating) {
         String text = "\n Activity Id: " + activity.getId() +
                 "\n Activity title: " + activity.getTitle() +
-                "\n Rating: " + rating.getRating() +
+                "\n Rating: " + rating.getRatingValue() +
                 "\n Feedback: " + rating.getFeedback();
         emailService.sendSimpleMessage(ratedUser.getEmailAddress(), ratedSubject, ratedText + text);
     }

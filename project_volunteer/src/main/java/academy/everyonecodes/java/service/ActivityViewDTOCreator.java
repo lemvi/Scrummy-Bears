@@ -3,7 +3,6 @@ package academy.everyonecodes.java.service;
 import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.dtos.ActivityViewDTO;
 import academy.everyonecodes.java.data.dtos.OrganizerViewForVolunteerActivityViewDTO;
-import academy.everyonecodes.java.data.repositories.RatingRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -59,7 +58,7 @@ public class ActivityViewDTOCreator {
         Optional<Rating> oRating = getRating(activity, user);
         if (oRating.isPresent()) {
             Rating rating = oRating.get();
-            ratingAsInt = rating.getRating();
+            ratingAsInt = rating.getRatingValue();
         }
         return ratingAsInt;
     }

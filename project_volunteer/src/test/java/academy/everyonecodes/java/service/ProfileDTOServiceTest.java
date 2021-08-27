@@ -67,7 +67,7 @@ class ProfileDTOServiceTest {
         Set<Role> roles = user.getRoles();
         Rating rating = new Rating(1);
         Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
-        Mockito.when(userService.getRoleIdSum(roles)).thenReturn(Long.valueOf(rating.getRating()));
+        Mockito.when(userService.getRoleIdSum(roles)).thenReturn(Long.valueOf(rating.getRatingValue()));
         VolunteerProfileDTO volunteerProfileDTO = new VolunteerProfileDTO("username", "postalCode", "city", "street", "num", "email@email.com", "phone", "description", Set.of(role), 1.0, "fullname", 20, Optional.of("skill"));
         Mockito.when(userToProfileDTOTranslator.toVolunteerProfileDTO(user)).thenReturn(volunteerProfileDTO);
 
@@ -135,7 +135,7 @@ class ProfileDTOServiceTest {
         Set<Role> roles = user.getRoles();
         Rating rating = new Rating(1);
         Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
-        Mockito.when(userService.getRoleIdSum(roles)).thenReturn(Long.valueOf(rating.getRating()));
+        Mockito.when(userService.getRoleIdSum(roles)).thenReturn(Long.valueOf(rating.getRatingValue()));
         VolunteerProfileDTO volunteerProfileDTO = new VolunteerProfileDTO("username", "postalCode", "city", "street", "num", "email@email.com", "phone", "description", Set.of(role), 1.0, "fullname", 20, Optional.of("skill"));
         Mockito.when(userToProfileDTOTranslator.toVolunteerProfileDTO(user)).thenReturn(volunteerProfileDTO);
 
