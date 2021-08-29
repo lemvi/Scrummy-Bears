@@ -8,10 +8,13 @@ import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import academy.everyonecodes.java.data.repositories.DraftRepository;
 import academy.everyonecodes.java.data.repositories.UserRepository;
 import academy.everyonecodes.java.service.email.EmailServiceImpl;
+import org.hibernate.Filter;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +23,7 @@ import java.util.Optional;
 public class ActivityService
 {
     private final ActivityRepository activityRepository;
+    private final EntityManager entityManager;
     private final ActivityDraftTranslator activityDraftTranslator;
     private final DraftRepository draftRepository;
     private final UserRepository userRepository;
@@ -29,9 +33,10 @@ public class ActivityService
 
 
 
-    public ActivityService(ActivityRepository activityRepository, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, EmailServiceImpl emailServiceImpl, @Value("${activityDeletedEmail.subject}") String subject, @Value("${activityDeletedEmail.text}") String text)
+    public ActivityService(ActivityRepository activityRepository, EntityManager entityManager, ActivityDraftTranslator activityDraftTranslator, DraftRepository draftRepository, UserRepository userRepository, EmailServiceImpl emailServiceImpl, @Value("${activityDeletedEmail.subject}") String subject, @Value("${activityDeletedEmail.text}") String text)
     {
         this.activityRepository = activityRepository;
+        this.entityManager = entityManager;
         this.activityDraftTranslator = activityDraftTranslator;
         this.draftRepository = draftRepository;
         this.userRepository = userRepository;
@@ -40,9 +45,24 @@ public class ActivityService
         this.text = text;
     }
 
-    public List<Activity> getAllActivities()
+    public List<Activity> getAllActivities(boolean isDeleted)
     {
-        return activityRepository.findAll();
+        Session session = entityManager.unwrap(Session.class);
+        Filter filter = session.enableFilter("deletedActivityFilter");
+        filter.setParameter("isDeleted", isDeleted);
+        List<Activity> activities =  activityRepository.findAll();
+        session.disableFilter("deletedActivityFilter");
+        return activities;
+    }
+
+    public Iterable<Activity> getDeletedActivities(boolean isDeleted, String organizerUsername){
+        Session session = entityManager.unwrap(Session.class);
+        Filter filter = session.enableFilter("deletedActivityFilter");
+        filter.setParameter("isDeleted", isDeleted);
+        Iterable<Activity> activities =  activityRepository.findByOrganizer_Username(organizerUsername);
+        activities.forEach(activity -> authenticateLoggedInUserEqualsObjectOwner(organizerUsername));
+        session.disableFilter("deletedActivityFilter");
+        return activities;
     }
 
     public List<Activity> getActivitiesOfOrganizer(String organizerUsername)
@@ -66,12 +86,30 @@ public class ActivityService
         return saveActivity(draft);
     }
 
-    public Activity editActivity(Activity activityNew)
+    public Activity editActivity(Activity activityDetails)
     {
-        Activity activityOld = findActivityById(activityNew.getId());
-        authenticateLoggedInUserEqualsObjectOwner(activityOld.getOrganizer().getUsername());
-        if (!activityOld.getParticipants().isEmpty() || !activityOld.getApplicants().isEmpty())
+        Activity activityNew = findActivityById(activityDetails.getId());
+        authenticateLoggedInUserEqualsObjectOwner(activityDetails.getOrganizer().getUsername());
+        if (activityDetails.isDeleted())
+            ExceptionThrower.badRequest(ErrorMessage.EDIT_DELETED_ACTIVITY_NOT_POSSIBLE);
+        if (!activityDetails.getParticipants().isEmpty() || !activityDetails.getApplicants().isEmpty())
             ExceptionThrower.badRequest(ErrorMessage.EDIT_ACTIVITY_WITH_APPLICANTS_OR_PARTICIPANTS_NOT_POSSIBLE);
+
+        activityNew.getId();
+        activityNew.setTitle(activityDetails.getTitle());
+        activityNew.setDescription(activityDetails.getDescription());
+        activityNew.setRecommendedSkills(activityDetails.getRecommendedSkills());
+        activityNew.setCategories(activityDetails.getCategories());
+        activityNew.setStartDateTime(activityDetails.getStartDateTime());
+        activityNew.setEndDateTime(activityDetails.getEndDateTime());
+        activityNew.setOpenEnd(activityDetails.isOpenEnd());
+        activityNew.setOrganizer(activityDetails.getOrganizer());
+        activityNew.setApplicants(activityDetails.getApplicants());
+        activityNew.setParticipants(activityDetails.getParticipants());
+        activityNew.setDeleted(activityDetails.isDeleted());
+
+        activityRepository.deleteById(activityDetails.getId());
+
         return postActivity(activityDraftTranslator.toDraft(activityNew));
     }
 
@@ -112,10 +150,20 @@ public class ActivityService
         return draftRepository.save(draft);
     }
 
-    public Draft editDraft(Draft draftNew)
+    public Draft editDraft(Draft draftDetails)
     {
-        findDraftById(draftNew.getId());
-        return postDraft(draftNew);
+        Draft newDraft = findDraftById(draftDetails.getId());
+        newDraft.setId(draftDetails.getId());
+        newDraft.setTitle(draftDetails.getTitle());
+        newDraft.setDescription(draftDetails.getDescription());
+        newDraft.setRecommendedSkills(draftDetails.getRecommendedSkills());
+        newDraft.setCategories(draftDetails.getCategories());
+        newDraft.setStartDateTime(draftDetails.getStartDateTime());
+        newDraft.setEndDateTime(draftDetails.getEndDateTime());
+        newDraft.setOpenEnd(draftDetails.isOpenEnd());
+        newDraft.setOrganizerUsername(draftDetails.getOrganizerUsername());
+
+        return postDraft(newDraft);
     }
 
     public Activity saveDraftAsActivity(Long draftId)

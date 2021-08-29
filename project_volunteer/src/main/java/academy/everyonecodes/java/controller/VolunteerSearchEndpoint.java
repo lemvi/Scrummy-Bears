@@ -22,6 +22,6 @@ public class VolunteerSearchEndpoint {
 
 	@GetMapping
 	List<Activity> getAllActivities() {
-		return activityService.getAllActivities();
+		return activityService.getAllActivities(false);
 	}
 }
