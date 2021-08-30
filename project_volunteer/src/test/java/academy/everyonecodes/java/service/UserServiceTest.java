@@ -5,6 +5,7 @@ import academy.everyonecodes.java.data.dtos.OrganizationDTO;
 import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.repositories.UserRepository;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -67,42 +68,42 @@ class UserServiceTest
     @Test
     void findAllUsers() {
         Mockito.when(userRepository.findAll()).thenReturn(users);
-        Assert.assertEquals(users, userService.findAllUsers());
+        assertEquals(users, userService.findAllUsers());
         Mockito.verify(userRepository).findAll();
     }
 
     @Test
     void findAllVolunteers() {
         Mockito.when(userRepository.findAll()).thenReturn(users);
-        Assert.assertEquals(List.of(volunteer), userService.findAllVolunteers());
+        assertEquals(List.of(volunteer), userService.findAllVolunteers());
         Mockito.verify(userRepository).findAll();
     }
 
     @Test
     void findAllIndividuals() {
         Mockito.when(userRepository.findAll()).thenReturn(users);
-        Assert.assertEquals(List.of(individual), userService.findAllIndividuals());
+        assertEquals(List.of(individual), userService.findAllIndividuals());
         Mockito.verify(userRepository).findAll();
     }
 
     @Test
     void findAllOrganizations() {
         Mockito.when(userRepository.findAll()).thenReturn(users);
-        Assert.assertEquals(List.of(organization), userService.findAllOrganizations());
+        assertEquals(List.of(organization), userService.findAllOrganizations());
         Mockito.verify(userRepository).findAll();
     }
 
     @Test
     void findAllOrganizers() {
         Mockito.when(userRepository.findAll()).thenReturn(users);
-        Assert.assertEquals(List.of(individual, organization), userService.findAllOrganizers());
+        assertEquals(List.of(individual, organization), userService.findAllOrganizers());
         Mockito.verify(userRepository, times(2)).findAll();
     }
 
     @Test
     void findByUsername() {
         Mockito.when(userRepository.findByUsername("volunteer")).thenReturn(Optional.of(volunteer));
-        Assert.assertEquals(Optional.of(volunteer), userService.findByUsername("volunteer"));
+        assertEquals(Optional.of(volunteer), userService.findByUsername("volunteer"));
         Mockito.verify(userRepository).findByUsername("volunteer");
     }
 
@@ -110,17 +111,14 @@ class UserServiceTest
     void findById_usernameFound() {
         volunteer.setId(1L);
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(volunteer));
-        Assert.assertEquals(Optional.of(volunteer), userService.findById(1L));
+        assertEquals(Optional.of(volunteer), userService.findById(1L));
         Mockito.verify(userRepository).findById(1L);
     }
     @Test
     void findById_usernameNotFound() {
         volunteer.setId(1L);
         Mockito.when(userRepository.findById(2L)).thenReturn(Optional.empty());
-        Exception exception = assertThrows(HttpStatusCodeException.class, () ->
-        {
-            userService.findById(2L);
-        });
+        Exception exception = assertThrows(HttpStatusCodeException.class, () -> userService.findById(2L));
         Mockito.verify(userRepository).findById(2L);
     }
 

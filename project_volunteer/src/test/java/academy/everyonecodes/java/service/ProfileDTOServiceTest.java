@@ -10,6 +10,7 @@ import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.repositories.UserRepository;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ class ProfileDTOServiceTest {
         user.setRoles(Set.of(new Role(1L, "ROLE_VOLUNTEER")));
         Mockito.when(userService.findAllVolunteers()).thenReturn(List.of(user));
         Mockito.when(userToProfileDTOTranslator.toVolunteerProfileDTO(user)).thenReturn(volunteerProfileDTO);
-        Assert.assertEquals(List.of(volunteerProfileDTO), profileDTOService.viewAllProfilesOfVolunteers());
+        Assertions.assertEquals(List.of(volunteerProfileDTO), profileDTOService.viewAllProfilesOfVolunteers());
         Mockito.verify(userService).findAllVolunteers();
         Mockito.verify(userToProfileDTOTranslator).toVolunteerProfileDTO(user);
     }
@@ -65,7 +66,7 @@ class ProfileDTOServiceTest {
         volunteerProfileDTO.setAge(0);
         Mockito.when(userService.findAllVolunteers()).thenReturn(List.of(user));
         Mockito.when(userToProfileDTOTranslator.toVolunteerProfileDTO(user)).thenReturn(volunteerProfileDTO);
-        Assert.assertEquals(List.of(volunteerProfileDTO), profileDTOService.viewAllProfilesOfVolunteers());
+        Assertions.assertEquals(List.of(volunteerProfileDTO), profileDTOService.viewAllProfilesOfVolunteers());
         Mockito.verify(userService).findAllVolunteers();
         Mockito.verify(userToProfileDTOTranslator).toVolunteerProfileDTO(user);
     }
@@ -75,7 +76,7 @@ class ProfileDTOServiceTest {
         user.setRoles(Set.of(new Role(2L, "ROLE_INDIVIDUAL")));
         Mockito.when(userService.findAllIndividuals()).thenReturn(List.of(user));
         Mockito.when(userToProfileDTOTranslator.toIndividualProfileDTO(user)).thenReturn(individualProfileDTO);
-        Assert.assertEquals(List.of(individualProfileDTO), profileDTOService.viewAllProfilesOfIndividuals());
+        Assertions.assertEquals(List.of(individualProfileDTO), profileDTOService.viewAllProfilesOfIndividuals());
         Mockito.verify(userService).findAllIndividuals();
         Mockito.verify(userToProfileDTOTranslator).toIndividualProfileDTO(user);
     }
@@ -85,7 +86,7 @@ class ProfileDTOServiceTest {
         user.setRoles(Set.of(new Role(2L, "ROLE_ORGANIZATION")));
         Mockito.when(userService.findAllOrganizations()).thenReturn(List.of(user));
         Mockito.when(userToProfileDTOTranslator.toOrganizationProfileDTO(user)).thenReturn(organizationProfileDTO);
-        Assert.assertEquals(List.of(organizationProfileDTO), profileDTOService.viewAllProfilesOfOrganizations());
+        Assertions.assertEquals(List.of(organizationProfileDTO), profileDTOService.viewAllProfilesOfOrganizations());
         Mockito.verify(userService).findAllOrganizations();
         Mockito.verify(userToProfileDTOTranslator).toOrganizationProfileDTO(user);
     }
@@ -100,7 +101,7 @@ class ProfileDTOServiceTest {
         Mockito.when(userService.findAllOrganizations()).thenReturn(List.of(user2));
         Mockito.when(userToProfileDTOTranslator.toIndividualProfileDTO(user)).thenReturn(individualProfileDTO);
         Mockito.when(userToProfileDTOTranslator.toOrganizationProfileDTO(user2)).thenReturn(organizationProfileDTO);
-        Assert.assertEquals(List.of(individualProfileDTO, organizationProfileDTO), profileDTOService.viewAllProfilesOfOrganizers());
+        Assertions.assertEquals(List.of(individualProfileDTO, organizationProfileDTO), profileDTOService.viewAllProfilesOfOrganizers());
         Mockito.verify(userToProfileDTOTranslator).toIndividualProfileDTO(user);
         Mockito.verify(userToProfileDTOTranslator).toOrganizationProfileDTO(user2);
     }
@@ -115,10 +116,7 @@ class ProfileDTOServiceTest {
         user.setId(id);
         Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(HttpStatusCodeException.class, () ->
-        {
-            profileDTOService.viewProfile(username);
-        });
+        Exception exception = assertThrows(HttpStatusCodeException.class, () -> profileDTOService.viewProfile(username));
         Mockito.verify(userRepository).findByUsername(username);
         Mockito.verifyNoMoreInteractions(userRepository);
         Mockito.verifyNoInteractions(userToProfileDTOTranslator);
