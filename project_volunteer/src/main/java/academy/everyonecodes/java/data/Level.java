@@ -20,10 +20,10 @@ public class Level
     {
     }
 
-    public Level(User user, int levelValue)
+    public Level(User user)
     {
         this.user = user;
-        this.levelValue = levelValue;
+        this.levelValue = 1;
         this.currentXp = 0;
         this.xpForLevelUpNeeded = (int)(500 * 1.5 * levelValue);
     }

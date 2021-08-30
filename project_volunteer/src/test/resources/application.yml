@@ -32,6 +32,20 @@ security:
   minIdSum: 1
   maxIdSum: 3
 
+# badges sentence starts with: "Congratulations! You've earned a badge for " + appending the value of the yml
+badges:
+  baseMessage: "Congratulations! You've earned a badge for "
+  firstActivity: "completing your first activity!"
+  fiveActivities: "completing 5 activities!"
+  tenActivities: "completing 10 activities!"
+  fiftyActivities: "completing 50 activities!"
+  hundredActivities: "completing 100 activities!"
+  thousandActivities: "completing 1000 activities!"
+  level5: "reaching Level 5!"
+  level10: "reaching Level 10!"
+  level50: "reaching Level 50!"
+  level100: "reaching Level 100!"
+
 level:
   xpGainedForCompleting1Activity: 1000
   levelUpMessage: "Congratulations! You leveled up! Current Level: "
