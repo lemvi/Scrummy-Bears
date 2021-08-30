@@ -36,18 +36,19 @@ public class SearchService {
         List<Activity> descriptionList = activityRepository.findByDescriptionContainingIgnoreCase(text);
         List<Activity> recommendedSkillList = activityRepository.findByRecommendedSkillsContainingIgnoreCase(text);
 
-        List<Activity> returnList =  mergeActvityLists(exactList, titleList, descriptionList, recommendedSkillList);
+        List<Activity> returnList =  mergeActivityLists(exactList, titleList, descriptionList, recommendedSkillList);
         if (returnList.isEmpty()) {
             System.out.println(activitiesNotFound + " " + text);
         }
         return returnList;
     }
 
-    public List<Activity> mergeActvityLists(List<Activity> list1, List<Activity> list2, List<Activity> list3, List<Activity> list4) {
+    public List<Activity> mergeActivityLists(List<Activity> list1, List<Activity> list2, List<Activity> list3, List<Activity> list4) {
         for (Activity activity : list2) {
             if (!list1.contains(activity)) {
                 list1.add(activity);
             }
+
         }
         for (Activity activity : list3) {
             if (!list1.contains(activity)) {
@@ -63,10 +64,10 @@ public class SearchService {
     }
 
     public List<VolunteerProfileDTO> searchVolunteers(String text) {
-        List<User> exactList = userRepository.findFullTextSearchByText(text);
-        List<User> descriptionList = userRepository.findByDescriptionContainingIgnoreCase(text);
-        List<Skill> skillFullTextSearch = skillRepository.findFullTextSearchByText(text);
-        List<Skill> skillList = skillRepository.findBySkillContainingIgnoreCase(text);
+        List<User> exactList = new ArrayList<>(userRepository.findFullTextSearchByText(text));
+        List<User> descriptionList = new ArrayList<>(userRepository.findByDescriptionContainingIgnoreCase(text));
+        List<Skill> skillFullTextSearch = new ArrayList<>(skillRepository.findFullTextSearchByText(text));
+        List<Skill> skillList = new ArrayList<>(skillRepository.findBySkillContainingIgnoreCase(text));
 
         List<User> userList =  mergeUserLists(exactList,skillFullTextSearch, descriptionList, skillList);
         if (userList.isEmpty()) {

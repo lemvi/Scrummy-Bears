@@ -72,4 +72,13 @@ public class VolunteerProfileDTO extends ProfileDTO
     {
         return Objects.hash(super.hashCode(), fullName, age);
     }
+
+    @Override
+    public String toString() {
+        return "VolunteerProfileDTO{" +
+                "fullName='" + fullName + '\'' +
+                ", age=" + age +
+                ", skill=" + skill +
+                '}';
+    }
 }
