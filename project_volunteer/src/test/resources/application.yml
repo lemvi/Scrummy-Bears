@@ -51,6 +51,7 @@ errorMessages:
   tooManyCharactersMax800: "BAD_REQUEST: Too many characters, max. 800 allowed"
   volunteerIsNotApplicant: "BAD_REQUEST: The volunteer you selected has not applied for this activity"
   alreadyApplied: "BAD_REQUEST: You have already applied for this activity"
+  noVolunteerFound: "BAD_REQUEST: There was no volunteer, with the matching search criteria."
 
 constants:
   how-many-failed-logins-cause-email-warning: 5

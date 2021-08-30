@@ -1,6 +1,7 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.Activity;
+import academy.everyonecodes.java.data.ErrorMessage;
 import academy.everyonecodes.java.data.Skill;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.dtos.VolunteerProfileDTO;
@@ -70,7 +71,8 @@ public class SearchService {
         List<User> userList =  mergeUserLists(exactList,skillFullTextSearch, descriptionList, skillList);
         if (userList.isEmpty()) {
             System.out.println(activitiesNotFound + " " + text);
-            //TODO: throw bad request
+            ExceptionThrower.badRequest(ErrorMessage.NO_VOLUNTEER_FOUND);
+
         }
 
         List<VolunteerProfileDTO> returnList = new ArrayList<>();
