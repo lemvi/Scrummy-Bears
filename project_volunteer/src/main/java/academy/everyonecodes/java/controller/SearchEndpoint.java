@@ -1,6 +1,8 @@
 package academy.everyonecodes.java.controller;
 
 import academy.everyonecodes.java.data.Activity;
+import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
+import academy.everyonecodes.java.data.dtos.VolunteerProfileDTO;
 import academy.everyonecodes.java.service.SearchService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,9 +23,15 @@ public class SearchEndpoint {
 
     }
 
-    @GetMapping("/{text}")
+    @GetMapping("/activities/{text}")
     @Secured("ROLE_VOLUNTEER")
     List<Activity> searchActivities(@PathVariable String text) {
         return  searchService.searchActivities(text);
     }
+    @GetMapping("/volunteers/{text}")
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
+    List<VolunteerProfileDTO> searchVolunteers(@PathVariable String text) {
+        return  searchService.searchVolunteers(text);
+    }
+
  }
