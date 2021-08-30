@@ -16,14 +16,18 @@ public class ActivityCompletionService {
     private final ActivityStatusService activityStatusService;
     private final EmailServiceImpl emailServiceImpl;
     private final String activitycompletedmessage;
+    private final int xpGainedForCompleting1Activity;
+    private final LevelService levelService;
 
 
-    public ActivityCompletionService(ActivityService activityService, RatingService ratingService, ActivityStatusService activityStatusService, EmailServiceImpl emailServiceImpl, @Value(("${activityCompletedEmail.subjectAndText}")) String activitycompletedmessage) {
+    public ActivityCompletionService(ActivityService activityService, RatingService ratingService, ActivityStatusService activityStatusService, EmailServiceImpl emailServiceImpl, @Value(("${activityCompletedEmail.subjectAndText}")) String activitycompletedmessage,@Value(("${level.xpGainedForCompleting1Activity}")) int xpGainedForCompleting1Activity, LevelService levelService) {
         this.activityService = activityService;
         this.ratingService = ratingService;
         this.activityStatusService = activityStatusService;
         this.emailServiceImpl = emailServiceImpl;
         this.activitycompletedmessage = activitycompletedmessage;
+        this.xpGainedForCompleting1Activity = xpGainedForCompleting1Activity;
+        this.levelService = levelService;
     }
 
     public Optional<ActivityStatus> completeActivity(Long activityId, Rating rating) {
@@ -72,8 +76,11 @@ public class ActivityCompletionService {
         emailServiceImpl.sendSimpleMessage(emailParticipant, title, completeText);
         //emailService.sendMessageWithAttachment(emailParticipant, title, completeText, "project_volunteer/src/main/resources/Scrummy Bears Logo.jpg");
 
+        levelService.gainXp(participant, xpGainedForCompleting1Activity);
+
         return Optional.of(activityStatus);
     }
+
     private String getAuthenticatedName()
     {
         return SecurityContextHolder.getContext().getAuthentication().getName();
