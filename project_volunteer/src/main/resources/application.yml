@@ -32,6 +32,25 @@ security:
   minIdSum: 1
   maxIdSum: 3
 
+# badges sentence starts with: "Congratulations! You've earned a badge for " + appending the value of the yml
+badges:
+  baseMessage: "Congratulations! You've earned a badge for "
+  firstActivity: "completing your first activity!"
+  fiveActivities: "completing 5 activities!"
+  tenActivities: "completing 10 activities!"
+  fiftyActivities: "completing 50 activities!"
+  hundredActivities: "completing 100 activities!"
+  thousandActivities: "completing 1000 activities!"
+  level5: "reaching Level 5!"
+  level10: "reaching Level 10!"
+  level50: "reaching Level 50!"
+  level100: "reaching Level 100!"
+
+level:
+  xpGainedForCompleting1Activity: 1000
+  levelUpMessage: "Congratulations! You leveled up! Current Level: "
+
+
 errorMessages:
   wrongRoles: "BAD_REQUEST: Roles are not set correctly"
   usernameNotFound: "BAD_REQUEST: Username doesn't exist"
@@ -48,8 +67,8 @@ errorMessages:
   userNotInvolvedInActivity: "BAD_REQUEST: This user has no involvement in the selected activity"
   noStatusFound: "BAD_REQUEST: No status found for this activity"
   activityNotCompletedYet: "BAD_REQUEST: To post a rating the activity has to be set to completed by the organizer first"
-  tooManyCharactersMax800: "BAD_REQUEST: Too many characters, max. 800 allowed"
   volunteerIsNotApplicant: "BAD_REQUEST: The volunteer you selected has not applied for this activity"
+  tooManyCharactersMax800: "BAD_REQUEST: Too many characters, max. 800 allowed"
   alreadyApplied: "BAD_REQUEST: You have already applied for this activity"
 
 constants:

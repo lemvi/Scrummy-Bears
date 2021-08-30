@@ -2,8 +2,11 @@ package academy.everyonecodes.java.controller;
 
 import academy.everyonecodes.java.data.Activity;
 import academy.everyonecodes.java.data.Draft;
+import academy.everyonecodes.java.data.Level;
 import academy.everyonecodes.java.data.Rating;
 import academy.everyonecodes.java.service.ActivityCompletionService;
+import academy.everyonecodes.java.service.BadgesService;
+import academy.everyonecodes.java.service.LevelService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -30,6 +33,12 @@ public class ActivityCompletionEndpointTest {
 
     @Autowired
     MockMvc mvc;
+
+    @MockBean
+    private BadgesService badgesService;
+
+    @MockBean
+    private LevelService levelService;
 
     @MockBean
     private ActivityCompletionService activityCompletionService;

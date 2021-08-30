@@ -79,6 +79,7 @@ public class VolunteerAcceptanceServiceTest
         activity.setParticipants(new HashSet<>());
         activity.setTitle("title");
         activity.setOrganizer(new User("username"));
+
         when(userRepository.findById(1L)).thenReturn(Optional.of(userToBeAccepted));
         when(activityRepository.findById(1L)).thenReturn(Optional.of(activity));
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
@@ -145,6 +146,7 @@ public class VolunteerAcceptanceServiceTest
         activity.setParticipants(new HashSet<>());
         activity.setTitle("title");
         activity.setOrganizer(new User("username"));
+
         when(userRepository.findById(1L)).thenReturn(Optional.of(userToBeAccepted));
         when(activityRepository.findById(1L)).thenReturn(Optional.of(activity));
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("username");
