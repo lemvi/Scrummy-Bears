@@ -4,6 +4,7 @@ import academy.everyonecodes.java.data.User;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Optional;
 
 
 @Service
@@ -23,7 +24,7 @@ public class AgeCalculator
         if ((birthDate != null) && (currentDate != null)) {
             return Period.between(birthDate, currentDate).getYears();
         } else {
-            return null;
+            return 0;
         }
     }
 }
