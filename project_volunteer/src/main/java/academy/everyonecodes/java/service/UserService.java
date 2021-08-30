@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -49,6 +51,31 @@ public class UserService
         User user = dtoTranslator.OrganizationToUser(organizationDTO);
         validateRoles(user);
         return save(user);
+    }
+
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public List<User> findAllVolunteers() {
+        return userRepository.findByRolesById(1L);
+    }
+
+    public List<User> findAllIndividuals() {
+        return userRepository.findByRolesById(2L);
+    }
+
+    public List<User> findAllOrganizations() {
+        return userRepository.findByRolesById(3L);
+    }
+
+    public List<User> findAllOrganizers() {
+        ArrayList<List<User>> organizersList = new ArrayList<>();
+        organizersList.add(findAllIndividuals());
+        organizersList.add(findAllOrganizations());
+        return organizersList.stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
     }
 
     public Optional<User> findByUsername(String username)

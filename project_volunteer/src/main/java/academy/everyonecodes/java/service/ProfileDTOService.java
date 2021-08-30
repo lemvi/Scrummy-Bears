@@ -8,6 +8,7 @@ import academy.everyonecodes.java.data.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -28,6 +29,11 @@ public class ProfileDTOService
         this.maxIdSum = maxIdSum;
         this.minIdSum = minIdSum;
         this.userService = userService;
+    }
+
+    public List<ProfileDTO> viewAllProfilesOfVolunteers() {
+
+       return List.of();
     }
 
     public Optional<ProfileDTO> viewProfile(String username)
