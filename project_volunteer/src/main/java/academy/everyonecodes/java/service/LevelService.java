@@ -29,11 +29,8 @@ public class LevelService
 
         if (accumulatedXp < level.getXpForLevelUpNeeded())
         {
-            System.out.println("HALLO! ER HAT ES BIS HIERHIN GESCHAFFT!");
-            System.out.println(accumulatedXp);
             level.setCurrentXp(accumulatedXp);
             levelRepository.save(level);
-            System.out.println("HALLO! ER HAT ES BIS HIERHIN GESCHAFFT NACH DEN SETTER!");
         } else
         {
             levelUp(level, accumulatedXp);
@@ -53,7 +50,7 @@ public class LevelService
         }
     }
 
-    private static Level getCurrentUserLevel(User user)
+    public static Level getCurrentUserLevel(User user)
     {
         Level level = new Level();
         Optional<Level> oLevel = levelRepository.findByUser(user);
