@@ -4,21 +4,23 @@ import academy.everyonecodes.java.data.dtos.OrganizationProfileDTO;
 import academy.everyonecodes.java.data.dtos.IndividualProfileDTO;
 import academy.everyonecodes.java.data.dtos.VolunteerProfileDTO;
 import academy.everyonecodes.java.data.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 public class UserToProfileDTOTranslator
 {
     private final AgeCalculator ageCalculator;
-    @Autowired
-    RatingService ratingService;
+
+    private final RatingService ratingService;
     private final SkillService skillService;
 
 
-    public UserToProfileDTOTranslator(AgeCalculator ageCalculator, SkillService skillService)
+    public UserToProfileDTOTranslator(AgeCalculator ageCalculator, RatingService ratingService, SkillService skillService)
     {
         this.ageCalculator = ageCalculator;
+        this.ratingService = ratingService;
         this.skillService = skillService;
     }
 

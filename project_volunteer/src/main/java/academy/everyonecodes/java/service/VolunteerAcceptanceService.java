@@ -39,8 +39,8 @@ public class VolunteerAcceptanceService
     public Activity acceptVolunteer(Long activityId, Long userId)
     {
         User user = getUser(userId);
-        authenticateLoggedInUserEqualsObjectOwner(user.getUsername());
         Activity activity = getActivity(activityId);
+        authenticateLoggedInUserEqualsObjectOwner(activity.getOrganizer().getUsername());
         Set<User> applicants = activity.getApplicants();
         String activityTitle = activity.getTitle();
         if (!applicants.contains(user))
@@ -48,8 +48,7 @@ public class VolunteerAcceptanceService
         activity.getParticipants().add(user);
         applicants.remove(user);
         emailServiceImpl.sendSimpleMessage(user.getEmailAddress(), subjectAccepted, textAccepted + activityTitle);
-        applicants.stream()
-                .forEach(rejectedVolunteer -> emailServiceImpl.sendSimpleMessage(rejectedVolunteer.getEmailAddress(), subjectRejected, textRejected + activityTitle));
+        applicants.forEach(rejectedVolunteer -> emailServiceImpl.sendSimpleMessage(rejectedVolunteer.getEmailAddress(), subjectRejected, textRejected + activityTitle));
         return activityRepository.save(activity);
     }
 
