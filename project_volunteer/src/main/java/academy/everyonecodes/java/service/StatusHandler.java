@@ -41,6 +41,8 @@ public class StatusHandler
 
         if (checkIfCompleted(activity))
             return Status.COMPLETED;
+        else if (checkIfActivityIsActive(activity))
+            return Status.ACTIVE;
         return Status.NOT_SET;
     }
 
@@ -78,6 +80,10 @@ public class StatusHandler
     private boolean checkIfUserHasApplied(Activity activity, User user)
     {
         return activity.getApplicants().contains(user);
+    }
+
+    private boolean checkIfActivityIsActive(Activity activity) {
+        return getStatusOfActivity(activity).equals(Status.ACTIVE);
     }
 
     public Status getStatusOfActivity(Activity activity)

@@ -305,5 +305,19 @@ DELETE http://localhost:8080/activities/2/delete
 Content-Type: application/json
 Authorization: Basic organization1 pw
 
+### Create new Draft as individual1
+POST http://localhost:8080/drafts/create
+Content-Type: application/json
+Authorization: Basic individual1 pw
 
+{
+  "title": "FILO new Draft",
+  "description": "description",
+  "recommendedSkills": "recommendedSkills",
+  "categories": "oneCategory",
+  "startDateTime": "01-02-2100 10:10:10",
+  "endDateTime": "01-02-2100 10:10:10",
+  "openEnd": false,
+  "organizer": "username1"
+}
 

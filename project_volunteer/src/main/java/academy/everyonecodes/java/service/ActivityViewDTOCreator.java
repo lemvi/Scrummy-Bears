@@ -4,6 +4,7 @@ import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.dtos.ActivityViewDTO_individualOrganization;
 import academy.everyonecodes.java.data.dtos.ActivityViewDTO_volunteer;
 import academy.everyonecodes.java.data.dtos.OrganizerViewForActivityViewDTO_volunteer;
+import academy.everyonecodes.java.data.dtos.VolunteerViewForActivityViewDTO_individualOrganization;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,11 +23,9 @@ public class ActivityViewDTOCreator {
     }
 
     public ActivityViewDTO_volunteer createActivityViewDTO_forVolunteer(Activity activity, User user) {
-        Long userId = user.getId();
-
-        Status status = statusHandler.getStatusForSpecificActivityAndVolunteer(activity, userId);
+        Status status = statusHandler.getStatusForSpecificActivityAndVolunteer(activity, user.getId());
         User userOrganizer = activity.getOrganizer();
-        OrganizerViewForActivityViewDTO_volunteer organizer = translateFromUser(userOrganizer);
+        OrganizerViewForActivityViewDTO_volunteer organizer = translateFromOrganizer(userOrganizer);
 
         int ratingGivenToOrganizerAsInt = getRatingAsInt(activity, userOrganizer);
         int ratingReceivedByOrganizerAsInt = getRatingAsInt(activity, user);
@@ -46,13 +45,85 @@ public class ActivityViewDTOCreator {
                 feedbackReceivedByOrganizer);
     }
 
-    private OrganizerViewForActivityViewDTO_volunteer translateFromUser(User user) {
+    public ActivityViewDTO_individualOrganization createActivityViewDTO_forIndividualOrOrganization(ActivityDraft activityDraft, User individualOrganization) {
+        if (activityDraft.isActivity()) {
+            return getActivityViewDTO_individualOrganization_activity( activityDraft, individualOrganization);
+
+        }
+        else {
+            return getActivityViewDTO_individualOrganization_draft(activityDraft, individualOrganization);
+        }
+    }
+
+    private ActivityViewDTO_individualOrganization getActivityViewDTO_individualOrganization_activity(ActivityDraft activityDraft, User individualOrganization) {
+        Status status;
+        int ratingGivenToVolunteerAsInt = -1;
+        int ratingReceivedByVolunteerAsInt = -1;
+        String feedbackGivenToVolunteer = "no feedback yet";
+        String feedbackReceivedByVolunteer = "no feedback yet";
+        VolunteerViewForActivityViewDTO_individualOrganization volunteer = new VolunteerViewForActivityViewDTO_individualOrganization();
+        Activity activity = (Activity) activityDraft;
+        status = statusHandler.getStatusForSpecificActivityAndIndividualOrOrganization(activity, individualOrganization.getId());
+        if (status.equals(Status.COMPLETED)) {
+            Optional<User> oParticipant = activity.getParticipants().stream().findFirst();
+            User participant = oParticipant.isPresent() ? oParticipant.get() : null;
+            volunteer = translateFromVolunteer(participant);
+            ratingGivenToVolunteerAsInt = getRatingAsInt(activity, participant);
+            ratingReceivedByVolunteerAsInt = getRatingAsInt(activity, individualOrganization);
+            feedbackGivenToVolunteer = getFeedbackAsString(activity, participant);
+            feedbackReceivedByVolunteer = getFeedbackAsString(activity, individualOrganization);
+        }
+        return new ActivityViewDTO_individualOrganization(
+                activity.getTitle(),
+                status,
+                activity.getStartDateTime(),
+                activity.getEndDateTime(),
+                activity.isOpenEnd(),
+                volunteer,
+                ratingGivenToVolunteerAsInt,
+                feedbackGivenToVolunteer,
+                ratingReceivedByVolunteerAsInt,
+                feedbackReceivedByVolunteer);
+    }
+
+    private ActivityViewDTO_individualOrganization getActivityViewDTO_individualOrganization_draft(ActivityDraft activityDraft, User individualOrganization) {
+        Status status;
+        int ratingGivenToVolunteerAsInt = -1;
+        int ratingReceivedByVolunteerAsInt = -1;
+        String feedbackGivenToVolunteer = "no feedback yet";
+        String feedbackReceivedByVolunteer = "no feedback yet";
+        VolunteerViewForActivityViewDTO_individualOrganization volunteer = new VolunteerViewForActivityViewDTO_individualOrganization();
+        Draft draft = (Draft) activityDraft;
+        status = Status.DRAFT;
+
+        return new ActivityViewDTO_individualOrganization(
+                draft.getTitle(),
+                status,
+                draft.getStartDateTime(),
+                draft.getEndDateTime(),
+                draft.isOpenEnd(),
+                volunteer,
+                ratingGivenToVolunteerAsInt,
+                feedbackGivenToVolunteer,
+                ratingReceivedByVolunteerAsInt,
+                feedbackReceivedByVolunteer);
+    }
+
+    private OrganizerViewForActivityViewDTO_volunteer translateFromOrganizer(User user) {
         return new OrganizerViewForActivityViewDTO_volunteer(
                 user.getUsername(),
                 user.getRoles().stream().map(Role::getRole).collect(Collectors.toSet()),
                 ratingService.calculateAverageUserRating(user.getId())
         );
     }
+
+    private VolunteerViewForActivityViewDTO_individualOrganization translateFromVolunteer(User user) {
+        return new VolunteerViewForActivityViewDTO_individualOrganization(
+                user.getUsername(),
+                ratingService.calculateAverageUserRating(user.getId())
+        );
+    }
+
 
     private int getRatingAsInt(Activity activity, User user) {
         int ratingAsInt = -1;
@@ -79,7 +150,5 @@ public class ActivityViewDTOCreator {
         return oRating;
     }
 
-    public ActivityViewDTO_individualOrganization createActivityViewDTO_forIndividualOrOrganization(Activity activity, User user) {
-        return null;
-    }
+
 }

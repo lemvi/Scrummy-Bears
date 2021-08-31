@@ -10,11 +10,33 @@ public class ActivityViewDTO_individualOrganization {
     private Status status;
     private LocalDateTime begin;
     private LocalDateTime end;
+    private boolean isOpenEnd;
     private VolunteerViewForActivityViewDTO_individualOrganization volunteer;
     private int givenRatingToVolunteer;
     private String givenFeedbackToVolunteer;
     private int ratingReceivedByVolunteer;
     private String feedbackReceivedByVolunteer;
+
+    public ActivityViewDTO_individualOrganization(String title,
+                                                  Status status,
+                                                  LocalDateTime begin,
+                                                  LocalDateTime end,
+                                                  boolean isOpenEnd, VolunteerViewForActivityViewDTO_individualOrganization volunteer,
+                                                  int givenRatingToVolunteer,
+                                                  String givenFeedbackToVolunteer,
+                                                  int ratingReceivedByVolunteer,
+                                                  String feedbackReceivedByVolunteer) {
+        this.title = title;
+        this.status = status;
+        this.begin = begin;
+        this.end = end;
+        this.isOpenEnd = isOpenEnd;
+        this.volunteer = volunteer;
+        this.givenRatingToVolunteer = givenRatingToVolunteer;
+        this.givenFeedbackToVolunteer = givenFeedbackToVolunteer;
+        this.ratingReceivedByVolunteer = ratingReceivedByVolunteer;
+        this.feedbackReceivedByVolunteer = feedbackReceivedByVolunteer;
+    }
 
     public String getTitle() {
         return title;
@@ -46,6 +68,14 @@ public class ActivityViewDTO_individualOrganization {
 
     public void setEnd(LocalDateTime end) {
         this.end = end;
+    }
+
+    public boolean isOpenEnd() {
+        return isOpenEnd;
+    }
+
+    public void setOpenEnd(boolean openEnd) {
+        isOpenEnd = openEnd;
     }
 
     public VolunteerViewForActivityViewDTO_individualOrganization getVolunteer() {

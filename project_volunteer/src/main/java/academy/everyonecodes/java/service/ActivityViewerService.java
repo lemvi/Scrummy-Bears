@@ -1,14 +1,12 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.ErrorMessage;
+import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.dtos.ActivityViewDTO_individualOrganization;
 import academy.everyonecodes.java.data.dtos.ActivityViewDTO_volunteer;
-import academy.everyonecodes.java.data.Status;
-import academy.everyonecodes.java.data.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,7 +39,7 @@ public class ActivityViewerService
     public List<ActivityViewDTO_individualOrganization> getListOfActivityViewDTOsForSpecificIndividualOrOrganization(String username) {
         checkIfLoggedInUserIsMatchingRequest(username);
         User user = getUserFromDB(username);
-        List<Activity> activities = getAllActivitiesForSpecificIndividualOrOrganization(user);
+        List<ActivityDraft> activities = getAllActivitiesAndDraftsForIndividualOrOrganization(user);
         return activities.stream()
                 .map(activity -> activityViewDTOCreator.createActivityViewDTO_forIndividualOrOrganization(activity, user))
                 .collect(Collectors.toList());
@@ -61,6 +59,13 @@ public class ActivityViewerService
             ExceptionThrower.badRequest(ErrorMessage.LOGGED_IN_USER_NOT_MATCHING_REQUEST);
     }
 
+    private List<ActivityDraft> getAllActivitiesAndDraftsForIndividualOrOrganization(User user) {
+        List<ActivityDraft> activityDraftList = new ArrayList<>();
+        getAllActivitiesForSpecificIndividualOrOrganization(user).forEach(activity -> activityDraftList.add(activity));
+        getAllDraftsOfOrganizer().forEach(draft -> activityDraftList.add(draft));
+        return activityDraftList;
+    }
+
 
     public List<Activity> getAllActivitiesForSpecificVolunteer(User user)
     {
@@ -78,6 +83,10 @@ public class ActivityViewerService
 
     private List<Activity> getAllActivities() {
         return activityService.getAllActivities(false);
+    }
+
+    private List<Draft> getAllDraftsOfOrganizer() {
+        return activityService.getDraftsOfOrganizer();
     }
 
     public List<ActivityViewDTO_volunteer> getListOfActivityViewDTOsForSpecificVolunteer(String username, Status status)
