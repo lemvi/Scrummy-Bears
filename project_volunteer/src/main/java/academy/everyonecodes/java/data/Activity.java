@@ -1,9 +1,11 @@
 package academy.everyonecodes.java.data;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.annotations.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -14,6 +16,9 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@SQLDelete(sql = "UPDATE activity SET deleted = true WHERE id=?")
+@FilterDef(name = "deletedActivityFilter", parameters = @ParamDef(name = "isDeleted", type = "boolean"))
+@Filter(name = "deletedActivityFilter", condition = "deleted = :isDeleted")
 public class Activity {
 
     @Id
@@ -56,6 +61,8 @@ public class Activity {
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<User> participants;
 
+    private boolean deleted = Boolean.FALSE;
+
 
     public Activity(){
     }
@@ -86,6 +93,20 @@ public class Activity {
         this.organizer = organizer;
         this.applicants = applicants;
         this.participants = participants;
+    }
+
+    public Activity(String title, String description, String recommendedSkills, List<String> categories, LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean openEnd, User organizer, Set<User> applicants, Set<User> participants, boolean deleted) {
+        this.title = title;
+        this.description = description;
+        this.recommendedSkills = recommendedSkills;
+        this.categories = categories;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.openEnd = openEnd;
+        this.organizer = organizer;
+        this.applicants = applicants;
+        this.participants = participants;
+        this.deleted = deleted;
     }
 
     public Long getId() {
@@ -176,6 +197,14 @@ public class Activity {
         this.participants = participants;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -185,16 +214,16 @@ public class Activity {
             return false;
         }
         Activity activity = (Activity) o;
-        return isOpenEnd() == activity.isOpenEnd() && Objects.equals(getId(), activity.getId()) && Objects.equals(getTitle(), activity.getTitle()) && Objects.equals(getDescription(), activity.getDescription()) && Objects.equals(getRecommendedSkills(), activity.getRecommendedSkills()) && Objects.equals(getCategories(), activity.getCategories()) && Objects.equals(getStartDateTime(), activity.getStartDateTime()) && Objects.equals(getEndDateTime(), activity.getEndDateTime()) && Objects.equals(getOrganizer(), activity.getOrganizer()) && Objects.equals(getApplicants(), activity.getApplicants()) && Objects.equals(getParticipants(), activity.getParticipants());
+        return isDeleted() == activity.isDeleted() && Objects.equals(getId(), activity.getId()) && Objects.equals(getTitle(), activity.getTitle()) && Objects.equals(getDescription(), activity.getDescription()) && Objects.equals(getRecommendedSkills(), activity.getRecommendedSkills()) && Objects.equals(getCategories(), activity.getCategories()) && Objects.equals(getStartDateTime(), activity.getStartDateTime()) && Objects.equals(getEndDateTime(), activity.getEndDateTime()) && Objects.equals(openEnd, activity.openEnd) && Objects.equals(getOrganizer(), activity.getOrganizer()) && Objects.equals(getApplicants(), activity.getApplicants()) && Objects.equals(getParticipants(), activity.getParticipants());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitle(), getDescription(), getRecommendedSkills(), getCategories(), getStartDateTime(), getEndDateTime(), isOpenEnd(), getOrganizer(), getApplicants(), getParticipants());
+        return Objects.hash(getId(), getTitle(), getDescription(), getRecommendedSkills(), getCategories(), getStartDateTime(), getEndDateTime(), openEnd, getOrganizer(), getApplicants(), getParticipants(), isDeleted());
     }
 
     @Override
     public String toString() {
-        return "Activity{" + "id=" + id + ", title='" + title + '\'' + ", description='" + description + '\'' + ", recommendedSkills='" + recommendedSkills + '\'' + ", categories=" + categories + ", startDateTime=" + startDateTime + ", endDateTime=" + endDateTime + ", openEnd=" + openEnd + ", organizer=" + organizer + ", applicants=" + applicants + ", participants=" + participants + '}';
+        return "Activity{" + "id=" + id + ", title='" + title + '\'' + ", description='" + description + '\'' + ", recommendedSkills='" + recommendedSkills + '\'' + ", categories=" + categories + ", startDateTime=" + startDateTime + ", endDateTime=" + endDateTime + ", openEnd=" + openEnd + ", organizer=" + organizer + ", applicants=" + applicants + ", participants=" + participants + ", deleted=" + deleted + '}';
     }
 }

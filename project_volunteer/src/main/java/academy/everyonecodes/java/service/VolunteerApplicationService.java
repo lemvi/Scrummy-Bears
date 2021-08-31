@@ -40,6 +40,10 @@ public class VolunteerApplicationService {
         User user = getUser(userId);
         authenticateLoggedInUserEqualsObjectOwner(user.getUsername());
 
+        if (activity.isDeleted()) {
+            ExceptionThrower.badRequest(ErrorMessage.EDIT_DELETED_ACTIVITY_NOT_POSSIBLE);
+        }
+
         if (activity.getApplicants().contains(user))
             ExceptionThrower.badRequest(ErrorMessage.ALREADY_APPLIED);
 

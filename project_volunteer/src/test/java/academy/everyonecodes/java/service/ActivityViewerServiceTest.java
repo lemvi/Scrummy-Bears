@@ -100,7 +100,7 @@ class ActivityViewerServiceTest
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
-        when(activityService.getAllActivities()).thenReturn(activities);
+        when(activityService.getAllActivities(false)).thenReturn(activities);
         when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
 
         List<ActivityViewDTO> expected = List.of(activityViewDTO);
@@ -131,7 +131,7 @@ class ActivityViewerServiceTest
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
-        when(activityService.getAllActivities()).thenReturn(activities);
+        when(activityService.getAllActivities(false)).thenReturn(activities);
         when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
 
         List<ActivityViewDTO> expected = List.of(activityViewDTO);
@@ -162,7 +162,7 @@ class ActivityViewerServiceTest
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
-        when(activityService.getAllActivities()).thenReturn(activities);
+        when(activityService.getAllActivities(false)).thenReturn(activities);
         when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
 
         List<ActivityViewDTO> expected = List.of(activityViewDTO);
@@ -193,7 +193,7 @@ class ActivityViewerServiceTest
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
-        when(activityService.getAllActivities()).thenReturn(activities);
+        when(activityService.getAllActivities(false)).thenReturn(activities);
         when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
 
         List<ActivityViewDTO> expected = List.of(activityViewDTO);
@@ -224,7 +224,7 @@ class ActivityViewerServiceTest
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
-        when(activityService.getAllActivities()).thenReturn(activities);
+        when(activityService.getAllActivities(false)).thenReturn(activities);
         when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
 
         List<ActivityViewDTO> expected = List.of(activityViewDTO);
@@ -255,7 +255,7 @@ class ActivityViewerServiceTest
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
-        when(activityService.getAllActivities()).thenReturn(activities);
+        when(activityService.getAllActivities(false)).thenReturn(activities);
         when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
 
         List<ActivityViewDTO> expected = List.of(activityViewDTO);
@@ -284,7 +284,7 @@ class ActivityViewerServiceTest
 
         List<Activity> activities = List.of(activity1, activity2);
 
-        when(activityService.getAllActivities()).thenReturn(activities);
+        when(activityService.getAllActivities(false)).thenReturn(activities);
 
         List<Activity> expected = List.of(activity1);
         List<Activity> actual = activityViewerService.getAllActivitiesForSpecificVolunteer(volunteer1);
