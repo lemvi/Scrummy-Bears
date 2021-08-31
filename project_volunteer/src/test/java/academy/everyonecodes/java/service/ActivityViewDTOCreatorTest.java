@@ -1,9 +1,8 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.*;
-import academy.everyonecodes.java.data.dtos.ActivityViewDTO;
-import academy.everyonecodes.java.data.dtos.OrganizerViewForVolunteerActivityViewDTO;
-import academy.everyonecodes.java.data.repositories.RatingRepository;
+import academy.everyonecodes.java.data.dtos.ActivityViewDTO_volunteer;
+import academy.everyonecodes.java.data.dtos.OrganizerViewForActivityViewDTO_volunteer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -60,12 +59,12 @@ class ActivityViewDTOCreatorTest {
         when(ratingService.findByActivityAndUser(activity, userOrganizer)).thenReturn(java.util.Optional.of(new Rating(3, "feedback given")));
         when(ratingService.findByActivityAndUser(activity, userVolunteer)).thenReturn(java.util.Optional.of(new Rating(3, "feedback received")));
 
-        OrganizerViewForVolunteerActivityViewDTO organizerView = new OrganizerViewForVolunteerActivityViewDTO(
+        OrganizerViewForActivityViewDTO_volunteer organizerView = new OrganizerViewForActivityViewDTO_volunteer(
                 username,
                 role_organization.stream().map(role -> role.getRole()).collect(Collectors.toSet()),
                 rating);
 
-        ActivityViewDTO expected = new ActivityViewDTO(
+        ActivityViewDTO_volunteer expected = new ActivityViewDTO_volunteer(
                 title,
                 status,
                 localDateTime,
@@ -77,7 +76,7 @@ class ActivityViewDTOCreatorTest {
                 singleRating,
                 "feedback received");
 
-        ActivityViewDTO actual = creator.createActivityViewDTO_forVolunteer(activity, userVolunteer);
+        ActivityViewDTO_volunteer actual = creator.createActivityViewDTO_forVolunteer(activity, userVolunteer);
 
         assertEquals(expected, actual);
 
@@ -114,12 +113,12 @@ class ActivityViewDTOCreatorTest {
         when(ratingService.findByActivityAndUser(activity, userOrganizer)).thenReturn(Optional.empty());
         when(ratingService.findByActivityAndUser(activity, userVolunteer)).thenReturn(Optional.empty());
 
-        OrganizerViewForVolunteerActivityViewDTO organizerView = new OrganizerViewForVolunteerActivityViewDTO(
+        OrganizerViewForActivityViewDTO_volunteer organizerView = new OrganizerViewForActivityViewDTO_volunteer(
                 username,
                 role_organization.stream().map(role -> role.getRole()).collect(Collectors.toSet()),
                 rating);
 
-        ActivityViewDTO expected = new ActivityViewDTO(
+        ActivityViewDTO_volunteer expected = new ActivityViewDTO_volunteer(
                 title,
                 status,
                 localDateTime,
@@ -131,7 +130,7 @@ class ActivityViewDTOCreatorTest {
                 singleRating,
                 "no feedback yet");
 
-        ActivityViewDTO actual = creator.createActivityViewDTO_forVolunteer(activity, userVolunteer);
+        ActivityViewDTO_volunteer actual = creator.createActivityViewDTO_forVolunteer(activity, userVolunteer);
         assertEquals(expected, actual);
 
     }

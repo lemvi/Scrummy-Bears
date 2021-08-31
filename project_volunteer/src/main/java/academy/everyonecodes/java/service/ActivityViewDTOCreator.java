@@ -1,8 +1,9 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.*;
-import academy.everyonecodes.java.data.dtos.ActivityViewDTO;
-import academy.everyonecodes.java.data.dtos.OrganizerViewForVolunteerActivityViewDTO;
+import academy.everyonecodes.java.data.dtos.ActivityViewDTO_individualOrganization;
+import academy.everyonecodes.java.data.dtos.ActivityViewDTO_volunteer;
+import academy.everyonecodes.java.data.dtos.OrganizerViewForActivityViewDTO_volunteer;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,19 +21,19 @@ public class ActivityViewDTOCreator {
         this.statusHandler = statusHandler;
     }
 
-    public ActivityViewDTO createActivityViewDTO_forVolunteer(Activity activity, User user) {
+    public ActivityViewDTO_volunteer createActivityViewDTO_forVolunteer(Activity activity, User user) {
         Long userId = user.getId();
 
         Status status = statusHandler.getStatusForSpecificActivityAndVolunteer(activity, userId);
         User userOrganizer = activity.getOrganizer();
-        OrganizerViewForVolunteerActivityViewDTO organizer = translateFromUser(userOrganizer);
+        OrganizerViewForActivityViewDTO_volunteer organizer = translateFromUser(userOrganizer);
 
         int ratingGivenToOrganizerAsInt = getRatingAsInt(activity, userOrganizer);
         int ratingReceivedByOrganizerAsInt = getRatingAsInt(activity, user);
         String feedbackGivenToOrganizer = getFeedbackAsString(activity, userOrganizer);
         String feedbackReceivedByOrganizer = getFeedbackAsString(activity, user);
 
-        return new ActivityViewDTO(
+        return new ActivityViewDTO_volunteer(
                 activity.getTitle(),
                 status,
                 activity.getStartDateTime(),
@@ -45,8 +46,8 @@ public class ActivityViewDTOCreator {
                 feedbackReceivedByOrganizer);
     }
 
-    private OrganizerViewForVolunteerActivityViewDTO translateFromUser(User user) {
-        return new OrganizerViewForVolunteerActivityViewDTO(
+    private OrganizerViewForActivityViewDTO_volunteer translateFromUser(User user) {
+        return new OrganizerViewForActivityViewDTO_volunteer(
                 user.getUsername(),
                 user.getRoles().stream().map(Role::getRole).collect(Collectors.toSet()),
                 ratingService.calculateAverageUserRating(user.getId())
@@ -78,5 +79,7 @@ public class ActivityViewDTOCreator {
         return oRating;
     }
 
-
+    public ActivityViewDTO_individualOrganization createActivityViewDTO_forIndividualOrOrganization(Activity activity, User user) {
+        return null;
+    }
 }

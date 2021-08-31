@@ -1,7 +1,8 @@
 package academy.everyonecodes.java.controller;
 
 import academy.everyonecodes.java.data.Status;
-import academy.everyonecodes.java.data.dtos.ActivityViewDTO;
+import academy.everyonecodes.java.data.dtos.ActivityViewDTO_individualOrganization;
+import academy.everyonecodes.java.data.dtos.ActivityViewDTO_volunteer;
 import academy.everyonecodes.java.service.ActivityViewerService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,13 +23,19 @@ public class ActivityViewerEndpoint {
 
     @GetMapping("/{username}/activities")
     @Secured("ROLE_VOLUNTEER")
-    List<ActivityViewDTO> getMyActivities_asVolunteer(@PathVariable String username) {
+    List<ActivityViewDTO_volunteer> getMyActivities_asVolunteer(@PathVariable String username) {
         return activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username);
     }
 
     @GetMapping("/{username}/activities/{status}")
     @Secured("ROLE_VOLUNTEER")
-    List<ActivityViewDTO> getMyActivities_asVolunteer(@PathVariable String username, @PathVariable Status status) {
+    List<ActivityViewDTO_volunteer> getMyActivities_asVolunteer(@PathVariable String username, @PathVariable Status status) {
         return activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username, status);
+    }
+
+    @GetMapping("/{username}/activities")
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
+    List<ActivityViewDTO_individualOrganization> getMyActivities_asIndividualOrOrganization(@PathVariable String username) {
+        return activityViewerService.getListOfActivityViewDTOsForSpecificIndividualOrOrganization(username);
     }
 }

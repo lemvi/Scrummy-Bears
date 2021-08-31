@@ -21,13 +21,7 @@ public class StatusHandler
 
     public Status getStatusForSpecificActivityAndVolunteer(Activity activity, Long userId)
     {
-        Optional<User> optionalUser = userService.findById(userId);
-
-        if (optionalUser.isEmpty())
-        {
-            ExceptionThrower.badRequest(ErrorMessage.USERNAME_NOT_FOUND);
-        }
-        User user = optionalUser.get();
+        User user = getUser(userId);
 
         if (checkIfCompleted(activity))
             return Status.COMPLETED;
@@ -40,6 +34,24 @@ public class StatusHandler
         else if (checkIfUserHasApplied(activity, user))
             return Status.APPLIED;
         return Status.NOT_SET;
+    }
+
+    public Status getStatusForSpecificActivityAndIndividualOrOrganization(Activity activity, Long userId) {
+        User user = getUser(userId);
+
+        if (checkIfCompleted(activity))
+            return Status.COMPLETED;
+        return Status.NOT_SET;
+    }
+
+    private User getUser(Long userId) {
+        Optional<User> optionalUser = userService.findById(userId);
+        if (optionalUser.isEmpty())
+        {
+            ExceptionThrower.badRequest(ErrorMessage.USERNAME_NOT_FOUND);
+        }
+        User user = optionalUser.get();
+        return user;
     }
 
     private boolean checkIfCompleted(Activity activity)

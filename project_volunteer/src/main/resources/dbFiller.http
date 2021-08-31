@@ -266,8 +266,13 @@ PUT http://localhost:8080/activities/1/accept/1
 Content-Type: application/json
 Authorization: Basic organization1 pw
 
+### Accept volunteer1 for activity1 as organization1
+PUT http://localhost:8080/activities/2/accept/1
+Content-Type: application/json
+Authorization: Basic organization1 pw
+
 ### Accept volunteer2 for activity4 as individual1
-PUT http://localhost:8080/activities/1/accept/1
+PUT http://localhost:8080/activities/1/accept/2
 Content-Type: application/json
 Authorization: Basic individual1 pw
 
@@ -289,5 +294,16 @@ Authorization: Basic organization1 pw
   "rating": 5,
   "feedback": "awesome work there!"
 }
+
+### Delete activity1 as organization1
+DELETE http://localhost:8080/activities/1/delete
+Content-Type: application/json
+Authorization: Basic organization1 pw
+
+### Delete activity2 as organization1
+DELETE http://localhost:8080/activities/2/delete
+Content-Type: application/json
+Authorization: Basic organization1 pw
+
 
 
