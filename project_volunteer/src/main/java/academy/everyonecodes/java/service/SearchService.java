@@ -1,11 +1,9 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.ErrorMessage;
-import academy.everyonecodes.java.data.Skill;
-import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.dtos.VolunteerProfileDTO;
 import academy.everyonecodes.java.data.repositories.ActivityRepository;
+import academy.everyonecodes.java.data.repositories.RoleRepository;
 import academy.everyonecodes.java.data.repositories.SkillRepository;
 import academy.everyonecodes.java.data.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,14 +24,16 @@ public class SearchService {
     private final UserToProfileDTOTranslator userToProfileDTOTranslator;
     private final RatingService ratingService;
     private final String activitiesNotFound;
+    private final RoleRepository roleRepository;
 
-    public SearchService(ActivityRepository activityRepository, UserRepository userRepository, SkillRepository skillRepository, UserToProfileDTOTranslator userToProfileDTOTranslator, RatingService ratingService, @Value("${errorMessages.activitiesNotFound}") String activitiesNotFound) {
+    public SearchService(ActivityRepository activityRepository, UserRepository userRepository, SkillRepository skillRepository, UserToProfileDTOTranslator userToProfileDTOTranslator, RatingService ratingService, @Value("${errorMessages.activitiesNotFound}") String activitiesNotFound, RoleRepository roleRepository) {
         this.activityRepository = activityRepository;
         this.userRepository = userRepository;
         this.skillRepository = skillRepository;
         this.userToProfileDTOTranslator = userToProfileDTOTranslator;
         this.ratingService = ratingService;
         this.activitiesNotFound = activitiesNotFound;
+        this.roleRepository = roleRepository;
     }
 
     //-------------SEARCH & FILTER ACTIVITIES---------------------------------
@@ -47,13 +47,14 @@ public class SearchService {
 
         List<Activity> returnList = mergeActivityLists(exactList, titleList, descriptionList, recommendedSkillList);
         if (returnList.isEmpty()) {
-            System.out.println(activitiesNotFound + " " + text);
+            ExceptionThrower.badRequest(ErrorMessage.ACTIVITIES_NOT_FOUND);
         }
         return returnList;
     }
 
     public List<Activity> searchActivities(String searchKeyword, Optional<String> oCreatorFilter, Optional<String> startDate, Optional<String> endDate, Optional<Integer> oRatingMin, Optional<Integer> oRatingMax) {
         List<Activity> searchList = searchActivities(searchKeyword);
+        //ALl filter
         if (oCreatorFilter.isPresent() && startDate.isPresent() && endDate.isPresent() && oRatingMin.isPresent() && oRatingMax.isPresent()) {
 
             LocalDateTime start = LocalDate.parse(startDate.get()).atStartOfDay();
@@ -62,56 +63,79 @@ public class SearchService {
             Integer ratingMin = oRatingMin.get();
             Integer ratingMax = oRatingMax.get();
 
-            return searchList.stream()
+            searchList = searchList.stream()
                     .filter(n -> n.getOrganizer().getUsername().equals(creatorFilter))
                     .filter(n -> n.getStartDateTime().isAfter(start) && n.getStartDateTime().isBefore(end))
                     .filter(n -> n.getEndDateTime().isAfter(start) && n.getEndDateTime().isBefore(end))
-                    .filter(n -> ratingService.calculateAverageUserRating(n.getId()) <= ratingMax && ratingService.calculateAverageUserRating(n.getId()) >= ratingMin)
+                    .filter(n -> ratingService.calculateAverageUserRating(n.getOrganizer().getId()) <= ratingMax)
+                    .filter(n -> ratingService.calculateAverageUserRating(n.getOrganizer().getId()) >= ratingMin)
                     .collect(Collectors.toList());
         }
+        // organizer & date Filter
         if (oCreatorFilter.isPresent() && startDate.isPresent() && endDate.isPresent() && oRatingMin.isEmpty() && oRatingMax.isEmpty()) {
             LocalDateTime start = LocalDate.parse(startDate.get()).atStartOfDay();
             LocalDateTime end = LocalDate.parse(endDate.get()).atStartOfDay();
             String creatorFilter = oCreatorFilter.get();
-            return searchList.stream()
+            searchList = searchList.stream()
                     .filter(n -> n.getOrganizer().getUsername().equals(creatorFilter))
                     .filter(n -> n.getStartDateTime().isAfter(start) && n.getStartDateTime().isBefore(end))
                     .filter(n -> n.getEndDateTime().isAfter(start) && n.getEndDateTime().isBefore(end))
                     .collect(Collectors.toList());
         }
+        // organizer & rating filter
         if (oCreatorFilter.isPresent() && startDate.isEmpty() && endDate.isEmpty() && oRatingMin.isPresent() && oRatingMax.isPresent()) {
             String creatorFilter = oCreatorFilter.get();
             Integer ratingMin = oRatingMin.get();
             Integer ratingMax = oRatingMax.get();
-            return searchList.stream()
+            searchList = searchList.stream()
                     .filter(n -> n.getOrganizer().getUsername().equals(creatorFilter))
-                    .filter(n -> ratingService.calculateAverageUserRating(n.getId()) <= ratingMax && ratingService.calculateAverageUserRating(n.getId()) >= ratingMin)
+                    .filter(n -> ratingService.calculateAverageUserRating(n.getOrganizer().getId()) <= ratingMax && ratingService.calculateAverageUserRating(n.getOrganizer().getId()) >= ratingMin)
                     .collect(Collectors.toList());
         }
+        //date & rating filter
+        if (oCreatorFilter.isEmpty() && startDate.isPresent() && endDate.isPresent() && oRatingMin.isPresent() && oRatingMax.isPresent()) {
+            LocalDateTime start = LocalDate.parse(startDate.get()).atStartOfDay();
+            LocalDateTime end = LocalDate.parse(endDate.get()).atStartOfDay();
+            Integer ratingMin = oRatingMin.get();
+            Integer ratingMax = oRatingMax.get();
+
+            searchList = searchList.stream()
+                    .filter(n -> n.getStartDateTime().isAfter(start) && n.getStartDateTime().isBefore(end))
+                    .filter(n -> n.getEndDateTime().isAfter(start) && n.getEndDateTime().isBefore(end))
+                    .filter(n -> ratingService.calculateAverageUserRating(n.getOrganizer().getId()) <= ratingMax)
+                    .filter(n -> ratingService.calculateAverageUserRating(n.getOrganizer().getId()) >= ratingMin)
+                    .collect(Collectors.toList());
+        }
+        //organizer filter
         if (oCreatorFilter.isPresent() && startDate.isEmpty() && endDate.isEmpty() && oRatingMin.isEmpty() && oRatingMax.isEmpty()) {
             String creatorFilter = oCreatorFilter.get();
 
-            return searchList.stream()
+            searchList =  searchList.stream()
                     .filter(n -> n.getOrganizer().getUsername().equals(creatorFilter))
                     .collect(Collectors.toList());
         }
+        //date filter
         if (oCreatorFilter.isEmpty() && startDate.isPresent() && endDate.isPresent() && oRatingMin.isEmpty() && oRatingMax.isEmpty()) {
             LocalDateTime start = LocalDate.parse(startDate.get()).atStartOfDay();
             LocalDateTime end = LocalDate.parse(endDate.get()).atStartOfDay();
 
-            return searchList.stream()
+            searchList = searchList.stream()
                     .filter(n -> n.getStartDateTime().isAfter(start) && n.getStartDateTime().isBefore(end))
                     .filter(n -> n.getEndDateTime().isAfter(start) && n.getEndDateTime().isBefore(end))
                     .collect(Collectors.toList());
         }
+        //rating filter
         if (oCreatorFilter.isEmpty() && startDate.isEmpty() && endDate.isEmpty() && oRatingMin.isPresent() && oRatingMax.isPresent()) {
             Integer ratingMin = oRatingMin.get();
             Integer ratingMax = oRatingMax.get();
-            return searchList.stream()
-                    .filter(n -> ratingService.calculateAverageUserRating(n.getId()) <= ratingMax && ratingService.calculateAverageUserRating(n.getId()) >= ratingMin)
+            searchList = searchList.stream()
+                    .filter(n -> ratingService.calculateAverageUserRating(n.getOrganizer().getId()) <= ratingMax && ratingService.calculateAverageUserRating(n.getOrganizer().getId()) >= ratingMin)
                     .collect(Collectors.toList());
 
 
+        }
+        if (searchList.isEmpty()) {
+            ExceptionThrower.badRequest(ErrorMessage.ACTIVITIES_NOT_FOUND);
         }
         return searchList;
     }
@@ -119,7 +143,7 @@ public class SearchService {
     //--------------------------SEARCH & FILTER VOLUNTEERS----------------
     //-----------------BASIC SEARCH METHOD----------------------
 
-    public List<VolunteerProfileDTO> searchVolunteers(String text) {
+    public List<User> searchVolunteers(String text) {
         List<User> exactList = new ArrayList<>(userRepository.findFullTextSearchByText(text));
         List<User> descriptionList = new ArrayList<>(userRepository.findByDescriptionContainingIgnoreCase(text));
         List<Skill> skillFullTextSearch = new ArrayList<>(skillRepository.findFullTextSearchByText(text));
@@ -127,45 +151,56 @@ public class SearchService {
 
         List<User> userList = mergeUserLists(exactList, skillFullTextSearch, descriptionList, skillList);
         if (userList.isEmpty()) {
-            System.out.println(activitiesNotFound + " " + text);
             ExceptionThrower.badRequest(ErrorMessage.NO_VOLUNTEER_FOUND);
 
         }
 
-        List<VolunteerProfileDTO> returnList = new ArrayList<>();
-        for (User user : userList) {
-            returnList.add(userToProfileDTOTranslator.toVolunteerProfileDTO(user));
-        }
-
-        return returnList;
+        return userList;
     }
 
     public List<VolunteerProfileDTO> searchVolunteers(String searchKeyword, Optional<String> oPostalCode, Optional<Integer> oRatingMin, Optional<Integer> oRatingMax) {
-        List<VolunteerProfileDTO> searchList = searchVolunteers(searchKeyword);
+        List<User> searchList = searchVolunteers(searchKeyword);
+        List<User> volunteerList = new ArrayList<>();
+        for (User user : searchList) {
+            for (Role userRole : user.getRoles()) {
+                if (userRole.getId().equals(1L)) {
+                    volunteerList.add(user);
+                }
+            }
+        }
         if (oPostalCode.isPresent() && oRatingMin.isPresent() && oRatingMax.isPresent()) {
             String postalCode = oPostalCode.get();
             Integer ratingMin = oRatingMin.get();
             Integer ratingMax = oRatingMax.get();
-            return searchList.stream()
+            volunteerList = volunteerList.stream()
                     .filter(n -> n.getPostalCode().equals(postalCode))
-                    .filter(n -> ratingService.calculateAverageUserRating(userRepository.findByUsername(n.getUsername()).get().getId()) <= ratingMax && ratingService.calculateAverageUserRating(userRepository.findByUsername(n.getUsername()).get().getId()) >= ratingMin)
+                    .filter(n -> ratingService.calculateAverageUserRating(n.getId()) <= ratingMax && ratingService.calculateAverageUserRating(n.getId()) >= ratingMin)
                     .collect(Collectors.toList());
         }
         if (oPostalCode.isPresent() && oRatingMin.isEmpty() && oRatingMax.isEmpty()) {
             String postalCode = oPostalCode.get();
-            return searchList.stream()
+            volunteerList = volunteerList.stream()
                     .filter(n -> n.getPostalCode().equals(postalCode))
                     .collect(Collectors.toList());
         }
         if (oPostalCode.isEmpty() && oRatingMin.isPresent() && oRatingMax.isPresent()) {
             Integer ratingMin = oRatingMin.get();
             Integer ratingMax = oRatingMax.get();
-            return searchList.stream()
-                    .filter(n -> ratingService.calculateAverageUserRating(userRepository.findByUsername(n.getUsername()).get().getId()) <= ratingMax && ratingService.calculateAverageUserRating(userRepository.findByUsername(n.getUsername()).get().getId()) >= ratingMin)
+            volunteerList = volunteerList.stream()
+                    .filter(n -> ratingService.calculateAverageUserRating(n.getId()) <= ratingMax && ratingService.calculateAverageUserRating(n.getId()) >= ratingMin)
                     .collect(Collectors.toList());
 
         }
-        return searchList;
+        if (volunteerList.isEmpty()) {
+            ExceptionThrower.badRequest(ErrorMessage.NO_VOLUNTEER_FOUND);
+
+        }
+        List<VolunteerProfileDTO> returnList = new ArrayList<>();
+        for (User user : volunteerList) {
+            returnList.add(userToProfileDTOTranslator.toVolunteerProfileDTO(user));
+        }
+
+        return returnList;
     }
 
 //------------MERGE LIST METHODS------------------------------------------------------------------
