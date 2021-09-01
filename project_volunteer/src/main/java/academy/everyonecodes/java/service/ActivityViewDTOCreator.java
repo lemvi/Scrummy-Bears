@@ -17,7 +17,7 @@ public class ActivityViewDTOCreator {
     private final StatusHandler statusHandler;
 
 
-    public ActivityViewDTOCreator(RatingService ratingService, StatusHandler statusHandler, UserService userService) {
+    public ActivityViewDTOCreator(RatingService ratingService, StatusHandler statusHandler) {
         this.ratingService = ratingService;
         this.statusHandler = statusHandler;
     }
