@@ -69,6 +69,7 @@ errorMessages:
   volunteerIsNotApplicant: "BAD_REQUEST: The volunteer you selected has not applied for this activity"
   tooManyCharactersMax800: "BAD_REQUEST: Too many characters, max. 800 allowed"
   alreadyApplied: "BAD_REQUEST: You have already applied for this activity"
+  noVolunteerFound: "BAD_REQUEST: There was no volunteer, with the matching search criteria."
   editDeletedActivityNotPossible: "BAD_REQUEST: Editing a deleted activity not possible."
 
 constants:
