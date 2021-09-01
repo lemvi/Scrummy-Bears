@@ -17,6 +17,9 @@ public class ActivityViewDTO_individualOrganization {
     private int ratingReceivedByVolunteer;
     private String feedbackReceivedByVolunteer;
 
+    public ActivityViewDTO_individualOrganization() {
+    }
+
     public ActivityViewDTO_individualOrganization(String title,
                                                   Status status,
                                                   LocalDateTime begin,
@@ -129,5 +132,21 @@ public class ActivityViewDTO_individualOrganization {
     @Override
     public int hashCode() {
         return Objects.hash(getTitle(), getStatus(), getBegin(), getEnd(), getVolunteer(), getGivenRatingToVolunteer(), getGivenFeedbackToVolunteer(), getRatingReceivedByVolunteer(), getFeedbackReceivedByVolunteer());
+    }
+
+    @Override
+    public String toString() {
+        return "ActivityViewDTO_individualOrganization{" +
+                "title='" + title + '\'' +
+                ", status=" + status +
+                ", begin=" + begin +
+                ", end=" + end +
+                ", isOpenEnd=" + isOpenEnd +
+                ", volunteer=" + volunteer +
+                ", givenRatingToVolunteer=" + givenRatingToVolunteer +
+                ", givenFeedbackToVolunteer='" + givenFeedbackToVolunteer + '\'' +
+                ", ratingReceivedByVolunteer=" + ratingReceivedByVolunteer +
+                ", feedbackReceivedByVolunteer='" + feedbackReceivedByVolunteer + '\'' +
+                '}';
     }
 }

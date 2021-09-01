@@ -36,14 +36,12 @@ public class StatusHandler
         return Status.NOT_SET;
     }
 
-    public Status getStatusForSpecificActivityAndIndividualOrOrganization(Activity activity, Long userId) {
-        User user = getUser(userId);
-
+    public Status getStatusForSpecificActivity(Activity activity) {
+        //Status.DRAFT is handled in ActivityViewDTOCreator since there the distinction between Activity and Draft happens
         if (checkIfCompleted(activity))
             return Status.COMPLETED;
-        else if (checkIfActivityIsActive(activity))
+        else
             return Status.ACTIVE;
-        return Status.NOT_SET;
     }
 
     private User getUser(Long userId) {
@@ -58,7 +56,7 @@ public class StatusHandler
 
     private boolean checkIfCompleted(Activity activity)
     {
-        return getStatusOfActivity(activity).equals(Status.COMPLETED);
+        return getActivityStatusFromDb(activity).equals(Status.COMPLETED);
     }
 
     private boolean checkIfUserIsParticipantAndActivityIsActive(Activity activity, User user)
@@ -82,11 +80,7 @@ public class StatusHandler
         return activity.getApplicants().contains(user);
     }
 
-    private boolean checkIfActivityIsActive(Activity activity) {
-        return getStatusOfActivity(activity).equals(Status.ACTIVE);
-    }
-
-    public Status getStatusOfActivity(Activity activity)
+    public Status getActivityStatusFromDb(Activity activity)
     {
          Optional<ActivityStatus> activityStatus = activityStatusRepository.findByActivity(activity);
          Status status = activityStatus.isPresent() ? activityStatus.get().getStatus() : Status.NOT_SET;

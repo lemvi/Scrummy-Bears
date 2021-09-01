@@ -51,7 +51,7 @@ public class ActivityViewDTOCreator {
 
         }
         else {
-            return getActivityViewDTO_individualOrganization_draft(activityDraft, individualOrganization);
+            return getActivityViewDTO_individualOrganization_draft(activityDraft);
         }
     }
 
@@ -61,13 +61,17 @@ public class ActivityViewDTOCreator {
         int ratingReceivedByVolunteerAsInt = -1;
         String feedbackGivenToVolunteer = "no feedback yet";
         String feedbackReceivedByVolunteer = "no feedback yet";
-        VolunteerViewForActivityViewDTO_individualOrganization volunteer = new VolunteerViewForActivityViewDTO_individualOrganization();
+        VolunteerViewForActivityViewDTO_individualOrganization volunteerView = new VolunteerViewForActivityViewDTO_individualOrganization();
         Activity activity = (Activity) activityDraft;
-        status = statusHandler.getStatusForSpecificActivityAndIndividualOrOrganization(activity, individualOrganization.getId());
+        status = statusHandler.getStatusForSpecificActivity(activity);
+        Optional<User> oParticipant = activity.getParticipants().stream().findFirst();
+        User participant = new User();
+        if (oParticipant.isPresent()) {
+            participant = oParticipant.get();
+            volunteerView = translateFromVolunteer(participant);
+        }
+
         if (status.equals(Status.COMPLETED)) {
-            Optional<User> oParticipant = activity.getParticipants().stream().findFirst();
-            User participant = oParticipant.isPresent() ? oParticipant.get() : null;
-            volunteer = translateFromVolunteer(participant);
             ratingGivenToVolunteerAsInt = getRatingAsInt(activity, participant);
             ratingReceivedByVolunteerAsInt = getRatingAsInt(activity, individualOrganization);
             feedbackGivenToVolunteer = getFeedbackAsString(activity, participant);
@@ -79,14 +83,14 @@ public class ActivityViewDTOCreator {
                 activity.getStartDateTime(),
                 activity.getEndDateTime(),
                 activity.isOpenEnd(),
-                volunteer,
+                volunteerView,
                 ratingGivenToVolunteerAsInt,
                 feedbackGivenToVolunteer,
                 ratingReceivedByVolunteerAsInt,
                 feedbackReceivedByVolunteer);
     }
 
-    private ActivityViewDTO_individualOrganization getActivityViewDTO_individualOrganization_draft(ActivityDraft activityDraft, User individualOrganization) {
+    private ActivityViewDTO_individualOrganization getActivityViewDTO_individualOrganization_draft(ActivityDraft activityDraft) {
         Status status;
         int ratingGivenToVolunteerAsInt = -1;
         int ratingReceivedByVolunteerAsInt = -1;
@@ -146,8 +150,7 @@ public class ActivityViewDTOCreator {
     }
 
     private Optional<Rating> getRating(Activity activity, User user) {
-        Optional<Rating> oRating = ratingService.findByActivityAndUser(activity, user);
-        return oRating;
+        return ratingService.findByActivityAndUser(activity, user);
     }
 
 

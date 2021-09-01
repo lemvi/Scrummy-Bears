@@ -39,9 +39,9 @@ public class ActivityViewerService
     public List<ActivityViewDTO_individualOrganization> getListOfActivityViewDTOsForSpecificIndividualOrOrganization(String username) {
         checkIfLoggedInUserIsMatchingRequest(username);
         User user = getUserFromDB(username);
-        List<ActivityDraft> activities = getAllActivitiesAndDraftsForIndividualOrOrganization(user);
-        return activities.stream()
-                .map(activity -> activityViewDTOCreator.createActivityViewDTO_forIndividualOrOrganization(activity, user))
+        List<ActivityDraft> activityDrafts = getAllActivityDraftsForIndividualOrOrganization(user);
+        return activityDrafts.stream()
+                .map(activityDraft -> activityViewDTOCreator.createActivityViewDTO_forIndividualOrOrganization(activityDraft, user))
                 .collect(Collectors.toList());
     }
 
@@ -59,7 +59,7 @@ public class ActivityViewerService
             ExceptionThrower.badRequest(ErrorMessage.LOGGED_IN_USER_NOT_MATCHING_REQUEST);
     }
 
-    private List<ActivityDraft> getAllActivitiesAndDraftsForIndividualOrOrganization(User user) {
+    private List<ActivityDraft> getAllActivityDraftsForIndividualOrOrganization(User user) {
         List<ActivityDraft> activityDraftList = new ArrayList<>();
         getAllActivitiesForSpecificIndividualOrOrganization(user).forEach(activity -> activityDraftList.add(activity));
         getAllDraftsOfOrganizer().forEach(draft -> activityDraftList.add(draft));
@@ -89,11 +89,20 @@ public class ActivityViewerService
         return activityService.getDraftsOfOrganizer();
     }
 
-    public List<ActivityViewDTO_volunteer> getListOfActivityViewDTOsForSpecificVolunteer(String username, Status status)
+    public List<ActivityViewDTO_volunteer> getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus(String username, Status status)
     {
         List<ActivityViewDTO_volunteer> activityViewDTOVolunteers = getListOfActivityViewDTOsForSpecificVolunteer(username);
         return activityViewDTOVolunteers.stream()
-                .filter(activityViewDTO -> activityViewDTO.getStatus().equals(status))
+            .filter(activityViewDTO -> activityViewDTO.getStatus().equals(status))
+            .collect(Collectors.toList());
+    }
+
+    public List<ActivityViewDTO_individualOrganization> getListOfActivityViewDTOsForSpecificIndividualOrOrganizationFilteredByStatus(String username, Status status)
+    {
+        List<ActivityViewDTO_individualOrganization> activityViewDTO_individualOrganizations = getListOfActivityViewDTOsForSpecificIndividualOrOrganization(username);
+        return activityViewDTO_individualOrganizations.stream()
+                .filter(activityViewDTO_individualOrganization -> activityViewDTO_individualOrganization.getStatus().equals(status))
                 .collect(Collectors.toList());
     }
+
 }

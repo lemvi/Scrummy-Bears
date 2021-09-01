@@ -42,4 +42,12 @@ public class VolunteerViewForActivityViewDTO_individualOrganization {
     public int hashCode() {
         return Objects.hash(getName(), getRating());
     }
+
+    @Override
+    public String toString() {
+        return "VolunteerViewForActivityViewDTO_individualOrganization{" +
+                "name='" + name + '\'' +
+                ", rating=" + rating +
+                '}';
+    }
 }
