@@ -371,19 +371,19 @@ public class SearchServiceTest {
                 )
                 ,
                 Arguments.of(
-                        new LinkedList<>(List.of(u1, u2)), List.of(u3, u2), List.of(), List.of(), List.of(u1, u2, u3)
+                        new LinkedList<>(List.of(u1, u2)), List.of(s3, s2), List.of(), List.of(), List.of(u1, u2, u3)
                 ),
                 Arguments.of(
-                        new LinkedList<>(List.of(u1, u2)), List.of(u3, u4), List.of(u3, u4), List.of(), List.of(u1, u2, u3, u4)
+                        new LinkedList<>(List.of(u1, u2)), List.of(s3, s4), List.of(u3, u4), List.of(), List.of(u1, u2, u3, u4)
                 ),
                 Arguments.of(
-                        new LinkedList<>(List.of(u5, u4)), List.of(u5, u4), List.of(u5, u4), List.of(u5, u4), List.of(u5, u4)
+                        new LinkedList<>(List.of(u5, u4)), List.of(s5, s4), List.of(u5, u4), List.of(s5, s4), List.of(u5, u4)
                 ),
                 Arguments.of(
                         new LinkedList<>(List.of(u1, u2)), List.of(), List.of(u1, u4), List.of(), List.of(u1, u2,u4)
                 ),
                 Arguments.of(
-                        new LinkedList<>(), List.of(), List.of(), List.of(u2, u5), List.of(u2, u5)
+                        new LinkedList<>(), List.of(), List.of(), List.of(s2, s5), List.of(u2, u5)
                 ),
                 Arguments.of(
                         new LinkedList<>(), List.of(), List.of(), List.of(), List.of()
