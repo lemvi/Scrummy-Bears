@@ -1,5 +1,8 @@
 package academy.everyonecodes.java.data;
 
+
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -11,6 +14,7 @@ public class Badges
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @org.springframework.data.annotation.Transient
     private User user;
 
     @Enumerated(EnumType.STRING)

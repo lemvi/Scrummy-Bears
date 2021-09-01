@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.mail.MessagingException;
+
 @RestController
 @RequestMapping
 public class VolunteerAcceptanceEndpoint
@@ -21,7 +23,7 @@ public class VolunteerAcceptanceEndpoint
 
     @PutMapping("/activities/{activityId}/accept/{userId}")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
-    Activity acceptVolunteer(@PathVariable Long activityId, @PathVariable Long userId)
+    Activity acceptVolunteer(@PathVariable Long activityId, @PathVariable Long userId) throws MessagingException
     {
         return volunteerAcceptanceService.acceptVolunteer(activityId, userId);
     }

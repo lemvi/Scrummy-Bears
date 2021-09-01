@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.HttpStatusCodeException;
 
+import javax.mail.MessagingException;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -66,7 +67,7 @@ public class VolunteerAcceptanceServiceTest
     }
 
     @Test
-    void acceptUser_valid()
+    void acceptUser_valid() throws MessagingException
     {
         userToBeAccepted.setId(1L);
         userToBeRejected.setId(2L);
@@ -87,7 +88,7 @@ public class VolunteerAcceptanceServiceTest
 
         volunteerAcceptanceService.acceptVolunteer(1L, 1L);
 
-        verify(emailServiceImpl).sendSimpleMessage(userToBeAccepted.getEmailAddress(), subjectAccepted, textAccepted + activity.getTitle());
+        verify(emailServiceImpl).sendMessageWithAttachment(userToBeAccepted.getEmailAddress(), subjectAccepted, textAccepted + activity.getTitle(), "project_volunteer/src/main/resources/Scrummy Bears Logo.jpg");
         verify(emailServiceImpl).sendSimpleMessage(userToBeRejected.getEmailAddress(), subjectRejected, textRejected + activity.getTitle());
 
     }
