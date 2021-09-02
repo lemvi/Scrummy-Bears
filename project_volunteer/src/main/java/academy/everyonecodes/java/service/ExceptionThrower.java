@@ -140,6 +140,7 @@ public class ExceptionThrower
             case NO_VOLUNTEER_FOUND:
                 errorMessageString = noVolunteerFound;
                 break;
+
         }
         return errorMessageString;
     }

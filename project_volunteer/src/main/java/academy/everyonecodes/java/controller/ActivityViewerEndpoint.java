@@ -33,13 +33,13 @@ public class ActivityViewerEndpoint {
         return activityViewerService.getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus(username, status);
     }
 
-    @GetMapping(value = "/{username}/activities", params = "individual")
+    @GetMapping(value = "/{username}/activities", params = "organizer")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     List<ActivityViewDTO_individualOrganization> getMyActivities_asIndividualOrOrganization(@PathVariable String username) {
         return activityViewerService.getListOfActivityViewDTOsForSpecificIndividualOrOrganization(username);
     }
 
-    @GetMapping(value = "/{username}/activities/{status}", params = "individual")
+    @GetMapping(value = "/{username}/activities/{status}", params = "organizer")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     List<ActivityViewDTO_individualOrganization> getMyActivities_asIndividualOrganization(@PathVariable String username, @PathVariable Status status) {
         return activityViewerService.getListOfActivityViewDTOsForSpecificIndividualOrOrganizationFilteredByStatus(username, status);
