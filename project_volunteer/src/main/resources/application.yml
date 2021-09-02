@@ -73,6 +73,7 @@ applicationEmail:
 ratingEmail:
   subject: You received a rating
   text: A user has submitted a rating to one of your activities.
+
 acceptedVolunteerEmail:
   subject: Accepted for Activity
   text: "You have been accepted as the one and only for the following activity: "
@@ -81,8 +82,29 @@ rejectedVolunteerEmail:
   subject: Help no longer needed
   text: "We're happy to inform you that the following activity's creator has already received help: "
 
+email:
+  passwordforgotten:
+    subject: "Password Reset Request"
+    text: "Someone has requested a password reset for your account. If it was you, please follow the following link: "
 
+
+
+passwordforgotten:
+  values:
+    expirytime: 120 #Minutes
+  messages:
+    reset-email-successfully: "Password Reset Email successfully sent."
+    reset-email-no-user: "No User found for this identification!"
+    activate-token-successfully: "Activation of Token was successful."
+    activate-token-invalid: "This Token is no longer Valid. Either you should have got a new one, or it is too old."
+    activate-token-failure: "No such Token exists. Measures have been taken!"
+    change-password-successfully: "Your Password has been changed."
+    change-password-no-valid-token: "No Valid Reset Token has been found for you!"
+    change-password-not-entered-same-twice: "The repeated password does not match the first password entry"
+
+#Scrummy Bears Logo:
   #https://drive.google.com/file/d/1_0k1HyesHZC1R6oEZ2q3MY5FiaMhKPie/view?usp=sharing
+
 
 webapptreelist:
   resourceinfos:

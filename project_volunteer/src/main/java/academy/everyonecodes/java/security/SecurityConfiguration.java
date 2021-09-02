@@ -21,6 +21,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/register").permitAll()
+                .antMatchers("/forgottenpassword/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 //.addFilterAfter(new CustomBasicAuthenticationFilter(authenticationManager), ConcurrentSessionFilter.class)

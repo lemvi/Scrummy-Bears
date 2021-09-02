@@ -4,9 +4,11 @@ import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.dtos.OrganizationDTO;
 import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.repositories.UserRepository;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -368,6 +370,29 @@ class UserServiceTest
                         )
                 )
         );
+    }
+
+    @Test
+    void validateAndSaveUser() {
+        String validUsername = "user";
+        String validEncryptedPw = "encrypted";
+        String validFirst = "first";
+        String validSecond = "second";
+        String validEmail = "user@email.com";
+
+        User testUser = new User(
+                validUsername,
+                validEncryptedPw,
+                validFirst,
+                validSecond,
+                validEmail,
+                Set.of(new Role("ROLE_VOLUNTEER"))
+        );
+
+        userService.validateAndSaveUser(testUser);
+
+        Mockito.verify(repository).save(testUser);
+        Mockito.verifyNoMoreInteractions(repository);
     }
 }
 
