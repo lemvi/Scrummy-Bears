@@ -1,7 +1,8 @@
 package academy.everyonecodes.java.controller;
 
 import academy.everyonecodes.java.data.Status;
-import academy.everyonecodes.java.data.dtos.ActivityViewDTO;
+import academy.everyonecodes.java.data.dtos.ActivityViewDTO_individualOrganization;
+import academy.everyonecodes.java.data.dtos.ActivityViewDTO_volunteer;
 import academy.everyonecodes.java.service.ActivityViewerService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,15 +21,27 @@ public class ActivityViewerEndpoint {
         this.activityViewerService = activityViewerService;
     }
 
-    @GetMapping("/{username}/activities")
+    @GetMapping(value = "/{username}/activities", params = "volunteer")
     @Secured("ROLE_VOLUNTEER")
-    List<ActivityViewDTO> getMyActivities_asVolunteer(@PathVariable String username) {
+    List<ActivityViewDTO_volunteer> getMyActivities_asVolunteer(@PathVariable String username) {
         return activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username);
     }
 
-    @GetMapping("/{username}/activities/{status}")
+    @GetMapping(value = "/{username}/activities/{status}", params = "volunteer")
     @Secured("ROLE_VOLUNTEER")
-    List<ActivityViewDTO> getMyActivities_asVolunteer(@PathVariable String username, @PathVariable Status status) {
-        return activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username, status);
+    List<ActivityViewDTO_volunteer> getMyActivities_asVolunteer(@PathVariable String username, @PathVariable Status status) {
+        return activityViewerService.getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus(username, status);
+    }
+
+    @GetMapping(value = "/{username}/activities", params = "organizer")
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
+    List<ActivityViewDTO_individualOrganization> getMyActivities_asIndividualOrOrganization(@PathVariable String username) {
+        return activityViewerService.getListOfActivityViewDTOsForSpecificIndividualOrOrganization(username);
+    }
+
+    @GetMapping(value = "/{username}/activities/{status}", params = "organizer")
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
+    List<ActivityViewDTO_individualOrganization> getMyActivities_asIndividualOrganization(@PathVariable String username, @PathVariable Status status) {
+        return activityViewerService.getListOfActivityViewDTOsForSpecificIndividualOrOrganizationFilteredByStatus(username, status);
     }
 }

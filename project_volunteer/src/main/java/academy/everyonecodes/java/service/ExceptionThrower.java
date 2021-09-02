@@ -27,6 +27,8 @@ public class ExceptionThrower
     private static String activityAlreadyCompleted;
     private static String noParticipantsForActivity;
     private static String alreadyApplied;
+    private static String editDeletedActivityNotPossible;
+    private static String noVolunteerFound;
     public ExceptionThrower(@Value("${errorMessages.wrongRoles}") String wrongRoles,
                             @Value("${errorMessages.usernameNotFound}") String usernameNotFound,
                             @Value("${errorMessages.activitiesNotFound}") String activitiesNotFound,
@@ -43,7 +45,9 @@ public class ExceptionThrower
                             @Value("${errorMessages.noParticipantsForActivity}") String noParticipantsForActivity,
                             @Value("${errorMessages.activityNotCompletedYet}") String activityNotCompletedYet,
                             @Value("${errorMessages.volunteerIsNotApplicant}") String volunteerIsNotApplicant,
-                            @Value("${errorMessages.alreadyApplied}") String alreadyApplied)
+                            @Value("${errorMessages.editDeletedActivityNotPossible}") String editDeletedActivityNotPossible,
+                            @Value("${errorMessages.alreadyApplied}") String alreadyApplied,
+                            @Value("${errorMessages.noVolunteerFound}") String noVolunteerFound)
     {
         ExceptionThrower.wrongRoles = wrongRoles;
         ExceptionThrower.usernameNotFound = usernameNotFound;
@@ -62,6 +66,8 @@ public class ExceptionThrower
         ExceptionThrower.noParticipantsForActivity = noParticipantsForActivity;
         ExceptionThrower.volunteerIsNotApplicant = volunteerIsNotApplicant;
         ExceptionThrower.alreadyApplied = alreadyApplied;
+        ExceptionThrower.editDeletedActivityNotPossible = editDeletedActivityNotPossible;
+        ExceptionThrower.noVolunteerFound = noVolunteerFound;
     }
 
     public static void badRequest(ErrorMessage errorMessage)
@@ -124,8 +130,17 @@ public class ExceptionThrower
                 break;
             case VOLUNTEER_IS_NOT_APPLICANT:
                 errorMessageString = volunteerIsNotApplicant;
+                break;
             case ALREADY_APPLIED:
                 errorMessageString = alreadyApplied;
+                break;
+            case EDIT_DELETED_ACTIVITY_NOT_POSSIBLE:
+                errorMessageString = editDeletedActivityNotPossible;
+                break;
+            case NO_VOLUNTEER_FOUND:
+                errorMessageString = noVolunteerFound;
+                break;
+
         }
         return errorMessageString;
     }

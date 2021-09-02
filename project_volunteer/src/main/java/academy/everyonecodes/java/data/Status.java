@@ -6,5 +6,6 @@ public enum Status {
     ACTIVE,
     APPLIED,
     REJECTED,
+    DRAFT,
     NOT_SET
 }

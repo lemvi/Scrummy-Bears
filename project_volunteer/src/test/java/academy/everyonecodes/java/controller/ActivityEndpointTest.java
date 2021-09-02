@@ -48,7 +48,7 @@ public class ActivityEndpointTest
     void getAllActivities_valid_credentials() throws Exception
     {
         assertGetAllActivitiesIsOK();
-        Mockito.verify(activityService).getAllActivities();
+        Mockito.verify(activityService).getAllActivities(false);
     }
 
     @Test
@@ -175,15 +175,19 @@ public class ActivityEndpointTest
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
     void findDraftById_valid_credentials() throws Exception
     {
-        assertFindDraftByIdIsOK();
-        Mockito.verify(activityService).findDraftById(1L);
+        draft.setId(1L);
+        Long draftId = draft.getId();
+        assertFindDraftByIdIsOK(draftId);
+        Mockito.verify(activityService).findDraftById(draftId);
     }
 
     @Test
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_DICTATOR"})
     void findDraftById_invalid_credentials() throws Exception
     {
-        assertFindDraftByIdIsForbidden();
+        draft.setId(1L);
+        Long draftId = draft.getId();
+        assertFindDraftByIdIsForbidden(draftId);
         Mockito.verifyNoInteractions(activityService);
     }
 
@@ -223,7 +227,7 @@ public class ActivityEndpointTest
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
     void saveDraftAsActivity_valid_credentials() throws Exception
     {
-        assertSaveDraftAsActivityIsOK(1L);
+        assertSaveDraftAsActivityIsOK();
         Mockito.verify(activityService).saveDraftAsActivity(1L);
     }
 
@@ -231,7 +235,7 @@ public class ActivityEndpointTest
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_VOLUNTEER"})
     void saveDraftAsActivity_invalid_credentials() throws Exception
     {
-        assertSaveDraftAsActivityIsForbidden(1L);
+        assertSaveDraftAsActivityIsForbidden();
         Mockito.verifyNoInteractions(activityService);
     }
 
@@ -298,7 +302,7 @@ public class ActivityEndpointTest
 
     private void assertPostActivityIsOK(Draft draft) throws Exception
     {
-        mvc.perform(post("/activities")
+        mvc.perform(post("/activities/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getJsonOfDraft(draft))
                 .accept(MediaType.APPLICATION_JSON))
@@ -307,7 +311,7 @@ public class ActivityEndpointTest
 
     private void assertPostActivityIsForbidden(Draft draft) throws Exception
     {
-        mvc.perform(post("/activities")
+        mvc.perform(post("/activities/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getJsonOfDraft(draft))
                 .accept(MediaType.APPLICATION_JSON))
@@ -316,7 +320,7 @@ public class ActivityEndpointTest
 
     private void assertEditActivityIsOK(Activity activity) throws Exception
     {
-        mvc.perform(put("/activities")
+        mvc.perform(put("/activities/edit")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getJsonOfActivity(activity))
                 .accept(MediaType.APPLICATION_JSON))
@@ -325,7 +329,7 @@ public class ActivityEndpointTest
 
     private void assertEditActivityIsForbidden(Activity activity) throws Exception
     {
-        mvc.perform(put("/activities")
+        mvc.perform(put("/activities/edit")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getJsonOfActivity(activity))
                 .accept(MediaType.APPLICATION_JSON))
@@ -334,14 +338,14 @@ public class ActivityEndpointTest
 
     private void assertDeleteActivityIsOK() throws Exception
     {
-        mvc.perform(delete("/activities/1")
+        mvc.perform(delete("/activities/1/delete")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     private void assertDeleteActivityIsForbidden() throws Exception
     {
-        mvc.perform(delete("/activities/1")
+        mvc.perform(delete("/activities/1/delete")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
@@ -360,23 +364,23 @@ public class ActivityEndpointTest
                 .andExpect(status().isForbidden());
     }
 
-    private void assertFindDraftByIdIsOK() throws Exception
+    private void assertFindDraftByIdIsOK(Long draftId) throws Exception
     {
-        mvc.perform(get("/drafts/1")
+        mvc.perform(get("/drafts/find/" + draftId)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
-    private void assertFindDraftByIdIsForbidden() throws Exception
+    private void assertFindDraftByIdIsForbidden(Long draftId) throws Exception
     {
-        mvc.perform(get("/drafts/1")
+        mvc.perform(get("/drafts/find/" + draftId)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
 
     private void assertPostDraftIsOK(Draft draft) throws Exception
     {
-        mvc.perform(post("/drafts")
+        mvc.perform(post("/drafts/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getJsonOfDraft(draft))
                 .accept(MediaType.APPLICATION_JSON))
@@ -385,7 +389,7 @@ public class ActivityEndpointTest
 
     private void assertPostDraftIsForbidden(Draft draft) throws Exception
     {
-        mvc.perform(post("/drafts")
+        mvc.perform(post("/drafts/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getJsonOfDraft(draft))
                 .accept(MediaType.APPLICATION_JSON))
@@ -394,7 +398,7 @@ public class ActivityEndpointTest
 
     private void assertEditDraftIsOK(Draft draft) throws Exception
     {
-        mvc.perform(put("/drafts")
+        mvc.perform(put("/drafts/edit")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getJsonOfDraft(draft))
                 .accept(MediaType.APPLICATION_JSON))
@@ -403,37 +407,37 @@ public class ActivityEndpointTest
 
     private void assertEditDraftIsForbidden(Draft draft) throws Exception
     {
-        mvc.perform(put("/drafts")
+        mvc.perform(put("/drafts/edit")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getJsonOfDraft(draft))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
 
-    private void assertSaveDraftAsActivityIsOK(Long draftId) throws Exception
+    private void assertSaveDraftAsActivityIsOK() throws Exception
     {
-        mvc.perform(put("/drafts/" + draftId)
+        mvc.perform(put("/drafts/1/save_as_activity")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
-    private void assertSaveDraftAsActivityIsForbidden(Long draftId) throws Exception
+    private void assertSaveDraftAsActivityIsForbidden() throws Exception
     {
-        mvc.perform(put("/drafts/" + draftId)
+        mvc.perform(put("/drafts/1/save_as_activity")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
 
     private void assertDeleteDraftIsOK() throws Exception
     {
-        mvc.perform(delete("/drafts/1")
+        mvc.perform(delete("/drafts/1/delete")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     private void assertDeleteDraftIsForbidden() throws Exception
     {
-        mvc.perform(delete("/drafts/1")
+        mvc.perform(delete("/drafts/1/delete")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }

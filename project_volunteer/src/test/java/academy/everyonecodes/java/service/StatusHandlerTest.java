@@ -7,17 +7,14 @@ import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.repositories.ActivityStatusRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpStatusCodeException;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -179,7 +176,21 @@ class StatusHandlerTest
         verifyNoMoreInteractions(userService);
     }
 
+    @Test
+    void getStatusForSpecificActivity_completed() {
+        Activity activity = new Activity();
+        when(activityStatusRepository.findByActivity(activity)).thenReturn(Optional.of(new ActivityStatus(activity, Status.COMPLETED)));
+        Status actual = statusHandler.getStatusForSpecificActivity(activity);
+        assertEquals(Status.COMPLETED, actual);
+    }
 
+    @Test
+    void getStatusForSpecificActivity_active() {
+        Activity activity = new Activity();
+        when(activityStatusRepository.findByActivity(activity)).thenReturn(Optional.empty());
+        Status actual = statusHandler.getStatusForSpecificActivity(activity);
+        assertEquals(Status.ACTIVE, actual);
+    }
 
 
 }

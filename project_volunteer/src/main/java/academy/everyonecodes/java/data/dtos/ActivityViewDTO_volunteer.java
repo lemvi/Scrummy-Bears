@@ -5,30 +5,30 @@ import academy.everyonecodes.java.data.Status;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class ActivityViewDTO {
+public class ActivityViewDTO_volunteer {
     private String title;
     private Status status;
     private LocalDateTime begin;
     private LocalDateTime end;
     private boolean openEnd;
-    private OrganizerViewForVolunteerActivityViewDTO organizer;
+    private OrganizerViewForActivityViewDTO_volunteer organizer;
     private int givenRatingToOrganizer;
     private String givenFeedbackToOrganizer;
     private int ratingReceivedByOrganizer;
     private String feedbackReceivedByOrganizer;
 
-    public ActivityViewDTO() {
+    public ActivityViewDTO_volunteer() {
     }
 
-    public ActivityViewDTO(String title,
-                           Status status,
-                           LocalDateTime begin,
-                           LocalDateTime end,
-                           boolean openEnd, OrganizerViewForVolunteerActivityViewDTO organizer,
-                           int givenRatingToOrganizer,
-                           String givenFeedbackToOrganizer,
-                           int ratingReceivedByOrganizer,
-                           String feedbackReceivedByOrganizer) {
+    public ActivityViewDTO_volunteer(String title,
+                                     Status status,
+                                     LocalDateTime begin,
+                                     LocalDateTime end,
+                                     boolean openEnd, OrganizerViewForActivityViewDTO_volunteer organizer,
+                                     int givenRatingToOrganizer,
+                                     String givenFeedbackToOrganizer,
+                                     int ratingReceivedByOrganizer,
+                                     String feedbackReceivedByOrganizer) {
         this.title = title;
         this.status = status;
         this.begin = begin;
@@ -81,11 +81,11 @@ public class ActivityViewDTO {
         this.status = status;
     }
 
-    public OrganizerViewForVolunteerActivityViewDTO getOrganizer() {
+    public OrganizerViewForActivityViewDTO_volunteer getOrganizer() {
         return organizer;
     }
 
-    public void setOrganizer(OrganizerViewForVolunteerActivityViewDTO organizer) {
+    public void setOrganizer(OrganizerViewForActivityViewDTO_volunteer organizer) {
         this.organizer = organizer;
     }
 
@@ -125,7 +125,7 @@ public class ActivityViewDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ActivityViewDTO that = (ActivityViewDTO) o;
+        ActivityViewDTO_volunteer that = (ActivityViewDTO_volunteer) o;
         return Objects.equals(getTitle(), that.getTitle()) && Objects.equals(getBegin(), that.getBegin()) && Objects.equals(getEnd(), that.getEnd()) && Objects.equals(getOrganizer(), that.getOrganizer()) && Objects.equals(getGivenRatingToOrganizer(), that.getGivenRatingToOrganizer()) && Objects.equals(getGivenFeedbackToOrganizer(), that.getGivenFeedbackToOrganizer()) && Objects.equals(getRatingReceivedByOrganizer(), that.getRatingReceivedByOrganizer()) && Objects.equals(getFeedbackReceivedByOrganizer(), that.getFeedbackReceivedByOrganizer());
     }
 

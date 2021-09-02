@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,10 +26,11 @@ public class UserService
 
     private final Set<Role> roles;
 
-    private final int maxIdSum;
-    private final int minIdSum;
+    private final Long maxIdSum;
+    private final Long minIdSum;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, DtoTranslator dtoTranslator, Set<Role> roles, @Value("${security.maxIdSum}") int maxIdSum, @Value("${security.minIdSum}") int minIdSum)
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, DtoTranslator dtoTranslator, Set<Role> roles,
+                       @Value("${security.maxIdSum}") Long maxIdSum, @Value("${security.minIdSum}") Long minIdSum)
     {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -37,18 +40,35 @@ public class UserService
         this.minIdSum = minIdSum;
     }
 
-    public User translateIndividualVolunteerDTOAndSaveUser(IndividualVolunteerDTO individualVolunteerDTO)
-    {
-        User user = dtoTranslator.IndividualVolunteerToUser(individualVolunteerDTO);
-        validateRoles(user);
-        return save(user);
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
     }
 
-    public User translateOrganizationDTOAndSaveUser(OrganizationDTO organizationDTO)
-    {
-        User user = dtoTranslator.OrganizationToUser(organizationDTO);
-        validateRoles(user);
-        return save(user);
+    public List<User> findAllVolunteers() {
+        return userRepository.findAll().stream()
+                .filter(u -> getRoleIdSum(u.getRoles()).equals(minIdSum))
+                .collect(Collectors.toList());
+    }
+
+    public List<User> findAllIndividuals() {
+        return userRepository.findAll().stream()
+                .filter(u -> getRoleIdSum(u.getRoles()).equals(maxIdSum - minIdSum))
+                .collect(Collectors.toList());
+    }
+
+    public List<User> findAllOrganizations() {
+        return userRepository.findAll().stream()
+                .filter(u -> getRoleIdSum(u.getRoles()).equals(maxIdSum))
+                .collect(Collectors.toList());
+    }
+
+    public List<User> findAllOrganizers() {
+        ArrayList<List<User>> organizersList = new ArrayList<>();
+        organizersList.add(findAllIndividuals());
+        organizersList.add(findAllOrganizations());
+        return organizersList.stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
     }
 
     public User validateAndSaveUser(User user) {
@@ -72,6 +92,20 @@ public class UserService
         if (oUser.isEmpty())
             ExceptionThrower.badRequest(ErrorMessage.USERNAME_NOT_FOUND);
         return oUser;
+    }
+
+    public User translateIndividualVolunteerDTOAndSaveUser(IndividualVolunteerDTO individualVolunteerDTO)
+    {
+        User user = dtoTranslator.IndividualVolunteerToUser(individualVolunteerDTO);
+        validateRoles(user);
+        return save(user);
+    }
+
+    public User translateOrganizationDTOAndSaveUser(OrganizationDTO organizationDTO)
+    {
+        User user = dtoTranslator.OrganizationToUser(organizationDTO);
+        validateRoles(user);
+        return save(user);
     }
 
     private User save(User user)
