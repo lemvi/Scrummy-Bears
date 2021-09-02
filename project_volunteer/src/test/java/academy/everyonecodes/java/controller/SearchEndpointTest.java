@@ -29,12 +29,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class SearchEndpointTest {
     @Autowired
-    TestRestTemplate template;
+    private MockMvc mockMvc;
 
     @MockBean
     SearchService searchService;
-    @Autowired
-    private MockMvc mvc;
+
     @Test
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_VOLUNTEER"})
     public void search_Authorized() throws Exception {
@@ -51,7 +50,7 @@ public class SearchEndpointTest {
 
         List<Activity> expected = List.of(a1);
         Mockito.when(searchService.searchActivities(searchKeyword, Optional.of(organization), Optional.of(startDate), Optional.of(endDate), Optional.of(ratingMin), Optional.of(ratingMax))).thenReturn(expected);
-        mvc.perform(get(url)
+        mockMvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -72,7 +71,7 @@ public class SearchEndpointTest {
 
         List<Activity> expected = List.of(a1);
         Mockito.when(searchService.searchActivities(searchKeyword, Optional.of(organization), Optional.of(startDate), Optional.of(endDate), Optional.of(ratingMin), Optional.of(ratingMax))).thenReturn(expected);
-        mvc.perform(get(url)
+        mockMvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
@@ -82,35 +81,27 @@ public class SearchEndpointTest {
     @Test
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
     public void searchVolunteer_Authorized() throws Exception {
+
         String searchKeyword = "title";
-        String postalCode = "postalCode";
+        String postalCode = "123";
         int ratingMin = 1;
         int ratingMax = 5;
-        String url = "/search/activities/title?postalCode=postalCode&ratingMin=1&ratingMax=5";
-        User u1 = new User("volunteer1", "pw", "email@email.com\",", Set.of(new Role("ROLE_VOLUNTEER")));
-        u1.setId(1L);
-        VolunteerProfileDTO v1 = new VolunteerProfileDTO("volunteer1", "email@email.com", Set.of(new Role("ROLE_VOLUNTEER")), "first last", 0);
-        List<VolunteerProfileDTO> expected = List.of(v1);
-        Mockito.when(searchService.searchVolunteers(searchKeyword, Optional.of(postalCode), Optional.of(ratingMin), Optional.of(ratingMax))).thenReturn(expected);
-        mvc.perform(get(url )
+        String url = "/search/volunteers/title?postalCode=123&ratingMin=1&ratingMax=5";
+
+        mockMvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
         Mockito.verify(searchService).searchVolunteers(searchKeyword, Optional.of(postalCode), Optional.of(ratingMin), Optional.of(ratingMax));
+        Mockito.verifyNoMoreInteractions(searchService);
     }
     @Test
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_VOLUNTEER"})
     public void searchVolunteer_UnAuthorized() throws Exception {
-        String searchKeyword = "title";
-        String postalCode = "postalCode";
-        int ratingMin = 1;
-        int ratingMax = 5;
-        String url = "/search/activities/title?postalCode=postalCode&ratingMin=1&ratingMax=5";
-        VolunteerProfileDTO v1 = new VolunteerProfileDTO("volunteer1", "email@email.com", Set.of(new Role("ROLE_VOLUNTEER")), "first last", 0);
 
-        List<VolunteerProfileDTO> expected = List.of();
-        //Mockito.when(searchService.searchVolunteers(searchKeyword, Optional.of(postalCode), Optional.of(ratingMin), Optional.of(ratingMax))).thenReturn(expected);
-        mvc.perform(get(url)
+        String url = "/search/volunteers/title?postalCode=postalCode&ratingMin=1&ratingMax=5";
+
+        mockMvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
