@@ -67,10 +67,10 @@ errorMessages:
   userNotInvolvedInActivity: "BAD_REQUEST: This user has no involvement in the selected activity"
   noStatusFound: "BAD_REQUEST: No status found for this activity"
   activityNotCompletedYet: "BAD_REQUEST: To post a rating the activity has to be set to completed by the organizer first"
-  volunteerIsNotApplicant: "BAD_REQUEST: The volunteer you selected has not applied for this activity"
   tooManyCharactersMax800: "BAD_REQUEST: Too many characters, max. 800 allowed"
+  volunteerIsNotApplicant: "BAD_REQUEST: The volunteer you selected has not applied for this activity"
   alreadyApplied: "BAD_REQUEST: You have already applied for this activity"
-  noVolunteerFound: "BAD_REQUEST: There was no volunteer, with the matching search criteria."
+  noVolunteerFound: "BAD_REQUEST: There is no volunteer, with the matching search criteria."
   editDeletedActivityNotPossible: "BAD_REQUEST: Editing a deleted activity not possible."
 
 constants:
