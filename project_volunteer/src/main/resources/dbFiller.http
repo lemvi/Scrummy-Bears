@@ -131,7 +131,7 @@ Authorization: Basic volunteer2 pw
 }
 
 ### Create activity1 as organization1
-POST http://localhost:8080/activities
+POST http://localhost:8080/activities/create
 Content-Type: application/json
 Authorization: Basic organization1 pw
 
@@ -147,7 +147,7 @@ Authorization: Basic organization1 pw
 }
 
 ### Create activity2 as organization1
-POST http://localhost:8080/activities
+POST http://localhost:8080/activities/create
 Content-Type: application/json
 Authorization: Basic organization1 pw
 
@@ -163,7 +163,7 @@ Authorization: Basic organization1 pw
 }
 
 ### Create activity3 as individual1
-POST http://localhost:8080/activities
+POST http://localhost:8080/activities/create
 Content-Type: application/json
 Authorization: Basic individual1 pw
 
@@ -179,7 +179,7 @@ Authorization: Basic individual1 pw
 }
 
 ### Create activity4 as individual1
-POST http://localhost:8080/activities
+POST http://localhost:8080/activities/create
 Content-Type: application/json
 Authorization: Basic individual1 pw
 
@@ -195,7 +195,7 @@ Authorization: Basic individual1 pw
 }
 
 ### Create activity5 as individual+volunteer
-POST http://localhost:8080/activities
+POST http://localhost:8080/activities/create
 Content-Type: application/json
 Authorization: Basic individualVolunteer pw
 
@@ -211,7 +211,7 @@ Authorization: Basic individualVolunteer pw
 }
 
 ### Create activity6 as individual+volunteer
-POST http://localhost:8080/activities
+POST http://localhost:8080/activities/create
 Content-Type: application/json
 Authorization: Basic individualVolunteer pw
 
@@ -266,8 +266,18 @@ PUT http://localhost:8080/activities/1/accept/1
 Content-Type: application/json
 Authorization: Basic organization1 pw
 
+### Accept volunteer1 for activity1 as organization1
+PUT http://localhost:8080/activities/2/accept/1
+Content-Type: application/json
+Authorization: Basic organization1 pw
+
+### Accept volunteer1 for activity3 as individual1
+PUT http://localhost:8080/activities/3/accept/1
+Content-Type: application/json
+Authorization: Basic individual1 pw
+
 ### Accept volunteer2 for activity4 as individual1
-PUT http://localhost:8080/activities/1/accept/1
+PUT http://localhost:8080/activities/4/accept/2
 Content-Type: application/json
 Authorization: Basic individual1 pw
 
@@ -277,7 +287,7 @@ Content-Type: application/json
 Authorization: Basic organization1 pw
 
 {
-  "rating": 5
+  "ratingValue": 5
 }
 
 ### Complete activity2 as organization1
@@ -286,8 +296,43 @@ Content-Type: application/json
 Authorization: Basic organization1 pw
 
 {
-  "rating": 5,
+  "ratingValue": 5,
   "feedback": "awesome work there!"
 }
 
+### Complete activity3 as individual1
+PUT http://localhost:8080/activities/complete/3
+Content-Type: application/json
+Authorization: Basic individual1 pw
+
+{
+  "ratingValue": 5,
+  "feedback": "awesome work there!"
+}
+
+### Delete activity1 as organization1
+DELETE http://localhost:8080/activities/1/delete
+Content-Type: application/json
+Authorization: Basic organization1 pw
+
+### Delete activity2 as organization1
+DELETE http://localhost:8080/activities/2/delete
+Content-Type: application/json
+Authorization: Basic organization1 pw
+
+### Create new Draft as individual1
+POST http://localhost:8080/drafts/create
+Content-Type: application/json
+Authorization: Basic individual1 pw
+
+{
+  "title": "FILO new Draft",
+  "description": "description",
+  "recommendedSkills": "recommendedSkills",
+  "categories": "oneCategory",
+  "startDateTime": "01-02-2100 10:10:10",
+  "endDateTime": "01-02-2100 10:10:10",
+  "openEnd": false,
+  "organizer": "username1"
+}
 

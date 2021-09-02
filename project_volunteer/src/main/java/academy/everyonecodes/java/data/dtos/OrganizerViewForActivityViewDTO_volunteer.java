@@ -3,12 +3,12 @@ package academy.everyonecodes.java.data.dtos;
 import java.util.Objects;
 import java.util.Set;
 
-public class OrganizerViewForVolunteerActivityViewDTO {
+public class OrganizerViewForActivityViewDTO_volunteer {
         private String name;
         private Set<String> roles;
         private double rating;
 
-        public OrganizerViewForVolunteerActivityViewDTO(String name, Set<String> roles, double rating) {
+        public OrganizerViewForActivityViewDTO_volunteer(String name, Set<String> roles, double rating) {
             this.name = name;
             this.roles = roles;
             this.rating = rating;
@@ -42,7 +42,7 @@ public class OrganizerViewForVolunteerActivityViewDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OrganizerViewForVolunteerActivityViewDTO that = (OrganizerViewForVolunteerActivityViewDTO) o;
+        OrganizerViewForActivityViewDTO_volunteer that = (OrganizerViewForActivityViewDTO_volunteer) o;
         return Double.compare(that.getRating(), getRating()) == 0 && Objects.equals(getName(), that.getName()) && Objects.equals(getRoles(), that.getRoles());
     }
 

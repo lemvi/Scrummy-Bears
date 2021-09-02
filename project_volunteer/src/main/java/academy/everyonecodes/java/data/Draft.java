@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-public class Draft
+public class Draft implements ActivityDraft
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -179,5 +179,10 @@ public class Draft
                 ", openEnd=" + openEnd +
                 ", organizer='" + organizerUsername + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean isActivity() {
+        return false;
     }
 }
