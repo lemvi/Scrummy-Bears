@@ -45,8 +45,7 @@ public class ExceptionThrower
                             @Value("${errorMessages.noParticipantsForActivity}") String noParticipantsForActivity,
                             @Value("${errorMessages.activityNotCompletedYet}") String activityNotCompletedYet,
                             @Value("${errorMessages.volunteerIsNotApplicant}") String volunteerIsNotApplicant,
-                            @Value("${errorMessages.alreadyApplied}") String alreadyApplied,
-                            @Value("${errorMessages.editDeletedActivityNotPossible}") String editDeletedActivityNotPossible)
+                            @Value("${errorMessages.editDeletedActivityNotPossible}") String editDeletedActivityNotPossible,
                             @Value("${errorMessages.alreadyApplied}") String alreadyApplied,
                             @Value("${errorMessages.noVolunteerFound}") String noVolunteerFound)
     {

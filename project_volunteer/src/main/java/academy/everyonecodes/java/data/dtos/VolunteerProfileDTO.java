@@ -119,12 +119,4 @@ public class VolunteerProfileDTO extends ProfileDTO
                 '}';
     }
 
-    @Override
-    public String toString() {
-        return "VolunteerProfileDTO{" +
-                "fullName='" + fullName + '\'' +
-                ", age=" + age +
-                ", skill=" + skill +
-                '}';
-    }
 }
