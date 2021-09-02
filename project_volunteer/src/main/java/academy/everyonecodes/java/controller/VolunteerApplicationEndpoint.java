@@ -18,8 +18,7 @@ public class VolunteerApplicationEndpoint {
 
     @PostMapping("activities/{activityId}/{userId}")
     @Secured({"ROLE_VOLUNTEER"})
-    public String applyForActivityWithEmailAndText(@PathVariable Long activityId,
-                                                   @PathVariable Long userId, @RequestBody String EmailText) {
+    public String applyForActivityWithEmailAndText(@PathVariable Long activityId, @PathVariable Long userId, @RequestBody String EmailText) {
         volunteerApplicationService.applyForActivityWithEmailAndText(activityId, userId, EmailText);
         return EmailText;
     }

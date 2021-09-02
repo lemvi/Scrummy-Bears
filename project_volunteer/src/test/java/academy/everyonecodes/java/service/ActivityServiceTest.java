@@ -123,7 +123,7 @@ public class ActivityServiceTest
     void getAllActivities_notEmpty()
     {
         Mockito.when(activityRepository.findAll()).thenReturn(List.of(activity));
-        List<Activity> actual = activityService.getAllActivities();
+        List<Activity> actual = activityService.getAllActivities(false);
         assertEquals(List.of(activity), actual);
         Mockito.verify(activityRepository).findAll();
     }
@@ -132,9 +132,30 @@ public class ActivityServiceTest
     void getAllActivities_Empty()
     {
         Mockito.when(activityRepository.findAll()).thenReturn(List.of());
-        List<Activity> actual = activityService.getAllActivities();
+        List<Activity> actual = activityService.getAllActivities(false);
         assertEquals(List.of(), actual);
         Mockito.verify(activityRepository).findAll();
+    }
+
+    @Test
+    void getDeletedActivities_notEmpty()
+    {
+        activity.setDeleted(true);
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
+        Mockito.when(activityRepository.findByOrganizer_Username(organizer.getUsername())).thenReturn(List.of(activity));
+        Iterable<Activity> actual = activityService.getDeletedActivities(true, organizer.getUsername());
+        assertEquals(List.of(activity), actual);
+        Mockito.verify(activityRepository).findByOrganizer_Username(organizer.getUsername());
+    }
+
+    @Test
+    void getDeletedActivities_Empty()
+    {
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
+        Mockito.when(activityRepository.findByOrganizer_Username(organizer.getUsername())).thenReturn(List.of());
+        Iterable<Activity> actual = activityService.getDeletedActivities(true, organizer.getUsername());
+        assertEquals(List.of(), actual);
+        Mockito.verify(activityRepository).findByOrganizer_Username(organizer.getUsername());
     }
 
     @Test
@@ -225,6 +246,7 @@ public class ActivityServiceTest
         assertEquals(activity, actual);
 
         Mockito.verify(activityRepository).findById(activity.getId());
+        Mockito.verify(activityRepository).deleteById(1L);
         Mockito.verify(translator).toDraft(activity);
         Mockito.verify(translator).toActivity(draft);
         Mockito.verify(activityRepository).save(activity);
@@ -250,6 +272,27 @@ public class ActivityServiceTest
 
         Mockito.verify(activityRepository).findById(activity.getId());
     }
+
+    @Test
+    void editActivity_invalid_because_activity_is_deleted()
+    {
+        activity.setId(1L);
+        activity.setDeleted(true);
+        Mockito.when(activityRepository.findById(activity.getId())).thenReturn(Optional.of(activity));
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
+        Mockito.when(translator.toDraft(activity)).thenReturn(draft);
+        Mockito.when(translator.toActivity(draft)).thenReturn(activity);
+        Mockito.when(activityRepository.save(activity)).thenReturn(activity);
+
+        Exception exception = assertThrows(HttpStatusCodeException.class, () ->
+        {
+            activityService.editActivity(activity);
+        });
+
+        Mockito.verify(activityRepository).findById(activity.getId());
+        Mockito.verifyNoMoreInteractions(activityRepository);
+    }
+
 
     @Test
     void deleteActivity_valid()

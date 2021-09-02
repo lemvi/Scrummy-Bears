@@ -1,17 +1,12 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.ErrorMessage;
-import academy.everyonecodes.java.data.dtos.ActivityViewDTO;
-import academy.everyonecodes.java.data.Status;
-import academy.everyonecodes.java.data.User;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.annotation.Secured;
+import academy.everyonecodes.java.data.*;
+import academy.everyonecodes.java.data.dtos.ActivityViewDTO_individualOrganization;
+import academy.everyonecodes.java.data.dtos.ActivityViewDTO_volunteer;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,34 +26,83 @@ public class ActivityViewerService
         this.userService = userService;
     }
 
-    public List<ActivityViewDTO> getListOfActivityViewDTOsForSpecificVolunteer(String username)
+    public List<ActivityViewDTO_volunteer> getListOfActivityViewDTOsForSpecificVolunteer(String username)
     {
-        String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (!currentPrincipalName.equals(username))
-            ExceptionThrower.badRequest(ErrorMessage.LOGGED_IN_USER_NOT_MATCHING_REQUEST);
-        Optional<User> oUser = userService.findByUsername(username);
-        if (oUser.isEmpty())
-            ExceptionThrower.badRequest(ErrorMessage.USERNAME_NOT_FOUND);
-        User user = oUser.get();
+        checkIfLoggedInUserIsMatchingRequest(username);
+        User user = getUserFromDB(username);
         List<Activity> activities = getAllActivitiesForSpecificVolunteer(user);
         return activities.stream()
                 .map(activity -> activityViewDTOCreator.createActivityViewDTO_forVolunteer(activity, user))
                 .collect(Collectors.toList());
     }
 
+    public List<ActivityViewDTO_individualOrganization> getListOfActivityViewDTOsForSpecificIndividualOrOrganization(String username) {
+        checkIfLoggedInUserIsMatchingRequest(username);
+        User user = getUserFromDB(username);
+        List<ActivityDraft> activityDrafts = getAllActivityDraftsForIndividualOrOrganization(user);
+        return activityDrafts.stream()
+                .map(activityDraft -> activityViewDTOCreator.createActivityViewDTO_forIndividualOrOrganization(activityDraft, user))
+                .collect(Collectors.toList());
+    }
+
+    private User getUserFromDB(String username) {
+        Optional<User> oUser = userService.findByUsername(username);
+        if (oUser.isEmpty())
+            ExceptionThrower.badRequest(ErrorMessage.USERNAME_NOT_FOUND);
+        User user = oUser.get();
+        return user;
+    }
+
+    private void checkIfLoggedInUserIsMatchingRequest(String username) {
+        String currentPrincipalName = SecurityContextHolder.getContext().getAuthentication().getName();;
+        if (!currentPrincipalName.equals(username))
+            ExceptionThrower.badRequest(ErrorMessage.LOGGED_IN_USER_NOT_MATCHING_REQUEST);
+    }
+
+    private List<ActivityDraft> getAllActivityDraftsForIndividualOrOrganization(User user) {
+        List<ActivityDraft> activityDraftList = new ArrayList<>();
+        getAllActivitiesForSpecificIndividualOrOrganization(user).forEach(activity -> activityDraftList.add(activity));
+        getAllDraftsOfOrganizer().forEach(draft -> activityDraftList.add(draft));
+        return activityDraftList;
+    }
+
+
     public List<Activity> getAllActivitiesForSpecificVolunteer(User user)
     {
-        List<Activity> activities = activityService.getAllActivities();
-        return activities.stream()
+        return  getAllActivities().stream()
                 .filter(activity -> activity.getApplicants().contains(user) || activity.getParticipants().contains(user))
                 .collect(Collectors.toList());
     }
 
-    public List<ActivityViewDTO> getListOfActivityViewDTOsForSpecificVolunteer(String username, Status status)
+    public List<Activity> getAllActivitiesForSpecificIndividualOrOrganization(User user)
     {
-        List<ActivityViewDTO> activityViewDTOS = getListOfActivityViewDTOsForSpecificVolunteer(username);
-        return activityViewDTOS.stream()
-                .filter(activityViewDTO -> activityViewDTO.getStatus().equals(status))
+        return  getAllActivities().stream()
+                .filter(activity -> activity.getOrganizer().equals(user))
                 .collect(Collectors.toList());
     }
+
+    private List<Activity> getAllActivities() {
+        return activityService.getAllActivities(false);
+    }
+
+    private List<Draft> getAllDraftsOfOrganizer() {
+        return activityService.getDraftsOfOrganizer();
+    }
+
+    public List<ActivityViewDTO_volunteer> getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus(String username, Status status)
+    {
+        List<ActivityViewDTO_volunteer> activityViewDTOVolunteers = getListOfActivityViewDTOsForSpecificVolunteer(username);
+        return activityViewDTOVolunteers.stream()
+            .filter(activityViewDTO -> activityViewDTO.getStatus().equals(status))
+            .collect(Collectors.toList());
+    }
+
+    public List<ActivityViewDTO_individualOrganization> getListOfActivityViewDTOsForSpecificIndividualOrOrganizationFilteredByStatus(String username, Status status)
+    {
+        List<ActivityViewDTO_individualOrganization> activityViewDTO_individualOrganizations = getListOfActivityViewDTOsForSpecificIndividualOrOrganization(username);
+        return activityViewDTO_individualOrganizations.stream()
+                .filter(activityViewDTO_individualOrganization -> activityViewDTO_individualOrganization.getStatus().equals(status))
+                .collect(Collectors.toList());
+    }
+
 }

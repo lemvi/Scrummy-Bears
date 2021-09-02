@@ -33,7 +33,7 @@ class VolunteerSearchEndpointTest {
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk());
 
-		Mockito.verify(activityService).getAllActivities();
+		Mockito.verify(activityService).getAllActivities(false);
 		Mockito.verifyNoMoreInteractions(activityService);
 	}
 

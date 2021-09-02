@@ -49,6 +49,6 @@ class AgeCalculatorTest
         );
 
         var actual = ageCalculator.calculate(user);
-        Assertions.assertNull(actual);
+        Assertions.assertEquals(0, actual);
     }
 }

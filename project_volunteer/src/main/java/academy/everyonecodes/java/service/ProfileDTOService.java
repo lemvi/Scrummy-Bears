@@ -8,20 +8,24 @@ import academy.everyonecodes.java.data.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ProfileDTOService
 {
     private final UserRepository userRepository;
     private final UserToProfileDTOTranslator userToProfileDTOTranslator;
-    private final int maxIdSum;
-    private final int minIdSum;
+    private final Long maxIdSum;
+    private final Long minIdSum;
     private final UserService userService;
 
 
-    public ProfileDTOService(UserRepository userRepository, UserToProfileDTOTranslator userToProfileDTOTranslator, @Value("${security.maxIdSum}") int maxIdSum, @Value("${security.minIdSum}") int minIdSum, UserService userService)
+    public ProfileDTOService(UserRepository userRepository, UserToProfileDTOTranslator userToProfileDTOTranslator, @Value("${security" +
+            ".maxIdSum}") Long maxIdSum, @Value("${security.minIdSum}") Long minIdSum, UserService userService)
     {
         this.userRepository = userRepository;
         this.userToProfileDTOTranslator = userToProfileDTOTranslator;
@@ -29,6 +33,34 @@ public class ProfileDTOService
         this.minIdSum = minIdSum;
         this.userService = userService;
     }
+
+    public List<ProfileDTO> viewAllProfilesOfVolunteers() {
+        return userService.findAllVolunteers().stream()
+                .map(userToProfileDTOTranslator::toVolunteerProfileDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProfileDTO> viewAllProfilesOfIndividuals() {
+        return userService.findAllIndividuals().stream()
+                .map(userToProfileDTOTranslator::toIndividualProfileDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProfileDTO> viewAllProfilesOfOrganizations() {
+        return userService.findAllOrganizations().stream()
+                .map(userToProfileDTOTranslator::toOrganizationProfileDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProfileDTO> viewAllProfilesOfOrganizers() {
+        ArrayList<List<ProfileDTO>> organizersProfileDTOList = new ArrayList<>();
+        organizersProfileDTOList.add(viewAllProfilesOfIndividuals());
+        organizersProfileDTOList.add(viewAllProfilesOfOrganizations());
+               return organizersProfileDTOList.stream()
+                       .flatMap(List::stream)
+                       .collect(Collectors.toList());
+    }
+
 
     public Optional<ProfileDTO> viewProfile(String username)
     {

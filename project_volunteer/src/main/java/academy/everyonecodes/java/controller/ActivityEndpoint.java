@@ -1,15 +1,11 @@
 package academy.everyonecodes.java.controller;
 
 import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.ActivityStatus;
 import academy.everyonecodes.java.data.Draft;
-import academy.everyonecodes.java.data.Rating;
 import academy.everyonecodes.java.service.ActivityService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.MessagingException;
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,7 +23,14 @@ public class ActivityEndpoint
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION", "ROLE_VOLUNTEER"})
     List<Activity> getAllActivities()
     {
-        return activityService.getAllActivities();
+        return activityService.getAllActivities(false);
+    }
+
+    @GetMapping("/activities/{organizerUsername}/deleted")
+    @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
+    Iterable<Activity> getDeletedActivities(@PathVariable String organizerUsername)
+    {
+        return activityService.getDeletedActivities(true, organizerUsername);
     }
 
     @GetMapping("/activities/{organizerUsername}")
@@ -44,21 +47,21 @@ public class ActivityEndpoint
         return activityService.findActivityById(id);
     }
 
-    @PostMapping("/activities")
+    @PostMapping("/activities/create")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     Activity postActivity(@RequestBody Draft draft)
     {
         return activityService.postActivity(draft);
     }
 
-    @PutMapping("/activities")
+    @PutMapping("/activities/edit")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
-    Activity editActivity(@RequestBody Activity activity)
+    Activity editActivity(@RequestBody Activity activityDetails)
     {
-        return activityService.editActivity(activity);
+        return activityService.editActivity(activityDetails);
     }
 
-    @DeleteMapping("/activities/{activityId}")
+    @DeleteMapping("/activities/{activityId}/delete")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     void deleteActivity(@PathVariable Long activityId)
     {
@@ -72,35 +75,35 @@ public class ActivityEndpoint
         return activityService.getDraftsOfOrganizer();
     }
 
-    @GetMapping("/drafts/{id}")
+    @GetMapping("/drafts/find/{draftId}")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
-    Draft findDraftById(@PathVariable Long id)
+    Draft findDraftById(@PathVariable Long draftId)
     {
-        return activityService.findDraftById(id);
+        return activityService.findDraftById(draftId);
     }
 
-    @PostMapping("/drafts")
+    @PostMapping("/drafts/create")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     Draft postDraft(@RequestBody Draft draft)
     {
         return activityService.postDraft(draft);
     }
 
-    @PutMapping("/drafts")
+    @PutMapping("/drafts/edit")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
-    Draft editDraft(@RequestBody Draft draft)
+    Draft editDraft(@RequestBody Draft draftDetails)
     {
-        return activityService.editDraft(draft);
+        return activityService.editDraft(draftDetails);
     }
 
-    @PutMapping("/drafts/{draftId}")
+    @PutMapping("/drafts/{draftId}/save_as_activity")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     Activity saveDraftAsActivity(@PathVariable Long draftId)
     {
         return activityService.saveDraftAsActivity(draftId);
     }
 
-    @DeleteMapping("/drafts/{draftId}")
+    @DeleteMapping("/drafts/{draftId}/delete")
     @Secured({"ROLE_INDIVIDUAL", "ROLE_ORGANIZATION"})
     void deleteDraft(@PathVariable Long draftId)
     {

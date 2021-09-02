@@ -4,22 +4,28 @@ import academy.everyonecodes.java.data.dtos.OrganizationProfileDTO;
 import academy.everyonecodes.java.data.dtos.IndividualProfileDTO;
 import academy.everyonecodes.java.data.dtos.VolunteerProfileDTO;
 import academy.everyonecodes.java.data.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import academy.everyonecodes.java.data.repositories.BadgesRepository;
+import academy.everyonecodes.java.data.repositories.LevelRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserToProfileDTOTranslator
 {
     private final AgeCalculator ageCalculator;
-    @Autowired
-    RatingService ratingService;
+
+    private final RatingService ratingService;
     private final SkillService skillService;
+    private final BadgesRepository badgesRepository;
+    private final LevelRepository levelRepository;
 
 
-    public UserToProfileDTOTranslator(AgeCalculator ageCalculator, SkillService skillService)
+    public UserToProfileDTOTranslator(AgeCalculator ageCalculator, RatingService ratingService, SkillService skillService, BadgesRepository badgesRepository, LevelRepository levelRepository)
     {
         this.ageCalculator = ageCalculator;
+        this.ratingService = ratingService;
         this.skillService = skillService;
+        this.badgesRepository = badgesRepository;
+        this.levelRepository = levelRepository;
     }
 
 
@@ -73,7 +79,9 @@ public class UserToProfileDTOTranslator
                 ratingService.calculateAverageUserRating(user.getId()),
                 user.getFirstNamePerson() + " " + user.getLastNamePerson(),
                 ageCalculator.calculate(user),
-                skillService.collect(user)
+                skillService.collect(user),
+                badgesRepository.findByUser(user),
+                LevelService.getCurrentUserLevel(user)
         );
     }
 }

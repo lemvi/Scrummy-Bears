@@ -1,5 +1,6 @@
 package academy.everyonecodes.java.data.repositories;
 
+import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.Activity;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
@@ -9,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);

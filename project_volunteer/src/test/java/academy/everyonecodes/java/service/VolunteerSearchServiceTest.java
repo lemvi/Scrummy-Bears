@@ -18,7 +18,7 @@ class VolunteerSearchServiceTest {
 
 	@Test
 	void getAllActivities() {
-		activityService.getAllActivities();
+		activityService.getAllActivities(false);
 		Mockito.verify(activityRepository).findAll();
 		Mockito.verifyNoMoreInteractions(activityRepository);
 	}
