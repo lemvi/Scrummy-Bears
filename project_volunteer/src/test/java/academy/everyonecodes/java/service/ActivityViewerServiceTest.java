@@ -1,11 +1,16 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.Activity;
+import academy.everyonecodes.java.data.Draft;
 import academy.everyonecodes.java.data.Status;
 import academy.everyonecodes.java.data.User;
-import academy.everyonecodes.java.data.dtos.ActivityViewDTO;
+import academy.everyonecodes.java.data.dtos.ActivityViewDTO_individualOrganization;
+import academy.everyonecodes.java.data.dtos.ActivityViewDTO_volunteer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +23,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -49,10 +55,27 @@ class ActivityViewerServiceTest
     @Mock
     private Authentication auth;
 
+    private String username = "username";
+
+    private User volunteer = new User();
+
+    private Activity activity = new Activity();
+
+    private List<Activity> activities = List.of(activity);
+
+    private Optional<User> oUser = Optional.of(volunteer);
+
     @BeforeEach
     public void initSecurityContext()
     {
         SecurityContextHolder.getContext().setAuthentication(auth);
+    }
+
+    @BeforeEach
+    public void setUpTestData() {
+        volunteer.setId(111L);
+        activity.setApplicants(Set.of(volunteer));
+        activity.setParticipants(Set.of(new User()));
     }
 
     @Test
@@ -83,186 +106,113 @@ class ActivityViewerServiceTest
     @Test
     void getListOfActivityViewDTOsForSpecificVolunteer_valid()
     {
-        String username = "username";
-
-        User volunteer = new User();
-        volunteer.setId(111L);
-
-        Activity activity = new Activity();
-        activity.setApplicants(Set.of(volunteer));
-        activity.setParticipants(Set.of(new User()));
-
-        ActivityViewDTO activityViewDTO = new ActivityViewDTO();
-
-        List<Activity> activities = List.of(activity);
-
-        Optional<User> oUser = Optional.of(volunteer);
+        ActivityViewDTO_volunteer activityViewDTOVolunteer = new ActivityViewDTO_volunteer();
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
         when(activityService.getAllActivities(false)).thenReturn(activities);
-        when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
+        when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTOVolunteer);
 
-        List<ActivityViewDTO> expected = List.of(activityViewDTO);
-        List<ActivityViewDTO> actual = activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username);
+        List<ActivityViewDTO_volunteer> expected = List.of(activityViewDTOVolunteer);
+        List<ActivityViewDTO_volunteer> actual = activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username);
 
         assertEquals(expected, actual);
         assertDoesNotThrow(() -> activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username));
     }
 
     @Test
-    void getListOfActivityViewDTOsForSpecificVolunteer_pending_valid()
+    void getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus_pending_valid()
     {
-        String username = "username";
-
-        User volunteer = new User();
-        volunteer.setId(111L);
-
-        Activity activity = new Activity();
-        activity.setApplicants(Set.of(volunteer));
-        activity.setParticipants(Set.of(new User()));
-
-        ActivityViewDTO activityViewDTO = new ActivityViewDTO();
-        activityViewDTO.setStatus(Status.PENDING);
-
-        List<Activity> activities = List.of(activity);
-
-        Optional<User> oUser = Optional.of(volunteer);
+        Status status = Status.PENDING;
+        ActivityViewDTO_volunteer activityViewDTOVolunteer = new ActivityViewDTO_volunteer();
+        activityViewDTOVolunteer.setStatus(status);
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
         when(activityService.getAllActivities(false)).thenReturn(activities);
-        when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
+        when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTOVolunteer);
 
-        List<ActivityViewDTO> expected = List.of(activityViewDTO);
-        List<ActivityViewDTO> actual = activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username, Status.PENDING);
+        List<ActivityViewDTO_volunteer> expected = List.of(activityViewDTOVolunteer);
+        List<ActivityViewDTO_volunteer> actual = activityViewerService.getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus(username, status);
 
         assertEquals(expected, actual);
-        assertDoesNotThrow(() -> activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username, Status.PENDING));
+        assertDoesNotThrow(() -> activityViewerService.getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus(username, status));
     }
 
     @Test
-    void getListOfActivityViewDTOsForSpecificVolunteer_completed_valid()
+    void getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus_completed_valid()
     {
-        String username = "username";
-
-        User volunteer = new User();
-        volunteer.setId(111L);
-
-        Activity activity = new Activity();
-        activity.setApplicants(Set.of(volunteer));
-        activity.setParticipants(Set.of(new User()));
-
-        ActivityViewDTO activityViewDTO = new ActivityViewDTO();
-        activityViewDTO.setStatus(Status.COMPLETED);
-
-        List<Activity> activities = List.of(activity);
-
-        Optional<User> oUser = Optional.of(volunteer);
+        Status status = Status.COMPLETED;
+        ActivityViewDTO_volunteer activityViewDTOVolunteer = new ActivityViewDTO_volunteer();
+        activityViewDTOVolunteer.setStatus(status);
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
         when(activityService.getAllActivities(false)).thenReturn(activities);
-        when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
+        when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTOVolunteer);
 
-        List<ActivityViewDTO> expected = List.of(activityViewDTO);
-        List<ActivityViewDTO> actual = activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username, Status.COMPLETED);
+        List<ActivityViewDTO_volunteer> expected = List.of(activityViewDTOVolunteer);
+        List<ActivityViewDTO_volunteer> actual = activityViewerService.getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus(username, status);
 
         assertEquals(expected, actual);
-        assertDoesNotThrow(() -> activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username, Status.COMPLETED));
+        assertDoesNotThrow(() -> activityViewerService.getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus(username, status));
     }
 
     @Test
-    void getListOfActivityViewDTOsForSpecificVolunteer_active_valid()
+    void getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus_active_valid()
     {
-        String username = "username";
+        Status status = Status.ACTIVE;
+        ActivityViewDTO_volunteer activityViewDTOVolunteer = new ActivityViewDTO_volunteer();
+        activityViewDTOVolunteer.setStatus(status);
 
-        User volunteer = new User();
-        volunteer.setId(111L);
-
-        Activity activity = new Activity();
-        activity.setApplicants(Set.of(volunteer));
-        activity.setParticipants(Set.of(new User()));
-
-        ActivityViewDTO activityViewDTO = new ActivityViewDTO();
-        activityViewDTO.setStatus(Status.ACTIVE);
-
-        List<Activity> activities = List.of(activity);
-
-        Optional<User> oUser = Optional.of(volunteer);
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
         when(activityService.getAllActivities(false)).thenReturn(activities);
-        when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
+        when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTOVolunteer);
 
-        List<ActivityViewDTO> expected = List.of(activityViewDTO);
-        List<ActivityViewDTO> actual = activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username, Status.ACTIVE);
+        List<ActivityViewDTO_volunteer> expected = List.of(activityViewDTOVolunteer);
+        List<ActivityViewDTO_volunteer> actual = activityViewerService.getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus(username, status);
 
         assertEquals(expected, actual);
-        assertDoesNotThrow(() -> activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username, Status.ACTIVE));
+        assertDoesNotThrow(() -> activityViewerService.getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus(username, status));
     }
 
     @Test
-    void getListOfActivityViewDTOsForSpecificVolunteer_rejected_valid()
+    void getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus_rejected_valid()
     {
-        String username = "username";
-
-        User volunteer = new User();
-        volunteer.setId(111L);
-
-        Activity activity = new Activity();
-        activity.setApplicants(Set.of(volunteer));
-        activity.setParticipants(Set.of(new User()));
-
-        ActivityViewDTO activityViewDTO = new ActivityViewDTO();
-        activityViewDTO.setStatus(Status.REJECTED);
-
-        List<Activity> activities = List.of(activity);
-
-        Optional<User> oUser = Optional.of(volunteer);
+        Status status = Status.REJECTED;
+        ActivityViewDTO_volunteer activityViewDTOVolunteer = new ActivityViewDTO_volunteer();
+        activityViewDTOVolunteer.setStatus(status);
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
         when(activityService.getAllActivities(false)).thenReturn(activities);
-        when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
+        when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTOVolunteer);
 
-        List<ActivityViewDTO> expected = List.of(activityViewDTO);
-        List<ActivityViewDTO> actual = activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username, Status.REJECTED);
+        List<ActivityViewDTO_volunteer> expected = List.of(activityViewDTOVolunteer);
+        List<ActivityViewDTO_volunteer> actual = activityViewerService.getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus(username, status);
 
         assertEquals(expected, actual);
-        assertDoesNotThrow(() -> activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username, Status.REJECTED));
+        assertDoesNotThrow(() -> activityViewerService.getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus(username, status));
     }
 
     @Test
-    void getListOfActivityViewDTOsForSpecificVolunteer_applied_valid()
+    void getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus_applied_valid()
     {
-        String username = "username";
-
-        User volunteer = new User();
-        volunteer.setId(111L);
-
-        Activity activity = new Activity();
-        activity.setApplicants(Set.of(volunteer));
-        activity.setParticipants(Set.of(new User()));
-
-        ActivityViewDTO activityViewDTO = new ActivityViewDTO();
-        activityViewDTO.setStatus(Status.APPLIED);
-
-        List<Activity> activities = List.of(activity);
-
-        Optional<User> oUser = Optional.of(volunteer);
+        ActivityViewDTO_volunteer activityViewDTOVolunteer = new ActivityViewDTO_volunteer();
+        activityViewDTOVolunteer.setStatus(Status.APPLIED);
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
         when(userService.findByUsername(username)).thenReturn(oUser);
         when(activityService.getAllActivities(false)).thenReturn(activities);
-        when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTO);
+        when(creator.createActivityViewDTO_forVolunteer(activity, volunteer)).thenReturn(activityViewDTOVolunteer);
 
-        List<ActivityViewDTO> expected = List.of(activityViewDTO);
-        List<ActivityViewDTO> actual = activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username, Status.APPLIED);
+        List<ActivityViewDTO_volunteer> expected = List.of(activityViewDTOVolunteer);
+        List<ActivityViewDTO_volunteer> actual = activityViewerService.getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus(username, Status.APPLIED);
 
         assertEquals(expected, actual);
-        assertDoesNotThrow(() -> activityViewerService.getListOfActivityViewDTOsForSpecificVolunteer(username, Status.APPLIED));
+        assertDoesNotThrow(() -> activityViewerService.getListOfActivityViewDTOsForSpecificVolunteerFilteredByStatus(username, Status.APPLIED));
     }
 
     @Test
@@ -293,5 +243,41 @@ class ActivityViewerServiceTest
         expected = List.of(activity2);
         actual = activityViewerService.getAllActivitiesForSpecificVolunteer(volunteer2);
         assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("getParams")
+    void getListOfActivityViewDTOsForSpecificIndividualOrOrganizationFilteredByStatus_valid(Status status) {
+        ActivityViewDTO_individualOrganization activityViewDTO_individualOrganization = new ActivityViewDTO_individualOrganization();
+        activityViewDTO_individualOrganization.setStatus(status);
+        ActivityViewDTO_individualOrganization activityViewDTO_individualOrganization_other = new ActivityViewDTO_individualOrganization();
+        activityViewDTO_individualOrganization_other.setStatus(Status.NOT_SET);
+
+        User organizer = volunteer;
+        activity.setOrganizer(organizer);
+        Draft draft = new Draft();
+        List<Draft> drafts = List.of(draft);
+
+        when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);
+        when(userService.findByUsername(username)).thenReturn(oUser);
+        when(activityService.getAllActivities(false)).thenReturn(activities);
+        when(activityService.getDraftsOfOrganizer()).thenReturn(drafts);
+        when(creator.createActivityViewDTO_forIndividualOrOrganization(draft, organizer)).thenReturn(activityViewDTO_individualOrganization);
+        when(creator.createActivityViewDTO_forIndividualOrOrganization(activity, organizer)).thenReturn(activityViewDTO_individualOrganization_other);
+
+        List<ActivityViewDTO_individualOrganization> expected = List.of(activityViewDTO_individualOrganization);
+        List<ActivityViewDTO_individualOrganization> actual = activityViewerService.getListOfActivityViewDTOsForSpecificIndividualOrOrganizationFilteredByStatus(username, status);
+
+        assertEquals(expected, actual);
+        assertDoesNotThrow(() -> activityViewerService.getListOfActivityViewDTOsForSpecificIndividualOrOrganizationFilteredByStatus(username, status));
+
+    }
+
+    static Stream<Arguments> getParams() {
+        return Stream.of(
+                Arguments.of(Status.DRAFT),
+                Arguments.of(Status.ACTIVE),
+                Arguments.of(Status.COMPLETED)
+        );
     }
 }

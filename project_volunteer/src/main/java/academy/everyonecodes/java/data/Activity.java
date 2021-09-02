@@ -19,7 +19,7 @@ import java.util.Set;
 @SQLDelete(sql = "UPDATE activity SET deleted = true WHERE id=?")
 @FilterDef(name = "deletedActivityFilter", parameters = @ParamDef(name = "isDeleted", type = "boolean"))
 @Filter(name = "deletedActivityFilter", condition = "deleted = :isDeleted")
-public class Activity {
+public class Activity implements ActivityDraft {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -225,5 +225,10 @@ public class Activity {
     @Override
     public String toString() {
         return "Activity{" + "id=" + id + ", title='" + title + '\'' + ", description='" + description + '\'' + ", recommendedSkills='" + recommendedSkills + '\'' + ", categories=" + categories + ", startDateTime=" + startDateTime + ", endDateTime=" + endDateTime + ", openEnd=" + openEnd + ", organizer=" + organizer + ", applicants=" + applicants + ", participants=" + participants + ", deleted=" + deleted + '}';
+    }
+
+    @Override
+    public boolean isActivity() {
+        return true;
     }
 }
