@@ -129,7 +129,7 @@ class ActivityViewerEndpointTest {
     @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_INDIVIDUAL"})
     void getMyActivities_asIndividual_valid() throws Exception {
         String username = "username";
-        String url = "/" + username + "/activities?individual";
+        String url = "/" + username + "/activities?organizer";
         mvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -140,7 +140,7 @@ class ActivityViewerEndpointTest {
     @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_VOLUNTEER"})
     void getMyActivities_asIndividualOrganization_usingVolunteer_forbidden() throws Exception {
         String username = "username";
-        String url = "/" + username + "/activities?individual";
+        String url = "/" + username + "/activities?organizer";
         mvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
@@ -150,7 +150,7 @@ class ActivityViewerEndpointTest {
     @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_MAFIABOSS"})
     void getMyActivities_asIndividualOrganization_usingMafiaBoss_forbidden() throws Exception {
         String username = "username";
-        String url = "/" + username + "/activities?individual";
+        String url = "/" + username + "/activities?organizer";
         mvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
@@ -160,7 +160,7 @@ class ActivityViewerEndpointTest {
     @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_ORGANIZATION"})
     void getMyActivities_asOrganization_valid() throws Exception {
         String username = "username";
-        String url = "/" + username + "/activities?individual";
+        String url = "/" + username + "/activities?organizer";
         mvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -171,7 +171,7 @@ class ActivityViewerEndpointTest {
     @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_INDIVIDUAL"})
     void getMyActivities_asIndividual_active_valid() throws Exception {
         String username = "username";
-        String url = "/" + username + "/activities/active?individual";
+        String url = "/" + username + "/activities/active?organizer";
         mvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -182,7 +182,7 @@ class ActivityViewerEndpointTest {
     @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_ORGANIZATION"})
     void getMyActivities_asOrganization_active_valid() throws Exception {
         String username = "username";
-        String url = "/" + username + "/activities/active?individual";
+        String url = "/" + username + "/activities/active?organizer";
         mvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -193,7 +193,7 @@ class ActivityViewerEndpointTest {
     @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_VOLUNTEER"})
     void getMyActivities_asIndividualOrganization_usingVolunteer_filteredForActive_forbidden() throws Exception {
         String username = "username";
-        String url = "/" + username + "/activities/active?individual";
+        String url = "/" + username + "/activities/active?organizer";
         mvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
@@ -203,7 +203,7 @@ class ActivityViewerEndpointTest {
     @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_MAFIABOSS"})
     void getMyActivities_asIndividualOrganization_usingMafiaBoss_filteredForActive_forbidden() throws Exception {
         String username = "username";
-        String url = "/" + username + "/activities/active?individual";
+        String url = "/" + username + "/activities/active?organizer";
         mvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
@@ -213,7 +213,7 @@ class ActivityViewerEndpointTest {
     @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_INDIVIDUAL"})
     void getMyActivities_asIndividual_draft_valid() throws Exception {
         String username = "username";
-        String url = "/" + username + "/activities/draft?individual";
+        String url = "/" + username + "/activities/draft?organizer";
         mvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -224,7 +224,7 @@ class ActivityViewerEndpointTest {
     @WithMockUser(username = "username", password = "pw", authorities = {"ROLE_INDIVIDUAL"})
     void getMyActivities_asIndividual_completed_valid() throws Exception {
         String username = "username";
-        String url = "/" + username + "/activities/completed?individual";
+        String url = "/" + username + "/activities/completed?organizer";
         mvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
