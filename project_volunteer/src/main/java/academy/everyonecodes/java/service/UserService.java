@@ -71,9 +71,18 @@ public class UserService
                 .collect(Collectors.toList());
     }
 
+    public User validateAndSaveUser(User user) {
+        validateRoles(user);
+        return save(user);
+    }
+
     public Optional<User> findByUsername(String username)
     {
         return userRepository.findByUsername(username);
+    }
+
+    public Optional<User> findByEmailAddress(String emailAddress) {
+        return userRepository.findByEmailAddress(emailAddress);
     }
 
     public Optional<User> findById(Long id)

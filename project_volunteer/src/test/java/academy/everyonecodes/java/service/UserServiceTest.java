@@ -4,8 +4,6 @@ import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.dtos.OrganizationDTO;
 import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.repositories.UserRepository;
-import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -455,6 +453,29 @@ class UserServiceTest
                         )
                 )
         );
+    }
+
+    @Test
+    void validateAndSaveUser() {
+        String validUsername = "user";
+        String validEncryptedPw = "encrypted";
+        String validFirst = "first";
+        String validSecond = "second";
+        String validEmail = "user@email.com";
+
+        User testUser = new User(
+                validUsername,
+                validEncryptedPw,
+                validFirst,
+                validSecond,
+                validEmail,
+                Set.of(new Role("ROLE_VOLUNTEER"))
+        );
+
+        userService.validateAndSaveUser(testUser);
+
+        Mockito.verify(userRepository).save(testUser);
+        Mockito.verifyNoMoreInteractions(userRepository);
     }
 }
 
