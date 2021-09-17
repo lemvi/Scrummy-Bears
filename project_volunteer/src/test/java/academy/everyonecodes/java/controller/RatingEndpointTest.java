@@ -1,6 +1,7 @@
 package academy.everyonecodes.java.controller;
 
 import academy.everyonecodes.java.data.Rating;
+import academy.everyonecodes.java.data.RatingBuilder;
 import academy.everyonecodes.java.service.RatingService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +32,7 @@ class RatingEndpointTest {
     @BeforeEach
     void resetRating()
     {
-        rating = new Rating(1, "feedback");
+        rating = new RatingBuilder().setRatingValue(1).setFeedback("feedback").createRating();
     }
 
     @Test

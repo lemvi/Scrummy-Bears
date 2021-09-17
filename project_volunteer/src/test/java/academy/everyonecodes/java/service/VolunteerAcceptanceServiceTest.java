@@ -1,7 +1,9 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.Activity;
+import academy.everyonecodes.java.data.ActivityBuilder;
 import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.UserEntityBuilder;
 import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import academy.everyonecodes.java.data.repositories.UserRepository;
 import academy.everyonecodes.java.service.email.EmailServiceImpl;
@@ -55,9 +57,9 @@ public class VolunteerAcceptanceServiceTest
     @Value("${rejectedVolunteerEmail.text}")
     private String textRejected;
 
-    User userToBeAccepted = new User("username");
-    User userToBeRejected = new User("loser");
-    Activity activity = new Activity();
+    User userToBeAccepted = new UserEntityBuilder().setUsername("username").createUser();
+    User userToBeRejected = new UserEntityBuilder().setUsername("loser").createUser();
+    Activity activity = new ActivityBuilder().createActivity();
     Set<User> applicants = new HashSet<>();
 
     @BeforeEach
@@ -79,7 +81,7 @@ public class VolunteerAcceptanceServiceTest
         System.out.println(activity.getApplicants());
         activity.setParticipants(new HashSet<>());
         activity.setTitle("title");
-        activity.setOrganizer(new User("username"));
+        activity.setOrganizer(new UserEntityBuilder().setUsername("username").createUser());
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(userToBeAccepted));
         when(activityRepository.findById(1L)).thenReturn(Optional.of(activity));
@@ -146,7 +148,7 @@ public class VolunteerAcceptanceServiceTest
         System.out.println(activity.getApplicants());
         activity.setParticipants(new HashSet<>());
         activity.setTitle("title");
-        activity.setOrganizer(new User("username"));
+        activity.setOrganizer(new UserEntityBuilder().setUsername("username").createUser());
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(userToBeAccepted));
         when(activityRepository.findById(1L)).thenReturn(Optional.of(activity));

@@ -3,6 +3,7 @@ package academy.everyonecodes.java.service;
 import academy.everyonecodes.java.data.ErrorMessage;
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.UserEntityBuilder;
 import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.dtos.OrganizationDTO;
 import academy.everyonecodes.java.data.repositories.UserRepository;
@@ -88,7 +89,7 @@ public class UserService
     public Optional<User> findById(Long id)
     {
         Optional<User> oUser = userRepository.findById(id);
-        User user = new User();
+        User user = new UserEntityBuilder().createUser();
         if (oUser.isEmpty())
             ExceptionThrower.badRequest(ErrorMessage.USERNAME_NOT_FOUND);
         return oUser;

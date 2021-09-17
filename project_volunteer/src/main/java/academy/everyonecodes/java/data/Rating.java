@@ -48,15 +48,6 @@ public class Rating {
 		this.feedback = feedback;
 	}
 
-	public Rating(int ratingValue) {
-		this.ratingValue = ratingValue;
-	}
-
-	public Rating(int ratingValue, String feedback) {
-		this.ratingValue = ratingValue;
-		this.feedback = feedback;
-	}
-
 	public Long getUserId() {
 		return userId;
 	}

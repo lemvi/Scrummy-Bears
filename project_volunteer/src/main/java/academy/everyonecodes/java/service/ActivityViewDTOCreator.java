@@ -65,7 +65,7 @@ public class ActivityViewDTOCreator {
         Activity activity = (Activity) activityDraft;
         status = statusHandler.getStatusForSpecificActivity(activity);
         Optional<User> oParticipant = activity.getParticipants().stream().findFirst();
-        User participant = new User();
+        User participant = new UserEntityBuilder().createUser();
         if (oParticipant.isPresent()) {
             participant = oParticipant.get();
             volunteerView = translateFromVolunteer(participant);

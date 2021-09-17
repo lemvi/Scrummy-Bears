@@ -1,9 +1,6 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.Draft;
-import academy.everyonecodes.java.data.Status;
-import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.dtos.ActivityViewDTO_individualOrganization;
 import academy.everyonecodes.java.data.dtos.ActivityViewDTO_volunteer;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,9 +54,9 @@ class ActivityViewerServiceTest
 
     private String username = "username";
 
-    private User volunteer = new User();
+    private User volunteer = new UserEntityBuilder().createUser();
 
-    private Activity activity = new Activity();
+    private Activity activity = new ActivityBuilder().createActivity();
 
     private List<Activity> activities = List.of(activity);
 
@@ -75,7 +72,7 @@ class ActivityViewerServiceTest
     public void setUpTestData() {
         volunteer.setId(111L);
         activity.setApplicants(Set.of(volunteer));
-        activity.setParticipants(Set.of(new User()));
+        activity.setParticipants(Set.of(new UserEntityBuilder().createUser()));
     }
 
     @Test
@@ -218,17 +215,17 @@ class ActivityViewerServiceTest
     @Test
     void getAllActivitiesForSpecificVolunteer()
     {
-        User volunteer1 = new User();
+        User volunteer1 = new UserEntityBuilder().createUser();
         volunteer1.setId(1L);
 
-        User volunteer2 = new User();
+        User volunteer2 = new UserEntityBuilder().createUser();
         volunteer2.setId(2L);
 
-        Activity activity1 = new Activity();
+        Activity activity1 = new ActivityBuilder().createActivity();
         activity1.setApplicants(Set.of(volunteer1));
         activity1.setParticipants(Set.of());
 
-        Activity activity2 = new Activity();
+        Activity activity2 = new ActivityBuilder().createActivity();
         activity2.setApplicants(Set.of());
         activity2.setParticipants(Set.of(volunteer2));
 
@@ -255,7 +252,7 @@ class ActivityViewerServiceTest
 
         User organizer = volunteer;
         activity.setOrganizer(organizer);
-        Draft draft = new Draft();
+        Draft draft = new DraftBuilder().createDraft();
         List<Draft> drafts = List.of(draft);
 
         when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(username);

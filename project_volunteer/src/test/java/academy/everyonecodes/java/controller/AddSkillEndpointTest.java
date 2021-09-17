@@ -2,6 +2,7 @@ package academy.everyonecodes.java.controller;
 
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.UserEntityBuilder;
 import academy.everyonecodes.java.data.repositories.UserRepository;
 import academy.everyonecodes.java.data.dtos.SkillDTO;
 import academy.everyonecodes.java.service.SkillService;
@@ -57,7 +58,7 @@ public class AddSkillEndpointTest {
         String skillDtoJson = createJson(skillDTO);
         Role role = new Role("ROLE_INDIVIDUAL");
         role.setId(id);
-        User user = new User("username", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(role));
+        User user = new UserEntityBuilder().setUsername("username").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setOrganizationName("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of(role)).createUser();
 
         Mockito.when(skillService.addSkill(username, skillDTO)).thenReturn(Optional.of(skillDTO));
         mvc.perform(post(url + username)
@@ -78,7 +79,7 @@ public class AddSkillEndpointTest {
         String skillDtoJson = createJson(skillDTO);
         Role role = new Role("ROLE_INDIVIDUAL");
         role.setId(id);
-        User user = new User("username", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(role));
+        User user = new UserEntityBuilder().setUsername("username").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setOrganizationName("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of(role)).createUser();
 
         Mockito.when(skillService.addSkill(username, skillDTO)).thenReturn(Optional.of(skillDTO));
         mvc.perform(post(url + username)

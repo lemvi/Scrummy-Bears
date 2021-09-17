@@ -1,6 +1,7 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.InvalidLoginCount;
+import academy.everyonecodes.java.data.UserEntityBuilder;
 import academy.everyonecodes.java.data.repositories.InvalidLoginCountRepository;
 import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.repositories.UserRepository;
@@ -104,7 +105,7 @@ class LoginServiceTest {
 
 		@Override
 		public Object getPrincipal() {
-			return new UserPrincipal(new User("Testy", "testPassword", null, null, null, null, null, null, null, null, "test@testmail.com", null, null, null));
+			return new UserPrincipal(new UserEntityBuilder().setUsername("Testy").setPassword("testPassword").setFirstNamePerson(null).setLastNamePerson(null).setOrganizationName(null).setDateOfBirth(null).setPostalCode(null).setCity(null).setStreet(null).setStreetNumber(null).setEmailAddress("test@testmail.com").setTelephoneNumber(null).setDescription(null).setRoles(null).createUser());
 		}
 
 		@Override
@@ -145,7 +146,7 @@ class LoginServiceTest {
 	@Test
 	void runFailedAuthenticationProcedure_UserFound_NoInvalidLoginCounter() {
 
-		User testUser = new User();
+		User testUser = new UserEntityBuilder().createUser();
 		testUser.setId(1L);
 		testUser.setUsername("Testy");
 		testUser.setPassword("test");
@@ -175,7 +176,7 @@ class LoginServiceTest {
 	@Test
 	void runFailedAuthenticationProcedure_UserFound_FoundInvalidLoginCounter_DoesNotReach5() {
 
-		User testUser = new User();
+		User testUser = new UserEntityBuilder().createUser();
 		testUser.setId(1L);
 		testUser.setUsername("Testy");
 		testUser.setPassword("test");
@@ -201,7 +202,7 @@ class LoginServiceTest {
 
 	@Test
 	void runFailedAuthenticationProcedure_UserFound_FoundInvalidLoginCounter_Reaches5() {
-		User testUser = new User();
+		User testUser = new UserEntityBuilder().createUser();
 		testUser.setId(1L);
 		testUser.setUsername("Testy");
 		testUser.setPassword("test");
@@ -233,7 +234,7 @@ class LoginServiceTest {
 
 	@Test
 	void resetFailedAttemptsIfNecessary_ResetNecessary() {
-		User testUser = new User();
+		User testUser = new UserEntityBuilder().createUser();
 		testUser.setId(1L);
 		testUser.setUsername("Testy");
 		testUser.setPassword("test");
@@ -259,7 +260,7 @@ class LoginServiceTest {
 
 	@Test
 	void resetFailedAttemptsIfNecessary_ResetNotNecessary_NoLoginCount() {
-		User testUser = new User();
+		User testUser = new UserEntityBuilder().createUser();
 		testUser.setId(1L);
 		testUser.setUsername("Testy");
 		testUser.setPassword("test");
@@ -284,7 +285,7 @@ class LoginServiceTest {
 
 	@Test
 	void resetFailedAttemptsIfNecessary_ResetNotNecessary_LoginCountIsZero() {
-		User testUser = new User();
+		User testUser = new UserEntityBuilder().createUser();
 		testUser.setId(1L);
 		testUser.setUsername("Testy");
 		testUser.setPassword("test");

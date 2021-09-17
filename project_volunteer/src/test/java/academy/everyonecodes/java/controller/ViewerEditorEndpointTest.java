@@ -2,6 +2,7 @@ package academy.everyonecodes.java.controller;
 
 import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.Role;
+import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTOBuilder;
 import academy.everyonecodes.java.service.ViewerEditorService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -39,20 +40,7 @@ public class ViewerEditorEndpointTest {
     public void getAccountInfo() throws Exception {
         String input = "username";
         String url = "/account/";
-        IndividualVolunteerDTO userdto = new IndividualVolunteerDTO(
-                "username",
-                "pw",
-                "firstName",
-                "lastName",
-                LocalDate.now(),
-                "postalCode",
-                "city",
-                "street",
-                "streetnumber",
-                "email@email.com",
-                "phone",
-                "description",
-                Set.of(new Role(1L, "ROLE_INDIVIDUAL")));
+        IndividualVolunteerDTO userdto = new IndividualVolunteerDTOBuilder().setUsername("username").setPassword("pw").setFirstNamePerson("firstName").setLastNamePerson("lastName").setDateOfBirth(LocalDate.now()).setPostalCode("postalCode").setCity("city").setStreet("street").setStreetNumber("streetnumber").setEmailAddress("email@email.com").setTelephoneNumber("phone").setDescription("description").setRoles(Set.of(new Role(1L, "ROLE_INDIVIDUAL"))).createIndividualVolunteerDTO();
         Mockito.when(viewerEditorService.getAccountInfo(input)).thenReturn(Optional.of(userdto));
         mvc.perform(get(url + input)
                 .accept(MediaType.APPLICATION_JSON))
@@ -68,7 +56,7 @@ public class ViewerEditorEndpointTest {
     public void getAccountInfo_ForbiddenAuthority() throws Exception {
         String input = "username";
         String url = "/account/";
-        IndividualVolunteerDTO userdto = new IndividualVolunteerDTO("username", "pw", "firstName", "lastName", LocalDate.now(), "postalCode", "city", "street", "streetnumber", "email@email.com", "phone", "description", Set.of(new Role(1L, "ROLE_INDIVIDUAL")));
+        IndividualVolunteerDTO userdto = new IndividualVolunteerDTOBuilder().setUsername("username").setPassword("pw").setFirstNamePerson("firstName").setLastNamePerson("lastName").setDateOfBirth(LocalDate.now()).setPostalCode("postalCode").setCity("city").setStreet("street").setStreetNumber("streetnumber").setEmailAddress("email@email.com").setTelephoneNumber("phone").setDescription("description").setRoles(Set.of(new Role(1L, "ROLE_INDIVIDUAL"))).createIndividualVolunteerDTO();
         Mockito.when(viewerEditorService.getAccountInfo(input)).thenReturn(Optional.of(userdto));
         mvc.perform(get(url + input)
                         .accept(MediaType.APPLICATION_JSON))
@@ -82,20 +70,7 @@ public class ViewerEditorEndpointTest {
     public void editAccountInfo() throws Exception{
         String input = "username";
         String url = "/account/";
-        IndividualVolunteerDTO userdto = new IndividualVolunteerDTO(
-                "username",
-                "pw",
-                "firstName",
-                "lastName",
-                LocalDate.now(),
-                "postalCode",
-                "city",
-                "street",
-                "streetnumber",
-                "email@email.com",
-                "phone",
-                "description",
-                Set.of(new Role(1L, "ROLE_INDIVIDUAL")));
+        IndividualVolunteerDTO userdto = new IndividualVolunteerDTOBuilder().setUsername("username").setPassword("pw").setFirstNamePerson("firstName").setLastNamePerson("lastName").setDateOfBirth(LocalDate.now()).setPostalCode("postalCode").setCity("city").setStreet("street").setStreetNumber("streetnumber").setEmailAddress("email@email.com").setTelephoneNumber("phone").setDescription("description").setRoles(Set.of(new Role(1L, "ROLE_INDIVIDUAL"))).createIndividualVolunteerDTO();
 
         String userDtoJson = createJson(userdto);
         System.out.println(userDtoJson);
@@ -125,20 +100,7 @@ public class ViewerEditorEndpointTest {
     public void editAccountInfo_ForbiddenAuthority() throws Exception{
         String input = "username";
         String url = "/account/";
-        IndividualVolunteerDTO userdto = new IndividualVolunteerDTO(
-                "username",
-                "pw",
-                "firstName",
-                "lastName",
-                LocalDate.now(),
-                "postalCode",
-                "city",
-                "street",
-                "streetnumber",
-                "email@email.com",
-                "phone",
-                "description",
-                Set.of(new Role(1L, "ROLE_INDIVIDUAL")));
+        IndividualVolunteerDTO userdto = new IndividualVolunteerDTOBuilder().setUsername("username").setPassword("pw").setFirstNamePerson("firstName").setLastNamePerson("lastName").setDateOfBirth(LocalDate.now()).setPostalCode("postalCode").setCity("city").setStreet("street").setStreetNumber("streetnumber").setEmailAddress("email@email.com").setTelephoneNumber("phone").setDescription("description").setRoles(Set.of(new Role(1L, "ROLE_INDIVIDUAL"))).createIndividualVolunteerDTO();
 
         String userDtoJson = createJson(userdto);
         System.out.println(userDtoJson);

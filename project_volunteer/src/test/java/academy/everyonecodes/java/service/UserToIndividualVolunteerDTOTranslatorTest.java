@@ -1,7 +1,9 @@
 package academy.everyonecodes.java.service;
 
+import academy.everyonecodes.java.data.UserEntityBuilder;
 import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTOBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -30,8 +32,8 @@ public class UserToIndividualVolunteerDTOTranslatorTest
     private static Stream<Arguments> inputData() {
         return Stream.of(
                 Arguments.of(
-                        new User("test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of()),
-                        new IndividualVolunteerDTO("test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of())));
+                        new UserEntityBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setOrganizationName("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of()).createUser(),
+                        new IndividualVolunteerDTOBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of()).createIndividualVolunteerDTO()));
     }
 
     @ParameterizedTest
@@ -44,8 +46,8 @@ public class UserToIndividualVolunteerDTOTranslatorTest
     private static Stream<Arguments> inputDataTwo() {
         return Stream.of(
                 Arguments.of(
-                        new IndividualVolunteerDTO("test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of()),
-                        new User("test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of())));
+                        new IndividualVolunteerDTOBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of()).createIndividualVolunteerDTO(),
+                        new UserEntityBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of()).createUser()));
     }
 
 }

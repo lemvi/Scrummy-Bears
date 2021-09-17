@@ -84,39 +84,16 @@ public class ActivityServiceTest
     }
 
     Set<Role> roles = new HashSet<>(List.of(new Role(2L, "ROLE_INDIVIDUAL")));
-    User organizer = new User(
-            "username",
-            "password",
-            "email@email.com",
-            roles
-    );
+    User organizer = new UserEntityBuilder().setUsername("username").setPassword("password").setEmailAddress("email@email.com").setRoles(roles).createUser();
     Set<User> applicants = new HashSet<>();
     Set<User> participants = new HashSet<>();
     String categories = "oneCategory";
     LocalDateTime startDateTime = LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10));
     LocalDateTime endDateTime = LocalDateTime.of(LocalDate.of(2100, 2, 1), LocalTime.of(10, 10, 10));
 
-    Activity activity = new Activity(
-            "title",
-            "descr",
-            "skills",
-            List.of(categories),
-            startDateTime,
-            endDateTime,
-            false,
-            organizer,
-            applicants,
-            participants);
+    Activity activity = new ActivityBuilder().setTitle("title").setDescription("descr").setRecommendedSkills("skills").setCategories(List.of(categories)).setStartDateTime(startDateTime).setEndDateTime(endDateTime).setOpenEnd(false).setOrganizer(organizer).setApplicants(applicants).setParticipants(participants).createActivity();
 
-    Draft draft = new Draft(
-            "title",
-            "descr",
-            "skills",
-            categories,
-            startDateTime,
-            endDateTime,
-            false,
-            organizer.getUsername());
+    Draft draft = new DraftBuilder().setTitle("title").setDescription("descr").setRecommendedSkills("skills").setCategories(categories).setStartDateTime(startDateTime).setEndDateTime(endDateTime).setOpenEnd(false).setOrganizerUsername(organizer.getUsername()).createDraft();
 
 
     @Test
@@ -432,7 +409,7 @@ public class ActivityServiceTest
         draft.setId(1L);
         Mockito.when(draftRepository.findById(draft.getId())).thenReturn(Optional.empty());
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(organizer.getUsername());
-        Mockito.when(translator.toActivity(new Draft())).thenReturn(new Activity(true));
+        Mockito.when(translator.toActivity(new DraftBuilder().createDraft())).thenReturn(new ActivityBuilder().setOpenEnd(true).createActivity());
 
         Exception exception = assertThrows(HttpStatusCodeException.class, () ->
         {

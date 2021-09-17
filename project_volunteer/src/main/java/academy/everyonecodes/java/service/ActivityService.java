@@ -1,9 +1,6 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.Draft;
-import academy.everyonecodes.java.data.ErrorMessage;
-import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import academy.everyonecodes.java.data.repositories.DraftRepository;
 import academy.everyonecodes.java.data.repositories.UserRepository;
@@ -73,7 +70,7 @@ public class ActivityService
     public Activity findActivityById(Long id)
     {
         Optional<Activity> oActivity = activityRepository.findById(id);
-        Activity activity = new Activity();
+        Activity activity = new ActivityBuilder().createActivity();
         if (oActivity.isEmpty())
             ExceptionThrower.badRequest(ErrorMessage.NO_MATCHING_ACTIVITY_FOUND);
         else
@@ -135,7 +132,7 @@ public class ActivityService
     public Draft findDraftById(Long id)
     {
         Optional<Draft> oDraft = draftRepository.findById(id);
-        Draft draft = new Draft();
+        Draft draft = new DraftBuilder().createDraft();
         if (oDraft.isEmpty())
             ExceptionThrower.badRequest(ErrorMessage.NO_MATCHING_DRAFT_FOUND);
         else
@@ -180,7 +177,7 @@ public class ActivityService
 
     private Activity saveActivity(Draft draft)
     {
-        User user = new User();
+        User user = new UserEntityBuilder().createUser();
         Activity activity = activityDraftTranslator.toActivity(draft);
         Optional<User> oUser = userRepository.findByUsername(getAuthenticatedName());
         if (oUser.isEmpty())

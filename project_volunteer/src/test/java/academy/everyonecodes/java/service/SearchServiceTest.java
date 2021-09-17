@@ -1,11 +1,8 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.Skill;
+import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.dtos.VolunteerProfileDTO;
 import academy.everyonecodes.java.data.repositories.ActivityRepository;
-import academy.everyonecodes.java.data.Role;
-import academy.everyonecodes.java.data.User;
 import academy.everyonecodes.java.data.repositories.SkillRepository;
 import academy.everyonecodes.java.data.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -68,10 +64,10 @@ public class SearchServiceTest {
     @Test
     void searchActivityTest_CONTAINING_SKILLS() {
         String keyword = "skills";
-        User organizer = new User("username", "first", "last", Set.of(new Role("ROLE_ORGANIZATION")));
-        Activity a = new Activity("title1", "desc1", "skills", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a1 = new Activity("title1", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a2 = new Activity("title2", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
+        User organizer = new UserEntityBuilder().setUsername("username").setPassword("first").setEmailAddress("last").setRoles(Set.of(new Role("ROLE_ORGANIZATION"))).createUser();
+        Activity a = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a1 = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a2 = new ActivityBuilder().setTitle("title2").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
         List<Activity> expected = List.of(a, a1, a2);
         when(activityRepository.findFullTextSearchByText(keyword)).thenReturn(expected);
         when(activityRepository.findByRecommendedSkillsContainingIgnoreCase(keyword)).thenReturn(expected);
@@ -85,9 +81,9 @@ public class SearchServiceTest {
     @Test
     void searchActivityTest_CONTAINING_TITLE() {
         String keyword = "title";
-        User organizer = new User("username", "first", "last", Set.of(new Role("ROLE_ORGANIZATION")));
-        Activity a1 = new Activity("title1", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a2 = new Activity("title2", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
+        User organizer = new UserEntityBuilder().setUsername("username").setPassword("first").setEmailAddress("last").setRoles(Set.of(new Role("ROLE_ORGANIZATION"))).createUser();
+        Activity a1 = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a2 = new ActivityBuilder().setTitle("title2").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
         List<Activity> expected = List.of(a1, a2);
         when(activityRepository.findFullTextSearchByText(keyword)).thenReturn(expected);
         when(activityRepository.findByTitleContainingIgnoreCase(keyword)).thenReturn(expected);
@@ -100,9 +96,9 @@ public class SearchServiceTest {
     @Test
     void searchActivityTest_CONTAINING_DESCRIPTION() {
         String keyword = "description";
-        User organizer = new User("username", "first", "last", Set.of(new Role("ROLE_ORGANIZATION")));
-        Activity a1 = new Activity("title1", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a2 = new Activity("title2", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
+        User organizer = new UserEntityBuilder().setUsername("username").setPassword("first").setEmailAddress("last").setRoles(Set.of(new Role("ROLE_ORGANIZATION"))).createUser();
+        Activity a1 = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a2 = new ActivityBuilder().setTitle("title2").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
         List<Activity> expected = List.of(a1, a2);
         when(activityRepository.findFullTextSearchByText(keyword)).thenReturn(expected);
         when(activityRepository.findByDescriptionContainingIgnoreCase(keyword)).thenReturn(expected);
@@ -115,10 +111,10 @@ public class SearchServiceTest {
     @Test
     void searchActivityTest_CONTAINING_ALL() {
         String keyword = "cook";
-        User organizer = new User("username", "first", "last", Set.of(new Role("ROLE_ORGANIZATION")));
-        Activity a1 = new Activity("cook", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a2 = new Activity("title2", "cook", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a3 = new Activity("title2", "desc3", "cook", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
+        User organizer = new UserEntityBuilder().setUsername("username").setPassword("first").setEmailAddress("last").setRoles(Set.of(new Role("ROLE_ORGANIZATION"))).createUser();
+        Activity a1 = new ActivityBuilder().setTitle("cook").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a2 = new ActivityBuilder().setTitle("title2").setDescription("cook").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a3 = new ActivityBuilder().setTitle("title2").setDescription("desc3").setRecommendedSkills("cook").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
 
         List<Activity> titleList = List.of(a1);
         List<Activity> descList = List.of(a2);
@@ -146,13 +142,13 @@ public class SearchServiceTest {
     }
 
     private static Stream<Arguments> inputData() {
-        User organizer = new User("username", "first", "last", Set.of(new Role("ROLE_ORGANIZATION")));
-        Activity a1 = new Activity("title1", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a2 = new Activity("title2", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a3 = new Activity("title3", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a4 = new Activity("title4", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a5 = new Activity("title5", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a6 = new Activity("title6", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
+        User organizer = new UserEntityBuilder().setUsername("username").setPassword("first").setEmailAddress("last").setRoles(Set.of(new Role("ROLE_ORGANIZATION"))).createUser();
+        Activity a1 = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a2 = new ActivityBuilder().setTitle("title2").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a3 = new ActivityBuilder().setTitle("title3").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a4 = new ActivityBuilder().setTitle("title4").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a5 = new ActivityBuilder().setTitle("title5").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a6 = new ActivityBuilder().setTitle("title6").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
 
 
         return Stream.of(
@@ -210,9 +206,9 @@ public class SearchServiceTest {
         Long id3 = 3L;
         Role role = new Role("ROLE_VOLUNTEER");
         role.setId(id1);
-        User u1 = new User("volunteer1", "pw", "first", "last", LocalDate.now(), "123", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(role));
-        User u2 = new User("volunteer2", "pw", "first", "last", LocalDate.now(), "123", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(role));
-        User u3 = new User("volunteer3", "pw", "first", "last", LocalDate.now(), "123", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(role));
+        User u1 = new UserEntityBuilder().setUsername("volunteer1").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("123").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(role)).createUser();
+        User u2 = new UserEntityBuilder().setUsername("volunteer2").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("123").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(role)).createUser();
+        User u3 = new UserEntityBuilder().setUsername("volunteer3").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("123").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(role)).createUser();
         u1.setId(id1);
         u2.setId(id2);
         u3.setId(id3);
@@ -260,9 +256,9 @@ public class SearchServiceTest {
         Long id3 = 3L;
         Role role = new Role("ROLE_VOLUNTEER");
         role.setId(id1);
-        User u1 = new User("volunteer1", "pw", "first", "last", LocalDate.now(), "123", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(role));
-        User u2 = new User("volunteer2", "pw", "first", "last", LocalDate.now(), "123", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(role));
-        User u3 = new User("volunteer3", "pw", "first", "last", LocalDate.now(), "123", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(role));
+        User u1 = new UserEntityBuilder().setUsername("volunteer1").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("123").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(role)).createUser();
+        User u2 = new UserEntityBuilder().setUsername("volunteer2").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("123").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(role)).createUser();
+        User u3 = new UserEntityBuilder().setUsername("volunteer3").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("123").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(role)).createUser();
         u1.setId(id1);
         u2.setId(id2);
         u3.setId(id3);
@@ -303,11 +299,11 @@ public class SearchServiceTest {
             Long id5 = 5L;
             Role role = new Role("ROLE_VOLUNTEER");
             role.setId(id1);
-            User u1 = new User("volunteer1", "pw", "first", "last", LocalDate.now(), "123", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(role));
-            User u2 = new User("volunteer2", "pw", "first", "last", LocalDate.now(), "123", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(role));
-            User u3 = new User("volunteer3", "pw", "first", "last", LocalDate.now(), "123", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(role));
-            User u4 = new User("volunteer4", "pw", "first", "last", LocalDate.now(), "123", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(role));
-            User u5 = new User("volunteer5", "pw", "first", "last", LocalDate.now(), "123", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(role));
+            User u1 = new UserEntityBuilder().setUsername("volunteer1").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("123").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(role)).createUser();
+            User u2 = new UserEntityBuilder().setUsername("volunteer2").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("123").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(role)).createUser();
+            User u3 = new UserEntityBuilder().setUsername("volunteer3").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("123").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(role)).createUser();
+            User u4 = new UserEntityBuilder().setUsername("volunteer4").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("123").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(role)).createUser();
+            User u5 = new UserEntityBuilder().setUsername("volunteer5").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("123").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(role)).createUser();
 
             u1.setId(id1);
             u2.setId(id2);
@@ -371,11 +367,11 @@ public class SearchServiceTest {
     }
 
     private static Stream<Arguments> inputData2() {
-        User u1 = new User("volunteer1", "pw", "first", "last", LocalDate.now(), "123", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(new Role("ROLE_VOLUNTEER")));
-        User u2 = new User("volunteer2", "pw", "first", "last", LocalDate.now(), "123", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(new Role("ROLE_VOLUNTEER")));
-        User u3 = new User("volunteer3", "pw", "first", "last", LocalDate.now(), "123", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(new Role("ROLE_VOLUNTEER")));
-        User u4 = new User("volunteer4", "pw", "first", "last", LocalDate.now(), "123", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(new Role("ROLE_VOLUNTEER")));
-        User u5 = new User("volunteer5", "pw", "first", "last", LocalDate.now(), "123", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(new Role("ROLE_VOLUNTEER")));
+        User u1 = new UserEntityBuilder().setUsername("volunteer1").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("123").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(new Role("ROLE_VOLUNTEER"))).createUser();
+        User u2 = new UserEntityBuilder().setUsername("volunteer2").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("123").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(new Role("ROLE_VOLUNTEER"))).createUser();
+        User u3 = new UserEntityBuilder().setUsername("volunteer3").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("123").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(new Role("ROLE_VOLUNTEER"))).createUser();
+        User u4 = new UserEntityBuilder().setUsername("volunteer4").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("123").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(new Role("ROLE_VOLUNTEER"))).createUser();
+        User u5 = new UserEntityBuilder().setUsername("volunteer5").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("123").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(new Role("ROLE_VOLUNTEER"))).createUser();
         Skill s1 = new Skill(u1, "test");
         s1.setId(u1.getId());
         Skill s2 = new Skill(u2, "test");
@@ -422,11 +418,11 @@ public class SearchServiceTest {
         String endDate = "2022-08-08";
         int ratingMin = 0;
         int ratingMax = 5;
-        User organizer = new User("username", "first", "last", Set.of(new Role("ROLE_ORGANIZATION")));
+        User organizer = new UserEntityBuilder().setUsername("username").setPassword("first").setEmailAddress("last").setRoles(Set.of(new Role("ROLE_ORGANIZATION"))).createUser();
         organizer.setId(1L);
-        Activity a = new Activity("title1", "desc1", "skills", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a1 = new Activity("title1", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a2 = new Activity("title2", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
+        Activity a = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a1 = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a2 = new ActivityBuilder().setTitle("title2").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
         List<Activity> expected = List.of(a);
         when(activityRepository.findFullTextSearchByText(keyword)).thenReturn(expected);
         when(activityRepository.findByRecommendedSkillsContainingIgnoreCase(keyword)).thenReturn(expected);
@@ -449,11 +445,11 @@ public class SearchServiceTest {
         String startDate = "2020-08-08";
         String endDate = "2022-08-08";
 
-        User organizer = new User("username", "first", "last", Set.of(new Role("ROLE_ORGANIZATION")));
+        User organizer = new UserEntityBuilder().setUsername("username").setPassword("first").setEmailAddress("last").setRoles(Set.of(new Role("ROLE_ORGANIZATION"))).createUser();
         organizer.setId(1L);
-        Activity a = new Activity("title1", "desc1", "skills", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a1 = new Activity("title1", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a2 = new Activity("title2", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
+        Activity a = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a1 = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a2 = new ActivityBuilder().setTitle("title2").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
         List<Activity> expected = List.of(a);
         when(activityRepository.findFullTextSearchByText(keyword)).thenReturn(expected);
         when(activityRepository.findByRecommendedSkillsContainingIgnoreCase(keyword)).thenReturn(expected);
@@ -471,11 +467,11 @@ public class SearchServiceTest {
 
         int ratingMin = 0;
         int ratingMax = 5;
-        User organizer = new User("username", "first", "last", Set.of(new Role("ROLE_ORGANIZATION")));
+        User organizer = new UserEntityBuilder().setUsername("username").setPassword("first").setEmailAddress("last").setRoles(Set.of(new Role("ROLE_ORGANIZATION"))).createUser();
         organizer.setId(1L);
-        Activity a = new Activity("title1", "desc1", "skills", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a1 = new Activity("title1", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a2 = new Activity("title2", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
+        Activity a = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a1 = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a2 = new ActivityBuilder().setTitle("title2").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
         List<Activity> expected = List.of(a);
         when(activityRepository.findFullTextSearchByText(keyword)).thenReturn(expected);
         when(activityRepository.findByRecommendedSkillsContainingIgnoreCase(keyword)).thenReturn(expected);
@@ -498,11 +494,11 @@ public class SearchServiceTest {
         String endDate = "2022-08-08";
         int ratingMin = 0;
         int ratingMax = 5;
-        User organizer = new User("username", "first", "last", Set.of(new Role("ROLE_ORGANIZATION")));
+        User organizer = new UserEntityBuilder().setUsername("username").setPassword("first").setEmailAddress("last").setRoles(Set.of(new Role("ROLE_ORGANIZATION"))).createUser();
         organizer.setId(1L);
-        Activity a = new Activity("title1", "desc1", "skills", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a1 = new Activity("title1", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a2 = new Activity("title2", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
+        Activity a = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a1 = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a2 = new ActivityBuilder().setTitle("title2").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
         List<Activity> expected = List.of(a);
         when(activityRepository.findFullTextSearchByText(keyword)).thenReturn(expected);
         when(activityRepository.findByRecommendedSkillsContainingIgnoreCase(keyword)).thenReturn(expected);
@@ -524,11 +520,11 @@ public class SearchServiceTest {
         String creatorFilter = "username";
 
 
-        User organizer = new User("username", "first", "last", Set.of(new Role("ROLE_ORGANIZATION")));
+        User organizer = new UserEntityBuilder().setUsername("username").setPassword("first").setEmailAddress("last").setRoles(Set.of(new Role("ROLE_ORGANIZATION"))).createUser();
         organizer.setId(1L);
-        Activity a = new Activity("title1", "desc1", "skills", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a1 = new Activity("title1", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a2 = new Activity("title2", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
+        Activity a = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a1 = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a2 = new ActivityBuilder().setTitle("title2").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
         List<Activity> expected = List.of(a);
         when(activityRepository.findFullTextSearchByText(keyword)).thenReturn(expected);
         when(activityRepository.findByRecommendedSkillsContainingIgnoreCase(keyword)).thenReturn(expected);
@@ -545,11 +541,11 @@ public class SearchServiceTest {
         String startDate = "2020-08-08";
         String endDate = "2022-08-08";
 
-        User organizer = new User("username", "first", "last", Set.of(new Role("ROLE_ORGANIZATION")));
+        User organizer = new UserEntityBuilder().setUsername("username").setPassword("first").setEmailAddress("last").setRoles(Set.of(new Role("ROLE_ORGANIZATION"))).createUser();
         organizer.setId(1L);
-        Activity a = new Activity("title1", "desc1", "skills", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a1 = new Activity("title1", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a2 = new Activity("title2", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
+        Activity a = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a1 = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a2 = new ActivityBuilder().setTitle("title2").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
         List<Activity> expected = List.of(a);
         when(activityRepository.findFullTextSearchByText(keyword)).thenReturn(expected);
         when(activityRepository.findByRecommendedSkillsContainingIgnoreCase(keyword)).thenReturn(expected);
@@ -566,11 +562,11 @@ public class SearchServiceTest {
 
         int ratingMin = 0;
         int ratingMax = 5;
-        User organizer = new User("username", "first", "last", Set.of(new Role("ROLE_ORGANIZATION")));
+        User organizer = new UserEntityBuilder().setUsername("username").setPassword("first").setEmailAddress("last").setRoles(Set.of(new Role("ROLE_ORGANIZATION"))).createUser();
         organizer.setId(1L);
-        Activity a = new Activity("title1", "desc1", "skills", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a1 = new Activity("title1", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a2 = new Activity("title2", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
+        Activity a = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a1 = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a2 = new ActivityBuilder().setTitle("title2").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
         List<Activity> expected = List.of(a);
         when(activityRepository.findFullTextSearchByText(keyword)).thenReturn(expected);
         when(activityRepository.findByRecommendedSkillsContainingIgnoreCase(keyword)).thenReturn(expected);
@@ -593,11 +589,11 @@ public class SearchServiceTest {
         String endDate = "2022-08-08";
         int ratingMin = 0;
         int ratingMax = 1;
-        User organizer = new User("username", "first", "last", Set.of(new Role("ROLE_ORGANIZATION")));
+        User organizer = new UserEntityBuilder().setUsername("username").setPassword("first").setEmailAddress("last").setRoles(Set.of(new Role("ROLE_ORGANIZATION"))).createUser();
         organizer.setId(1L);
-        Activity a = new Activity("title1", "desc1", "skills", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a1 = new Activity("title1", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
-        Activity a2 = new Activity("title2", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
+        Activity a = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a1 = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
+        Activity a2 = new ActivityBuilder().setTitle("title2").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
         List<Activity> expected = List.of(a);
         when(activityRepository.findFullTextSearchByText(keyword)).thenReturn(expected);
         when(activityRepository.findByRecommendedSkillsContainingIgnoreCase(keyword)).thenReturn(expected);
@@ -621,9 +617,9 @@ public class SearchServiceTest {
         int ratingMax = 5;
         Role role = new Role("ROLE_VOLUNTEER");
         role.setId(1L);
-        User u1 = new User("volunteer1", "pw", "first", "last", LocalDate.now(), "1210", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(role));
-        User u2 = new User("volunteer2", "pw", "first", "last", LocalDate.now(), "1210", "city", "street", "1a", "email@email.com", "0660", "sd", Set.of(role));
-        User u3 = new User("volunteer3", "pw", "first", "last", LocalDate.now(), "1210", "city", "street", "1a", "email@email.com", "0660", "sd", Set.of(role));
+        User u1 = new UserEntityBuilder().setUsername("volunteer1").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("1210").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(role)).createUser();
+        User u2 = new UserEntityBuilder().setUsername("volunteer2").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("1210").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("sd").setRoles(Set.of(role)).createUser();
+        User u3 = new UserEntityBuilder().setUsername("volunteer3").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("1210").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("sd").setRoles(Set.of(role)).createUser();
         u1.setId(1L);
         u2.setId(2L);
         u3.setId(3L);
@@ -669,9 +665,9 @@ public class SearchServiceTest {
 
         Role role = new Role("ROLE_VOLUNTEER");
         role.setId(1L);
-        User u1 = new User("volunteer1", "pw", "first", "last", LocalDate.now(), "1210", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(role));
-        User u2 = new User("volunteer2", "pw", "first", "last", LocalDate.now(), "1210", "city", "street", "1a", "email@email.com", "0660", "sd", Set.of(role));
-        User u3 = new User("volunteer3", "pw", "first", "last", LocalDate.now(), "1210", "city", "street", "1a", "email@email.com", "0660", "sd", Set.of(role));
+        User u1 = new UserEntityBuilder().setUsername("volunteer1").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("1210").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(role)).createUser();
+        User u2 = new UserEntityBuilder().setUsername("volunteer2").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("1210").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("sd").setRoles(Set.of(role)).createUser();
+        User u3 = new UserEntityBuilder().setUsername("volunteer3").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("1210").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("sd").setRoles(Set.of(role)).createUser();
         u1.setId(1L);
         u2.setId(2L);
         u3.setId(3L);
@@ -714,9 +710,9 @@ public class SearchServiceTest {
         int ratingMax = 5;
         Role role = new Role("ROLE_VOLUNTEER");
         role.setId(1L);
-        User u1 = new User("volunteer1", "pw", "first", "last", LocalDate.now(), "1210", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(role));
-        User u2 = new User("volunteer2", "pw", "first", "last", LocalDate.now(), "1210", "city", "street", "1a", "email@email.com", "0660", "sd", Set.of(role));
-        User u3 = new User("volunteer3", "pw", "first", "last", LocalDate.now(), "1210", "city", "street", "1a", "email@email.com", "0660", "sd", Set.of(role));
+        User u1 = new UserEntityBuilder().setUsername("volunteer1").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("1210").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(role)).createUser();
+        User u2 = new UserEntityBuilder().setUsername("volunteer2").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("1210").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("sd").setRoles(Set.of(role)).createUser();
+        User u3 = new UserEntityBuilder().setUsername("volunteer3").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("1210").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("sd").setRoles(Set.of(role)).createUser();
         u1.setId(1L);
         u2.setId(2L);
         u3.setId(3L);
@@ -763,9 +759,9 @@ public class SearchServiceTest {
         int ratingMax = 1;
         Role role = new Role("ROLE_VOLUNTEER");
         role.setId(1L);
-        User u1 = new User("volunteer1", "pw", "first", "last", LocalDate.now(), "1210", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(role));
-        User u2 = new User("volunteer2", "pw", "first", "last", LocalDate.now(), "1210", "city", "street", "1a", "email@email.com", "0660", "sd", Set.of(role));
-        User u3 = new User("volunteer3", "pw", "first", "last", LocalDate.now(), "1210", "city", "street", "1a", "email@email.com", "0660", "sd", Set.of(role));
+        User u1 = new UserEntityBuilder().setUsername("volunteer1").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("1210").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(role)).createUser();
+        User u2 = new UserEntityBuilder().setUsername("volunteer2").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("1210").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("sd").setRoles(Set.of(role)).createUser();
+        User u3 = new UserEntityBuilder().setUsername("volunteer3").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("1210").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("sd").setRoles(Set.of(role)).createUser();
         u1.setId(1L);
         u2.setId(2L);
         u3.setId(3L);
@@ -801,9 +797,9 @@ public class SearchServiceTest {
 
         Role role = new Role("ROLE_VOLUNTEER");
         role.setId(1L);
-        User u1 = new User("volunteer1", "pw", "first", "last", LocalDate.now(), "1210", "city", "street", "1a", "email@email.com", "0660", "desc", Set.of(role));
-        User u2 = new User("volunteer2", "pw", "first", "last", LocalDate.now(), "1210", "city", "street", "1a", "email@email.com", "0660", "sd", Set.of(role));
-        User u3 = new User("volunteer3", "pw", "first", "last", LocalDate.now(), "1210", "city", "street", "1a", "email@email.com", "0660", "sd", Set.of(role));
+        User u1 = new UserEntityBuilder().setUsername("volunteer1").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("1210").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("desc").setRoles(Set.of(role)).createUser();
+        User u2 = new UserEntityBuilder().setUsername("volunteer2").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("1210").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("sd").setRoles(Set.of(role)).createUser();
+        User u3 = new UserEntityBuilder().setUsername("volunteer3").setPassword("pw").setFirstNamePerson("first").setLastNamePerson("last").setDateOfBirth(LocalDate.now()).setPostalCode("1210").setCity("city").setStreet("street").setStreetNumber("1a").setEmailAddress("email@email.com").setTelephoneNumber("0660").setDescription("sd").setRoles(Set.of(role)).createUser();
         u1.setId(1L);
         u2.setId(2L);
         u3.setId(3L);

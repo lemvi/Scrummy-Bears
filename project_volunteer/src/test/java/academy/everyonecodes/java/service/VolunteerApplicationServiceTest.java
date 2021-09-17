@@ -1,8 +1,6 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.Role;
-import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import academy.everyonecodes.java.data.repositories.UserRepository;
 import academy.everyonecodes.java.service.email.EmailServiceImpl;
@@ -16,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureMockRestServiceServer;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -78,36 +75,16 @@ public class VolunteerApplicationServiceTest {
 
 
     Set<Role> rolesOrg = new HashSet<>(List.of(new Role(1L, "ROLE_VOLUNTEER")));
-    User organizer = new User(
-            "username",
-            "password",
-            "email@email.com",
-            rolesOrg
-    );
+    User organizer = new UserEntityBuilder().setUsername("username").setPassword("password").setEmailAddress("email@email.com").setRoles(rolesOrg).createUser();
     Set<Role> rolesVol = new HashSet<>(List.of(new Role(1L, "ROLE_VOLUNTEER")));
-    User volunteer = new User(
-            "username",
-            "password",
-            "email@email.com",
-            rolesVol
-    );
+    User volunteer = new UserEntityBuilder().setUsername("username").setPassword("password").setEmailAddress("email@email.com").setRoles(rolesVol).createUser();
     Set<User> applicants = new HashSet<>();
     Set<User> participants = new HashSet<>();
     String categories = "oneCategory";
     LocalDateTime startDateTime = LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10));
     LocalDateTime endDateTime = LocalDateTime.of(LocalDate.of(2100, 2, 1), LocalTime.of(10, 10, 10));
 
-    Activity activity = new Activity(
-            "title",
-            "descr",
-            "skills",
-            List.of(categories),
-            startDateTime,
-            endDateTime,
-            false,
-            organizer,
-            applicants,
-            participants);
+    Activity activity = new ActivityBuilder().setTitle("title").setDescription("descr").setRecommendedSkills("skills").setCategories(List.of(categories)).setStartDateTime(startDateTime).setEndDateTime(endDateTime).setOpenEnd(false).setOrganizer(organizer).setApplicants(applicants).setParticipants(participants).createActivity();
 
     @Test
     void apply_Text800Chars_Valid() {

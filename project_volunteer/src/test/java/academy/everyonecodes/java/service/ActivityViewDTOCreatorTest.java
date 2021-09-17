@@ -32,14 +32,14 @@ class ActivityViewDTOCreatorTest {
 
     @Test
     void createActivityViewDTO_forVolunteer_valid() {
-        Activity activity = new Activity();
+        Activity activity = new ActivityBuilder().createActivity();
         Long organizerId = 1L;
         Long userId = 2L;
         String title = "title";
         Status status = Status.ACTIVE;
         LocalDateTime localDateTime = LocalDateTime.MAX;
-        User userOrganizer = new User();
-        User userVolunteer = new User();
+        User userOrganizer = new UserEntityBuilder().createUser();
+        User userVolunteer = new UserEntityBuilder().createUser();
         userVolunteer.setId(userId);
         double rating = 3.0;
         int singleRating = 3;
@@ -58,8 +58,8 @@ class ActivityViewDTOCreatorTest {
 
         when(statusHandler.getStatusForSpecificActivityAndVolunteer(activity, userId)).thenReturn(status);
         when(ratingService.calculateAverageUserRating(organizerId)).thenReturn(rating);
-        when(ratingService.findByActivityAndUser(activity, userOrganizer)).thenReturn(java.util.Optional.of(new Rating(3, "feedback given")));
-        when(ratingService.findByActivityAndUser(activity, userVolunteer)).thenReturn(java.util.Optional.of(new Rating(3, "feedback received")));
+        when(ratingService.findByActivityAndUser(activity, userOrganizer)).thenReturn(java.util.Optional.of(new RatingBuilder().setRatingValue(3).setFeedback("feedback given").createRating()));
+        when(ratingService.findByActivityAndUser(activity, userVolunteer)).thenReturn(java.util.Optional.of(new RatingBuilder().setRatingValue(3).setFeedback("feedback received").createRating()));
 
         OrganizerViewForActivityViewDTO_volunteer organizerView = new OrganizerViewForActivityViewDTO_volunteer(
                 username,
@@ -86,14 +86,14 @@ class ActivityViewDTOCreatorTest {
 
     @Test
     void createActivityViewDTO_forIndividualOrganization_completedActivity_valid() {
-        Activity activity = new Activity();
+        Activity activity = new ActivityBuilder().createActivity();
         Long organizerId = 1L;
         Long userId = 2L;
         String title = "title";
         Status status = Status.COMPLETED;
         LocalDateTime localDateTime = LocalDateTime.MAX;
-        User userOrganizer = new User();
-        User userVolunteer = new User();
+        User userOrganizer = new UserEntityBuilder().createUser();
+        User userVolunteer = new UserEntityBuilder().createUser();
         userVolunteer.setId(userId);
         double rating = 3.0;
         int singleRating = 3;
@@ -114,8 +114,8 @@ class ActivityViewDTOCreatorTest {
 
         when(statusHandler.getStatusForSpecificActivity(activity)).thenReturn(status);
         when(ratingService.calculateAverageUserRating(userId)).thenReturn(rating);
-        when(ratingService.findByActivityAndUser(activity, userOrganizer)).thenReturn(java.util.Optional.of(new Rating(3, "feedback received")));
-        when(ratingService.findByActivityAndUser(activity, userVolunteer)).thenReturn(java.util.Optional.of(new Rating(3, "feedback given")));
+        when(ratingService.findByActivityAndUser(activity, userOrganizer)).thenReturn(java.util.Optional.of(new RatingBuilder().setRatingValue(3).setFeedback("feedback received").createRating()));
+        when(ratingService.findByActivityAndUser(activity, userVolunteer)).thenReturn(java.util.Optional.of(new RatingBuilder().setRatingValue(3).setFeedback("feedback given").createRating()));
 
         VolunteerViewForActivityViewDTO_individualOrganization volunteerView = new VolunteerViewForActivityViewDTO_individualOrganization(
                 usernameVolunteer,
@@ -141,14 +141,14 @@ class ActivityViewDTOCreatorTest {
 
     @Test
     void createActivityViewDTO_forIndividualOrganization_activeActivityWithParticipant_valid() {
-        Activity activity = new Activity();
+        Activity activity = new ActivityBuilder().createActivity();
         Long organizerId = 1L;
         Long userId = 2L;
         String title = "title";
         Status status = Status.ACTIVE;
         LocalDateTime localDateTime = LocalDateTime.MAX;
-        User userOrganizer = new User();
-        User userVolunteer = new User();
+        User userOrganizer = new UserEntityBuilder().createUser();
+        User userVolunteer = new UserEntityBuilder().createUser();
         userVolunteer.setId(userId);
         double rating = 3.0;
         int singleRating = -1;
@@ -196,12 +196,12 @@ class ActivityViewDTOCreatorTest {
 
     @Test
     void createActivityViewDTO_forIndividualOrganization_draft_valid() {
-        Draft draft = new Draft();
+        Draft draft = new DraftBuilder().createDraft();
         Long organizerId = 1L;
         String title = "title";
         Status status = Status.DRAFT;
         LocalDateTime localDateTime = LocalDateTime.MAX;
-        User userOrganizer = new User();
+        User userOrganizer = new UserEntityBuilder().createUser();
         int singleRating = -1;
         userOrganizer.setId(organizerId);
         String usernameOrganizer = "usernameOrganizer";
@@ -238,14 +238,14 @@ class ActivityViewDTOCreatorTest {
 
     @Test
     void createActivityViewDTO_forIndividualOrganization_activeActivityWithoutParticipant_valid() {
-        Activity activity = new Activity();
+        Activity activity = new ActivityBuilder().createActivity();
         Long organizerId = 1L;
         Long userId = 2L;
         String title = "title";
         Status status = Status.ACTIVE;
         LocalDateTime localDateTime = LocalDateTime.MAX;
-        User userOrganizer = new User();
-        User userVolunteer = new User();
+        User userOrganizer = new UserEntityBuilder().createUser();
+        User userVolunteer = new UserEntityBuilder().createUser();
         userVolunteer.setId(userId);
         double rating = 3.0;
         int singleRating = -1;
@@ -293,14 +293,14 @@ class ActivityViewDTOCreatorTest {
 
     @Test
     void createActivityViewDTO_forVolunteer_singleRatingNotFound() {
-        Activity activity = new Activity();
+        Activity activity = new ActivityBuilder().createActivity();
         Long organizerId = 1L;
         Long userId = 2L;
         String title = "title";
         Status status = Status.ACTIVE;
         LocalDateTime localDateTime = LocalDateTime.MAX;
-        User userOrganizer = new User();
-        User userVolunteer = new User();
+        User userOrganizer = new UserEntityBuilder().createUser();
+        User userVolunteer = new UserEntityBuilder().createUser();
         userVolunteer.setId(userId);
         double rating = 3.0;
         int singleRating = -1;

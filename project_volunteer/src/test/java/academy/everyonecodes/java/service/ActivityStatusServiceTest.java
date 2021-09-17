@@ -1,6 +1,7 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.Activity;
+import academy.everyonecodes.java.data.ActivityBuilder;
 import academy.everyonecodes.java.data.ActivityStatus;
 import academy.everyonecodes.java.data.Status;
 import academy.everyonecodes.java.data.repositories.ActivityStatusRepository;
@@ -33,7 +34,7 @@ class ActivityStatusServiceTest {
 
 	@Test
 	void changeActivityStatus_ActivityStatus_existing() {
-		Activity activity = new Activity();
+		Activity activity = new ActivityBuilder().createActivity();
 		activity.setId(1L);
 		Status status = Status.COMPLETED;
 		ActivityStatus activityStatusNotCompleted = new ActivityStatus(activity, Status.ACTIVE);
@@ -52,7 +53,7 @@ class ActivityStatusServiceTest {
 
 	@Test
 	void changeActivityStatus_ActivityStatus_empty() {
-		Activity activity = new Activity();
+		Activity activity = new ActivityBuilder().createActivity();
 		activity.setId(1L);
 		Status status = Status.COMPLETED;
 		ActivityStatus activityStatus = new ActivityStatus(activity, status);

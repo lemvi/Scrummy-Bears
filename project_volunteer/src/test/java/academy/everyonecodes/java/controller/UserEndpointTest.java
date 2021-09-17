@@ -3,7 +3,9 @@ package academy.everyonecodes.java.controller;
 import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTOBuilder;
 import academy.everyonecodes.java.data.dtos.OrganizationDTO;
+import academy.everyonecodes.java.data.dtos.OrganizationDTOBuilder;
 import academy.everyonecodes.java.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,22 +34,7 @@ class UserEndpointTest
     @Test
     void saveIndividual_valid_including_optional_fields()
     {
-        IndividualVolunteerDTO user = new IndividualVolunteerDTO
-                (
-                        "username",
-                        "password",
-                        "firstName",
-                        "lastName",
-                        LocalDate.of(2000, 1, 1),
-                        "12345",
-                        "city",
-                        "street",
-                        "streetnumber",
-                        "email@email.com",
-                        "0123456789",
-                        "description",
-                        Set.of(new Role("ROLE_VOLUNTEER"))
-                );
+        IndividualVolunteerDTO user = new IndividualVolunteerDTOBuilder().setUsername("username").setPassword("password").setFirstNamePerson("firstName").setLastNamePerson("lastName").setDateOfBirth(LocalDate.of(2000, 1, 1)).setPostalCode("12345").setCity("city").setStreet("street").setStreetNumber("streetnumber").setEmailAddress("email@email.com").setTelephoneNumber("0123456789").setDescription("description").setRoles(Set.of(new Role("ROLE_VOLUNTEER"))).createIndividualVolunteerDTO();
 
 
         String actual = restTemplate.postForEntity("/register?individual", user, User.class)
@@ -58,15 +45,14 @@ class UserEndpointTest
     @Test
     void saveIndividual_valid_only_mandatory_fields()
     {
-        IndividualVolunteerDTO user = new IndividualVolunteerDTO
-                (
-                        "username",
-                        "password",
-                        "firstName",
-                        "lastName",
-                        "email@email.com",
-                        Set.of(new Role("ROLE_VOLUNTEER"))
-                );
+        IndividualVolunteerDTO user = new IndividualVolunteerDTOBuilder()
+                .setUsername("username")
+                .setPassword("password")
+                .setFirstNamePerson("firstName")
+                .setLastNamePerson("lastName")
+                .setEmailAddress("email@email.com")
+                .setRoles(Set.of(new Role("ROLE_VOLUNTEER")))
+                .createIndividualVolunteerDTO();
 
 
         String actual = restTemplate.postForEntity("/register?individual", user, User.class)
@@ -77,22 +63,20 @@ class UserEndpointTest
     @Test
     void saveIndividual_USERNAME_empty__too_long()
     {
-        IndividualVolunteerDTO user = new IndividualVolunteerDTO
-                (
-                        "",
-                        "password",
-                        "firstName",
-                        "lastName",
-                        LocalDate.of(2000, 1, 1),
-                        "1111",
-                        "city",
-                        "street",
-                        "streetnumber",
-                        "email@email.com",
-                        "0123456789",
-                        "description",
-                        Set.of(new Role("ROLE_VOLUNTEER"))
-                );
+        IndividualVolunteerDTO user = new IndividualVolunteerDTOBuilder().setUsername("")
+                                                                         .setPassword("password")
+                                                                         .setFirstNamePerson("firstName")
+                                                                         .setLastNamePerson("lastName")
+                                                                         .setDateOfBirth(LocalDate.of(2000, 1, 1))
+                                                                         .setPostalCode("1111")
+                                                                         .setCity("city")
+                                                                         .setStreet("street")
+                                                                         .setStreetNumber("streetnumber")
+                                                                         .setEmailAddress("email@email.com")
+                                                                         .setTelephoneNumber("0123456789")
+                                                                         .setDescription("description")
+                                                                         .setRoles(Set.of(new Role("ROLE_VOLUNTEER")))
+                                                                         .createIndividualVolunteerDTO();
 
 
         String actual = restTemplate.postForEntity("/register?individual", user, User.class)
@@ -108,22 +92,20 @@ class UserEndpointTest
     @Test
     void saveIndividual_PASSWORD_empty__too_long()
     {
-        IndividualVolunteerDTO user = new IndividualVolunteerDTO
-                (
-                        "username",
-                        "",
-                        "firstName",
-                        "lastName",
-                        LocalDate.of(2000, 1, 1),
-                        "1111",
-                        "city",
-                        "street",
-                        "streetnumber",
-                        "email@email.com",
-                        "0123456789",
-                        "description",
-                        Set.of(new Role("ROLE_VOLUNTEER"))
-                );
+        IndividualVolunteerDTO user = new IndividualVolunteerDTOBuilder().setUsername("username")
+                                                                         .setPassword("")
+                                                                         .setFirstNamePerson("firstName")
+                                                                         .setLastNamePerson("lastName")
+                                                                         .setDateOfBirth(LocalDate.of(2000, 1, 1))
+                                                                         .setPostalCode("1111")
+                                                                         .setCity("city")
+                                                                         .setStreet("street")
+                                                                         .setStreetNumber("streetnumber")
+                                                                         .setEmailAddress("email@email.com")
+                                                                         .setTelephoneNumber("0123456789")
+                                                                         .setDescription("description")
+                                                                         .setRoles(Set.of(new Role("ROLE_VOLUNTEER")))
+                                                                         .createIndividualVolunteerDTO();
 
 
         String actualEmpty = restTemplate.postForEntity("/register?individual", user, User.class)
@@ -139,22 +121,20 @@ class UserEndpointTest
     @Test
     void saveIndividual_FIRSTNAMEPERSON_empty__too_long()
     {
-        IndividualVolunteerDTO user = new IndividualVolunteerDTO
-                (
-                        "username",
-                        "password",
-                        "",
-                        "lastName",
-                        LocalDate.of(2000, 1, 1),
-                        "1111",
-                        "city",
-                        "street",
-                        "streetnumber",
-                        "email@email.com",
-                        "0123456789",
-                        "description",
-                        Set.of(new Role("ROLE_VOLUNTEER"))
-                );
+        IndividualVolunteerDTO user = new IndividualVolunteerDTOBuilder().setUsername("username")
+                                                                         .setPassword("password")
+                                                                         .setFirstNamePerson("")
+                                                                         .setLastNamePerson("lastName")
+                                                                         .setDateOfBirth(LocalDate.of(2000, 1, 1))
+                                                                         .setPostalCode("1111")
+                                                                         .setCity("city")
+                                                                         .setStreet("street")
+                                                                         .setStreetNumber("streetnumber")
+                                                                         .setEmailAddress("email@email.com")
+                                                                         .setTelephoneNumber("0123456789")
+                                                                         .setDescription("description")
+                                                                         .setRoles(Set.of(new Role("ROLE_VOLUNTEER")))
+                                                                         .createIndividualVolunteerDTO();
 
 
         String actualEmpty = restTemplate.postForEntity("/register?individual", user, User.class)
@@ -170,22 +150,20 @@ class UserEndpointTest
     @Test
     void saveIndividual_LASTNAMEPERSON_empty__too_long()
     {
-        IndividualVolunteerDTO user = new IndividualVolunteerDTO
-                (
-                        "username",
-                        "password",
-                        "firstName",
-                        "",
-                        LocalDate.of(2000, 1, 1),
-                        "1111",
-                        "city",
-                        "street",
-                        "streetnumber",
-                        "email@email.com",
-                        "0123456789",
-                        "description",
-                        Set.of(new Role("ROLE_VOLUNTEER"))
-                );
+        IndividualVolunteerDTO user = new IndividualVolunteerDTOBuilder().setUsername("username")
+                                                                         .setPassword("password")
+                                                                         .setFirstNamePerson("firstName")
+                                                                         .setLastNamePerson("")
+                                                                         .setDateOfBirth(LocalDate.of(2000, 1, 1))
+                                                                         .setPostalCode("1111")
+                                                                         .setCity("city")
+                                                                         .setStreet("street")
+                                                                         .setStreetNumber("streetnumber")
+                                                                         .setEmailAddress("email@email.com")
+                                                                         .setTelephoneNumber("0123456789")
+                                                                         .setDescription("description")
+                                                                         .setRoles(Set.of(new Role("ROLE_VOLUNTEER")))
+                                                                         .createIndividualVolunteerDTO();
 
 
         String actualEmpty = restTemplate.postForEntity("/register?individual", user, User.class)
@@ -201,22 +179,20 @@ class UserEndpointTest
     @Test
     void saveIndividual_DATEOFBIRTH_date_in_future()
     {
-        IndividualVolunteerDTO user = new IndividualVolunteerDTO
-                (
-                        "username",
-                        "password",
-                        "firstName",
-                        "lastName",
-                        LocalDate.of(2030, 1, 1),
-                        "1111",
-                        "city",
-                        "street",
-                        "streetnumber",
-                        "email@email.com",
-                        "0123456789",
-                        "description",
-                        Set.of(new Role("ROLE_VOLUNTEER"))
-                );
+        IndividualVolunteerDTO user = new IndividualVolunteerDTOBuilder().setUsername("username")
+                                                                         .setPassword("password")
+                                                                         .setFirstNamePerson("firstName")
+                                                                         .setLastNamePerson("lastName")
+                                                                         .setDateOfBirth(LocalDate.of(2030, 1, 1))
+                                                                         .setPostalCode("1111")
+                                                                         .setCity("city")
+                                                                         .setStreet("street")
+                                                                         .setStreetNumber("streetnumber")
+                                                                         .setEmailAddress("email@email.com")
+                                                                         .setTelephoneNumber("0123456789")
+                                                                         .setDescription("description")
+                                                                         .setRoles(Set.of(new Role("ROLE_VOLUNTEER")))
+                                                                         .createIndividualVolunteerDTO();
 
 
         String actual = restTemplate.postForEntity("/register?individual", user, User.class)
@@ -227,22 +203,20 @@ class UserEndpointTest
     @Test
     void saveIndividual_POSTALCODE__too_long()
     {
-        IndividualVolunteerDTO user = new IndividualVolunteerDTO
-                (
-                        "username",
-                        "password",
-                        "firstName",
-                        "lastName",
-                        LocalDate.of(2000, 1, 1),
-                        "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf",
-                        "city",
-                        "street",
-                        "streetnumber",
-                        "email@email.com",
-                        "0123456789",
-                        "description",
-                        Set.of(new Role("ROLE_VOLUNTEER"))
-                );
+        IndividualVolunteerDTO user = new IndividualVolunteerDTOBuilder().setUsername("username")
+                                                                         .setPassword("password")
+                                                                         .setFirstNamePerson("firstName")
+                                                                         .setLastNamePerson("lastName")
+                                                                         .setDateOfBirth(LocalDate.of(2000, 1, 1))
+                                                                         .setPostalCode("ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf")
+                                                                         .setCity("city")
+                                                                         .setStreet("street")
+                                                                         .setStreetNumber("streetnumber")
+                                                                         .setEmailAddress("email@email.com")
+                                                                         .setTelephoneNumber("0123456789")
+                                                                         .setDescription("description")
+                                                                         .setRoles(Set.of(new Role("ROLE_VOLUNTEER")))
+                                                                         .createIndividualVolunteerDTO();
 
 
         String actual = restTemplate.postForEntity("/register?individual", user, User.class)
@@ -253,22 +227,20 @@ class UserEndpointTest
     @Test
     void saveIndividual_CITY__too_long()
     {
-        IndividualVolunteerDTO user = new IndividualVolunteerDTO
-                (
-                        "username",
-                        "password",
-                        "firstName",
-                        "lastName",
-                        LocalDate.of(2000, 1, 1),
-                        "1111",
-                        "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf",
-                        "street",
-                        "streetnumber",
-                        "email@email.com",
-                        "0123456789",
-                        "description",
-                        Set.of(new Role("ROLE_VOLUNTEER"))
-                );
+        IndividualVolunteerDTO user = new IndividualVolunteerDTOBuilder().setUsername("username")
+                                                                         .setPassword("password")
+                                                                         .setFirstNamePerson("firstName")
+                                                                         .setLastNamePerson("lastName")
+                                                                         .setDateOfBirth(LocalDate.of(2000, 1, 1))
+                                                                         .setPostalCode("1111")
+                                                                         .setCity("ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf")
+                                                                         .setStreet("street")
+                                                                         .setStreetNumber("streetnumber")
+                                                                         .setEmailAddress("email@email.com")
+                                                                         .setTelephoneNumber("0123456789")
+                                                                         .setDescription("description")
+                                                                         .setRoles(Set.of(new Role("ROLE_VOLUNTEER")))
+                                                                         .createIndividualVolunteerDTO();
 
 
         String actual = restTemplate.postForEntity("/register?individual", user, User.class)
@@ -279,22 +251,20 @@ class UserEndpointTest
     @Test
     void saveIndividual_STREET__too_long()
     {
-        IndividualVolunteerDTO user = new IndividualVolunteerDTO
-                (
-                        "username",
-                        "password",
-                        "firstName",
-                        "lastName",
-                        LocalDate.of(2000, 1, 1),
-                        "1111",
-                        "city",
-                        "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf",
-                        "streetnumber",
-                        "email@email.com",
-                        "0123456789",
-                        "description",
-                        Set.of(new Role("ROLE_VOLUNTEER"))
-                );
+        IndividualVolunteerDTO user = new IndividualVolunteerDTOBuilder().setUsername("username")
+                                                                         .setPassword("password")
+                                                                         .setFirstNamePerson("firstName")
+                                                                         .setLastNamePerson("lastName")
+                                                                         .setDateOfBirth(LocalDate.of(2000, 1, 1))
+                                                                         .setPostalCode("1111")
+                                                                         .setCity("city")
+                                                                         .setStreet("ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf")
+                                                                         .setStreetNumber("streetnumber")
+                                                                         .setEmailAddress("email@email.com")
+                                                                         .setTelephoneNumber("0123456789")
+                                                                         .setDescription("description")
+                                                                         .setRoles(Set.of(new Role("ROLE_VOLUNTEER")))
+                                                                         .createIndividualVolunteerDTO();
 
 
         String actual = restTemplate.postForEntity("/register?individual", user, User.class)
@@ -305,22 +275,20 @@ class UserEndpointTest
     @Test
     void saveIndividual_STREETNUMBER__too_long()
     {
-        IndividualVolunteerDTO user = new IndividualVolunteerDTO
-                (
-                        "username",
-                        "password",
-                        "firstName",
-                        "lastName",
-                        LocalDate.of(2000, 1, 1),
-                        "1111",
-                        "city",
-                        "street",
-                        "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf",
-                        "email@email.com",
-                        "0123456789",
-                        "description",
-                        Set.of(new Role("ROLE_VOLUNTEER"))
-                );
+        IndividualVolunteerDTO user = new IndividualVolunteerDTOBuilder().setUsername("username")
+                                                                         .setPassword("password")
+                                                                         .setFirstNamePerson("firstName")
+                                                                         .setLastNamePerson("lastName")
+                                                                         .setDateOfBirth(LocalDate.of(2000, 1, 1))
+                                                                         .setPostalCode("1111")
+                                                                         .setCity("city")
+                                                                         .setStreet("street")
+                                                                         .setStreetNumber("ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf")
+                                                                         .setEmailAddress("email@email.com")
+                                                                         .setTelephoneNumber("0123456789")
+                                                                         .setDescription("description")
+                                                                         .setRoles(Set.of(new Role("ROLE_VOLUNTEER")))
+                                                                         .createIndividualVolunteerDTO();
 
 
         String actual = restTemplate.postForEntity("/register?individual", user, User.class)
@@ -331,22 +299,20 @@ class UserEndpointTest
     @Test
     void saveIndividual_EMAIL_too_long__wrong_format()
     {
-        IndividualVolunteerDTO user = new IndividualVolunteerDTO
-                (
-                        "username",
-                        "password",
-                        "firstName",
-                        "lastName",
-                        LocalDate.of(2000, 1, 1),
-                        "1111",
-                        "city",
-                        "street",
-                        "streetnumber",
-                        "emailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemail@email.com",
-                        "0123456789",
-                        "description",
-                        Set.of(new Role("ROLE_VOLUNTEER"))
-                );
+        IndividualVolunteerDTO user = new IndividualVolunteerDTOBuilder().setUsername("username")
+                                                                         .setPassword("password")
+                                                                         .setFirstNamePerson("firstName")
+                                                                         .setLastNamePerson("lastName")
+                                                                         .setDateOfBirth(LocalDate.of(2000, 1, 1))
+                                                                         .setPostalCode("1111")
+                                                                         .setCity("city")
+                                                                         .setStreet("street")
+                                                                         .setStreetNumber("streetnumber")
+                                                                         .setEmailAddress("emailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemail@email.com")
+                                                                         .setTelephoneNumber("0123456789")
+                                                                         .setDescription("description")
+                                                                         .setRoles(Set.of(new Role("ROLE_VOLUNTEER")))
+                                                                         .createIndividualVolunteerDTO();
 
 
         String actualEmpty = restTemplate.postForEntity("/register?individual", user, User.class)
@@ -362,22 +328,20 @@ class UserEndpointTest
     @Test
     void saveIndividual_TELEPHONENUMBER__too_long()
     {
-        IndividualVolunteerDTO user = new IndividualVolunteerDTO
-                (
-                        "username",
-                        "password",
-                        "firstName",
-                        "lastName",
-                        LocalDate.of(2000, 1, 1),
-                        "1111",
-                        "city",
-                        "street",
-                        "streetnumber",
-                        "email@email.com",
-                        "46456456456456456489789789798789646545645645645645646545646545646545645645645645645645645645646545645645645645645646",
-                        "description",
-                        Set.of(new Role("ROLE_VOLUNTEER"))
-                );
+        IndividualVolunteerDTO user = new IndividualVolunteerDTOBuilder().setUsername("username")
+                                                                         .setPassword("password")
+                                                                         .setFirstNamePerson("firstName")
+                                                                         .setLastNamePerson("lastName")
+                                                                         .setDateOfBirth(LocalDate.of(2000, 1, 1))
+                                                                         .setPostalCode("1111")
+                                                                         .setCity("city")
+                                                                         .setStreet("street")
+                                                                         .setStreetNumber("streetnumber")
+                                                                         .setEmailAddress("email@email.com")
+                                                                         .setTelephoneNumber("46456456456456456489789789798789646545645645645645646545646545646545645645645645645645645645646545645645645645645646")
+                                                                         .setDescription("description")
+                                                                         .setRoles(Set.of(new Role("ROLE_VOLUNTEER")))
+                                                                         .createIndividualVolunteerDTO();
 
 
         String actual = restTemplate.postForEntity("/register?individual", user, User.class)
@@ -388,29 +352,27 @@ class UserEndpointTest
     @Test
     void saveIndividual_DESCRIPTION___too_long()
     {
-        IndividualVolunteerDTO user = new IndividualVolunteerDTO
-                (
-                        "username",
-                        "password",
-                        "firstName",
-                        "lastName",
-                        LocalDate.of(2000, 1, 1),
-                        "1111",
-                        "city",
-                        "street",
-                        "streetnumber",
-                        "email@email.com",
-                        "0123456789",
-                        "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf" +
-                                "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf" +
-                                "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf" +
-                                "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf" +
-                                "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf" +
-                                "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf" +
-                                "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf" +
-                                "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf",
-                        Set.of(new Role("ROLE_VOLUNTEER"))
-                );
+        IndividualVolunteerDTO user = new IndividualVolunteerDTOBuilder().setUsername("username")
+                                                                         .setPassword("password")
+                                                                         .setFirstNamePerson("firstName")
+                                                                         .setLastNamePerson("lastName")
+                                                                         .setDateOfBirth(LocalDate.of(2000, 1, 1))
+                                                                         .setPostalCode("1111")
+                                                                         .setCity("city")
+                                                                         .setStreet("street")
+                                                                         .setStreetNumber("streetnumber")
+                                                                         .setEmailAddress("email@email.com")
+                                                                         .setTelephoneNumber("0123456789")
+                                                                         .setDescription("ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf" +
+                                                                                                 "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf" +
+                                                                                                 "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf" +
+                                                                                                 "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf" +
+                                                                                                 "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf" +
+                                                                                                 "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf" +
+                                                                                                 "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf" +
+                                                                                                 "ahfjkslhfsdjakflhasdjfahsdjkflhasdklfjhasdkjlfhasdkjlfhsdajklfhasdljkfhasdkjfhsdajkfhsdakjlfhasdjklfhasdfkjlashfkjlsdhfkjlsahfkjlashfjklashf")
+                                                                         .setRoles(Set.of(new Role("ROLE_VOLUNTEER")))
+                                                                         .createIndividualVolunteerDTO();
 
 
         String actual = restTemplate.postForEntity("/register?individual", user, User.class)
@@ -421,7 +383,7 @@ class UserEndpointTest
     @Test
     void saveIndividual_invalid_empty_IndividualVolunteerDTO()
     {
-        IndividualVolunteerDTO user = new IndividualVolunteerDTO();
+        IndividualVolunteerDTO user = new IndividualVolunteerDTOBuilder().createIndividualVolunteerDTO();
 
 
         String actual = restTemplate.postForEntity("/register?individual", user, User.class)
@@ -432,20 +394,18 @@ class UserEndpointTest
     @Test
     void saveOrganization_ORGANIZATION_NAME_empty()
     {
-        OrganizationDTO user = new OrganizationDTO
-                (
-                        "username",
-                        "password",
-                        "",
-                        "1111",
-                        "city",
-                        "street",
-                        "streetnumber",
-                        "email@email.com",
-                        "0123456789",
-                        "description",
-                        Set.of(new Role("ROLE_ORGANIZATION"))
-                );
+        OrganizationDTO user = new OrganizationDTOBuilder().setUsername("username")
+                                                           .setPassword("password")
+                                                           .setOrganizationName("")
+                                                           .setPostalCode("1111")
+                                                           .setCity("city")
+                                                           .setStreet("street")
+                                                           .setStreetNumber("streetnumber")
+                                                           .setEmailAddress("email@email.com")
+                                                           .setTelephoneNumber("0123456789")
+                                                           .setDescription("description")
+                                                           .setRoles(Set.of(new Role("ROLE_ORGANIZATION")))
+                                                           .createOrganizationDTO();
 
 
         String actual = restTemplate.postForEntity("/register?organization", user, User.class)

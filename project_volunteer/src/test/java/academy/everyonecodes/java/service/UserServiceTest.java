@@ -1,8 +1,10 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.*;
+import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTOBuilder;
 import academy.everyonecodes.java.data.dtos.OrganizationDTO;
 import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
+import academy.everyonecodes.java.data.dtos.OrganizationDTOBuilder;
 import academy.everyonecodes.java.data.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -38,29 +40,26 @@ class UserServiceTest
     @MockBean
     private PasswordEncoder passwordEncoder;
 
-    User organization = new User(
-        "organization",
-        "validEncryptedPw",
-        "validOrganizationName",
-        "validEmail",
-        Set.of(new Role(3L, "ROLE_ORGANIZATION"))
-        );
-    User volunteer = new User(
-        "volunteer",
-        "validEncryptedPw",
-        "validFirst",
-        "validSecond",
-        "validEmail",
-        Set.of(new Role(1L, "ROLE_VOLUNTEER"))
-        );
-    User individual = new User(
-            "individual",
-            "validEncryptedPw",
-            "validFirst",
-            "validSecond",
-            "validEmail",
-            Set.of(new Role(2L, "ROLE_INDIVIDUAL"))
-    );
+    User organization = new UserEntityBuilder().setUsername("organization")
+                                               .setPassword("validEncryptedPw")
+                                               .setOrganizationName("validOrganizationName")
+                                               .setEmailAddress("validEmail")
+                                               .setRoles(Set.of(new Role(3L, "ROLE_ORGANIZATION")))
+                                               .createUser();
+    User volunteer = new UserEntityBuilder().setUsername("volunteer")
+                                            .setPassword("validEncryptedPw")
+                                            .setFirstNamePerson("validFirst")
+                                            .setLastNamePerson("validSecond")
+                                            .setEmailAddress("validEmail")
+                                            .setRoles(Set.of(new Role(1L, "ROLE_VOLUNTEER")))
+                                            .createUser();
+    User individual = new UserEntityBuilder().setUsername("individual")
+                                             .setPassword("validEncryptedPw")
+                                             .setFirstNamePerson("validFirst")
+                                             .setLastNamePerson("validSecond")
+                                             .setEmailAddress("validEmail")
+                                             .setRoles(Set.of(new Role(2L, "ROLE_INDIVIDUAL")))
+                                             .createUser();
     List<User> users = List.of(organization, volunteer, individual);
 
     @Test
@@ -190,90 +189,83 @@ class UserServiceTest
         String description = "description";
         return Stream.of(
                 Arguments.of(
-                        new IndividualVolunteerDTO(
-                                validUsername,
-                                validPw,
-                                validFirst,
-                                validSecond,
-                                validEmail,
-                                Set.of(new Role("ROLE_VOLUNTEER"))
-                        ),
-                        new User(
-                                validUsername,
-                                validEncryptedPw,
-                                validFirst,
-                                validSecond,
-                                validEmail,
-                                Set.of(new Role("ROLE_VOLUNTEER"))
-                        )
+                        new IndividualVolunteerDTOBuilder().setUsername(validUsername)
+                                                           .setPassword(validPw)
+                                                           .setFirstNamePerson(validFirst)
+                                                           .setLastNamePerson(validSecond)
+                                                           .setEmailAddress(validEmail)
+                                                           .setRoles(Set.of(new Role("ROLE_VOLUNTEER")))
+                                                           .createIndividualVolunteerDTO()
+                        ,
+                        new UserEntityBuilder().setUsername(validUsername)
+                                               .setPassword(validEncryptedPw)
+                                               .setFirstNamePerson(validFirst)
+                                               .setLastNamePerson(validSecond)
+                                               .setEmailAddress(validEmail)
+                                               .setRoles(Set.of(new Role("ROLE_VOLUNTEER")))
+                                               .createUser()
                 ),
                 Arguments.of(
-                        new IndividualVolunteerDTO(
-                                validUsername,
-                                validPw,
-                                validFirst,
-                                validSecond,
-                                validEmail,
-                                Set.of(new Role("ROLE_INDIVIDUAL"))
-                        ),
-                        new User(
-                                validUsername,
-                                validEncryptedPw,
-                                validFirst,
-                                validSecond,
-                                validEmail,
-                                Set.of(new Role("ROLE_INDIVIDUAL"))
-                        )
+                        new IndividualVolunteerDTOBuilder().setUsername(validUsername)
+                                                           .setPassword(validPw)
+                                                           .setFirstNamePerson(validFirst)
+                                                           .setLastNamePerson(validSecond)
+                                                           .setEmailAddress(validEmail)
+                                                           .setRoles(Set.of(new Role("ROLE_INDIVIDUAL")))
+                                                           .createIndividualVolunteerDTO(),
+                        new UserEntityBuilder().setUsername(validUsername)
+                                               .setPassword(validEncryptedPw)
+                                               .setFirstNamePerson(validFirst)
+                                               .setLastNamePerson(validSecond)
+                                               .setEmailAddress(validEmail)
+                                               .setRoles(Set.of(new Role("ROLE_INDIVIDUAL")))
+                                               .createUser()
                 ),
                 Arguments.of(
-                        new IndividualVolunteerDTO(
-                                validUsername,
-                                validPw,
-                                validFirst,
-                                validSecond,
-                                validEmail,
-                                Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_VOLUNTEER"))
-                        ),
-                        new User(
-                                validUsername,
-                                validEncryptedPw,
-                                validFirst,
-                                validSecond,
-                                validEmail,
-                                Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_VOLUNTEER"))
-                        )
+                        new IndividualVolunteerDTOBuilder().setUsername(validUsername)
+                                                           .setPassword(validPw)
+                                                           .setFirstNamePerson(validFirst)
+                                                           .setLastNamePerson(validSecond)
+                                                           .setEmailAddress(validEmail)
+                                                           .setRoles(Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_INDIVIDUAL")))
+                                                           .createIndividualVolunteerDTO(),
+                        new UserEntityBuilder().setUsername(validUsername)
+                                               .setPassword(validEncryptedPw)
+                                               .setFirstNamePerson(validFirst)
+                                               .setLastNamePerson(validSecond)
+                                               .setEmailAddress(validEmail)
+                                               .setRoles(Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_VOLUNTEER")))
+                                               .createUser()
                 ),
                 Arguments.of(
-                        new IndividualVolunteerDTO(
-                                validUsername,
-                                validPw,
-                                validFirst,
-                                validSecond,
-                                dateOfBirth,
-                                postalCode,
-                                city,
-                                street,
-                                streetNumber,
-                                validEmail,
-                                telephoneNumber,
-                                description,
-                                Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_VOLUNTEER"))
-                        ),
-                        new User(
-                                validUsername,
-                                validEncryptedPw,
-                                validFirst,
-                                validSecond,
-                                dateOfBirth,
-                                postalCode,
-                                city,
-                                street,
-                                streetNumber,
-                                validEmail,
-                                telephoneNumber,
-                                description,
-                                Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_VOLUNTEER"))
-                        )
+                        new IndividualVolunteerDTOBuilder().setUsername(validUsername)
+                                                           .setPassword(validPw)
+                                                           .setFirstNamePerson(validFirst)
+                                                           .setLastNamePerson(validSecond)
+                                                           .setDateOfBirth(dateOfBirth)
+                                                           .setPostalCode(postalCode)
+                                                           .setCity(city)
+                                                           .setStreet(street)
+                                                           .setStreetNumber(streetNumber)
+                                                           .setEmailAddress(validEmail)
+                                                           .setTelephoneNumber(telephoneNumber)
+                                                           .setDescription(description)
+                                                           .setRoles(Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_VOLUNTEER")))
+                                                           .createIndividualVolunteerDTO(),
+                        new UserEntityBuilder().setUsername(validUsername)
+                                               .setPassword(validEncryptedPw)
+                                               .setFirstNamePerson(validFirst)
+                                               .setLastNamePerson(validSecond)
+                                               .setDateOfBirth(dateOfBirth)
+                                               .setPostalCode(postalCode)
+                                               .setCity(city)
+                                               .setStreet(street)
+                                               .setStreetNumber(streetNumber)
+                                               .setEmailAddress(validEmail)
+                                               .setTelephoneNumber(telephoneNumber)
+                                               .setDescription(description)
+                                               .setRoles(Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_VOLUNTEER")))
+                                               .createUser()
                 )
         );
     }
@@ -287,44 +279,40 @@ class UserServiceTest
         String validEmail = "user@email.com";
         return Stream.of(
                 Arguments.of(
-                        new IndividualVolunteerDTO(
-                                validUsername,
-                                validPw,
-                                validFirst,
-                                validSecond,
-                                validEmail,
-                                Set.of(new Role("ROLE_ORGANIZATION"))
-                        )
+                        new IndividualVolunteerDTOBuilder().setUsername(validUsername)
+                                                           .setPassword(validPw)
+                                                           .setFirstNamePerson(validFirst)
+                                                           .setLastNamePerson(validSecond)
+                                                           .setEmailAddress(validEmail)
+                                                           .setRoles(Set.of(new Role("ROLE_ORGANIZATION")))
+                                                           .createIndividualVolunteerDTO()
                 ),
                 Arguments.of(
-                        new IndividualVolunteerDTO(
-                                validUsername,
-                                validPw,
-                                validFirst,
-                                validSecond,
-                                validEmail,
-                                Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_ORGANIZATION"))
-                        )
+                        new IndividualVolunteerDTOBuilder().setUsername(validUsername)
+                                                           .setPassword(validPw)
+                                                           .setFirstNamePerson(validFirst)
+                                                           .setLastNamePerson(validSecond)
+                                                           .setEmailAddress(validEmail)
+                                                           .setRoles(Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_ORGANIZATION")))
+                                                           .createIndividualVolunteerDTO()
                 ),
                 Arguments.of(
-                        new IndividualVolunteerDTO(
-                                validUsername,
-                                validPw,
-                                validFirst,
-                                validSecond,
-                                validEmail,
-                                Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_ORGANIZATION"))
-                        )
+                        new IndividualVolunteerDTOBuilder().setUsername(validUsername)
+                                                           .setPassword(validPw)
+                                                           .setFirstNamePerson(validFirst)
+                                                           .setLastNamePerson(validSecond)
+                                                           .setEmailAddress(validEmail)
+                                                           .setRoles(Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_ORGANIZATION")))
+                                                           .createIndividualVolunteerDTO()
                 ),
                 Arguments.of(
-                        new IndividualVolunteerDTO(
-                                validUsername,
-                                validPw,
-                                validFirst,
-                                validSecond,
-                                validEmail,
-                                Set.of(new Role("ROLE_MAFIABOSS"))
-                        )
+                        new IndividualVolunteerDTOBuilder().setUsername(validUsername)
+                                                           .setPassword(validPw)
+                                                           .setFirstNamePerson(validFirst)
+                                                           .setLastNamePerson(validSecond)
+                                                           .setEmailAddress(validEmail)
+                                                           .setRoles(Set.of(new Role("ROLE_MAFIABOSS")))
+                                                           .createIndividualVolunteerDTO()
                 )
         );
     }
@@ -345,48 +333,24 @@ class UserServiceTest
 
         return Stream.of(
                 Arguments.of(
-                        new OrganizationDTO(
-                                validUsername,
-                                validPw,
-                                validOrganizationName,
-                                validEmail,
-                                Set.of(new Role("ROLE_ORGANIZATION"))
-                        ),
-                        new User(
-                                validUsername,
-                                validEncryptedPw,
-                                validOrganizationName,
-                                validEmail,
-                                Set.of(new Role("ROLE_ORGANIZATION"))
-                        )
-                ),
+                        new OrganizationDTOBuilder().setUsername(validUsername)
+                                                    .setPassword(validPw)
+                                                    .setOrganizationName(validOrganizationName)
+                                                    .setEmailAddress(validEmail)
+                                                    .setRoles(Set.of(new Role("ROLE_ORGANIZATION")))
+                                                    .createOrganizationDTO()
+
+                ,
+                new UserEntityBuilder().setUsername(validUsername)
+                                       .setPassword(validEncryptedPw)
+                                       .setOrganizationName(validOrganizationName)
+                                       .setEmailAddress(validEmail)
+                                       .setRoles(Set.of(new Role("ROLE_ORGANIZATION")))
+                                       .createUser()
+        ),
                 Arguments.of(
-                        new OrganizationDTO(
-                                validUsername,
-                                validPw,
-                                validOrganizationName,
-                                postalCode,
-                                city,
-                                street,
-                                streetnumber,
-                                validEmail,
-                                telephoneNumber,
-                                description,
-                                Set.of(new Role("ROLE_ORGANIZATION"))
-                        ),
-                        new User(
-                                validUsername,
-                                validEncryptedPw,
-                                validOrganizationName,
-                                postalCode,
-                                city,
-                                street,
-                                streetnumber,
-                                validEmail,
-                                telephoneNumber,
-                                description,
-                                Set.of(new Role("ROLE_ORGANIZATION"))
-                        )
+                        new OrganizationDTOBuilder().setUsername(validUsername).setPassword(validPw).setOrganizationName(validOrganizationName).setPostalCode(postalCode).setCity(city).setStreet(street).setStreetNumber(streetnumber).setEmailAddress(validEmail).setTelephoneNumber(telephoneNumber).setDescription(description).setRoles(Set.of(new Role("ROLE_ORGANIZATION"))).createOrganizationDTO(),
+                        new UserEntityBuilder().setUsername(validUsername).setPassword(validEncryptedPw).setOrganizationName(validOrganizationName).setPostalCode(postalCode).setCity(city).setStreet(street).setStreetNumber(streetnumber).setEmailAddress(validEmail).setTelephoneNumber(telephoneNumber).setDescription(description).setRoles(Set.of(new Role("ROLE_ORGANIZATION"))).createUser()
                 )
         );
     }
@@ -399,58 +363,58 @@ class UserServiceTest
         String validEmail = "user@email.com";
         return Stream.of(
                 Arguments.of(
-                        new OrganizationDTO(
-                                validUsername,
-                                validPw,
-                                validOrganizationName,
-                                validEmail,
-                                Set.of(new Role("ROLE_INDIVIDUAL"))
-                        )
+                        new OrganizationDTOBuilder().setUsername(validUsername)
+                                                    .setPassword(validPw)
+                                                    .setOrganizationName(validOrganizationName)
+                                                    .setEmailAddress(validEmail)
+                                                    .setRoles(Set.of(new Role("ROLE_INDIVIDUAL")))
+                                                    .createOrganizationDTO()
+
                 ),
                 Arguments.of(
-                        new OrganizationDTO(
-                                validUsername,
-                                validPw,
-                                validOrganizationName,
-                                validEmail,
-                                Set.of(new Role("ROLE_VOLUNTEER"))
-                        )
+                        new OrganizationDTOBuilder().setUsername(validUsername)
+                                                    .setPassword(validPw)
+                                                    .setOrganizationName(validOrganizationName)
+                                                    .setEmailAddress(validEmail)
+                                                    .setRoles(Set.of(new Role("ROLE_VOLUNTEER")))
+                                                    .createOrganizationDTO()
+
                 ),
                 Arguments.of(
-                        new OrganizationDTO(
-                                validUsername,
-                                validPw,
-                                validOrganizationName,
-                                validEmail,
-                                Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_VOLUNTEER"))
-                        )
+                        new OrganizationDTOBuilder().setUsername(validUsername)
+                                                    .setPassword(validPw)
+                                                    .setOrganizationName(validOrganizationName)
+                                                    .setEmailAddress(validEmail)
+                                                    .setRoles(Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_VOLUNTEER")))
+                                                    .createOrganizationDTO()
+
                 ),
                 Arguments.of(
-                        new OrganizationDTO(
-                                validUsername,
-                                validPw,
-                                validOrganizationName,
-                                validEmail,
-                                Set.of(new Role("ROLE_VOLUNTEER"), new Role("ROLE_ORGANIZATION"))
-                        )
+                        new OrganizationDTOBuilder().setUsername(validUsername)
+                                                    .setPassword(validPw)
+                                                    .setOrganizationName(validOrganizationName)
+                                                    .setEmailAddress(validEmail)
+                                                    .setRoles(Set.of(new Role("ROLE_ORGANIZATION"), new Role("ROLE_VOLUNTEER")))
+                                                    .createOrganizationDTO()
+
                 ),
                 Arguments.of(
-                        new OrganizationDTO(
-                                validUsername,
-                                validPw,
-                                validOrganizationName,
-                                validEmail,
-                                Set.of(new Role("ROLE_INDIVIDUAL"), new Role("ROLE_ORGANIZATION"))
-                        )
+                        new OrganizationDTOBuilder().setUsername(validUsername)
+                                                    .setPassword(validPw)
+                                                    .setOrganizationName(validOrganizationName)
+                                                    .setEmailAddress(validEmail)
+                                                    .setRoles(Set.of(new Role("ROLE_ORGANIZATION"), new Role("ROLE_INDIVIDUAL")))
+                                                    .createOrganizationDTO()
+
                 ),
                 Arguments.of(
-                        new OrganizationDTO(
-                                validUsername,
-                                validPw,
-                                validOrganizationName,
-                                validEmail,
-                                Set.of(new Role("ROLE_MAFIABOSS"))
-                        )
+                        new OrganizationDTOBuilder().setUsername(validUsername)
+                                                    .setPassword(validPw)
+                                                    .setOrganizationName(validOrganizationName)
+                                                    .setEmailAddress(validEmail)
+                                                    .setRoles(Set.of(new Role("ROLE_MAFIABOSS")))
+                                                    .createOrganizationDTO()
+
                 )
         );
     }
@@ -463,14 +427,7 @@ class UserServiceTest
         String validSecond = "second";
         String validEmail = "user@email.com";
 
-        User testUser = new User(
-                validUsername,
-                validEncryptedPw,
-                validFirst,
-                validSecond,
-                validEmail,
-                Set.of(new Role("ROLE_VOLUNTEER"))
-        );
+        User testUser = new UserEntityBuilder().setUsername(validUsername).setPassword(validEncryptedPw).setFirstNamePerson(validFirst).setLastNamePerson(validSecond).setEmailAddress(validEmail).setRoles(Set.of(new Role("ROLE_VOLUNTEER"))).createUser();
 
         userService.validateAndSaveUser(testUser);
 

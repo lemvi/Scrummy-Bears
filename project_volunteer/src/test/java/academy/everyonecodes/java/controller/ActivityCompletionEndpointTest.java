@@ -1,9 +1,6 @@
 package academy.everyonecodes.java.controller;
 
-import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.Draft;
-import academy.everyonecodes.java.data.Level;
-import academy.everyonecodes.java.data.Rating;
+import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.service.ActivityCompletionService;
 import academy.everyonecodes.java.service.BadgesService;
 import academy.everyonecodes.java.service.LevelService;
@@ -43,21 +40,15 @@ public class ActivityCompletionEndpointTest {
     @MockBean
     private ActivityCompletionService activityCompletionService;
 
-    Draft draft = new Draft(
-            "title",
-            "description",
-            LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10)),
-            LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10)),
-            true,
-            null);
+    Draft draft = new DraftBuilder().setTitle("title").setDescription("description").setStartDateTime(LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10))).setEndDateTime(LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10))).setOpenEnd(true).setOrganizerUsername(null).createDraft();
 
-    Activity activity = new Activity();
+    Activity activity = new ActivityBuilder().createActivity();
 
     @Test
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
     void completeActivity_invalid_Rating_isLowerThanMin() throws Exception {
         Long activityId = 1L;
-        Rating rating = new Rating(0);
+        Rating rating = new RatingBuilder().setRatingValue(0).createRating();
 
         assert_completeActivity_IsBadRequest(activityId, rating);
         Mockito.verifyNoInteractions(activityCompletionService);
@@ -67,7 +58,7 @@ public class ActivityCompletionEndpointTest {
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
     void completeActivity_invalid_Feedback_MoreThan800Characters() throws Exception {
         Long activityId = 1L;
-        Rating rating = new Rating(5);
+        Rating rating = new RatingBuilder().setRatingValue(5).createRating();
         rating.setFeedback("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies.");
 
         assert_completeActivity_IsBadRequest(activityId, rating);
@@ -78,7 +69,7 @@ public class ActivityCompletionEndpointTest {
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
     void completeActivity_invalid_Feedback_NotNull_LowerThan800() throws Exception {
         Long activityId = 1L;
-        Rating rating = new Rating(5);
+        Rating rating = new RatingBuilder().setRatingValue(5).createRating();
         rating.setFeedback("Lorem ipsum dolor sit amet, consectetibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies.");
 
         assert_completeActivity_IsOK(activityId, rating);
@@ -90,7 +81,7 @@ public class ActivityCompletionEndpointTest {
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
     void completeActivity_invalid_Rating_isHigherThanMax() throws Exception {
         Long activityId = 1L;
-        Rating rating = new Rating(6);
+        Rating rating = new RatingBuilder().setRatingValue(6).createRating();
 
         assert_completeActivity_IsBadRequest(activityId, rating);
         Mockito.verifyNoInteractions(activityCompletionService);
@@ -110,7 +101,7 @@ public class ActivityCompletionEndpointTest {
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
     void completeActivity_Authorized_Individual() throws Exception {
         Long activityId = 1L;
-        Rating rating = new Rating(5);
+        Rating rating = new RatingBuilder().setRatingValue(5).createRating();
 
         assert_completeActivity_IsOK(activityId, rating);
         Mockito.verify(activityCompletionService).completeActivity(activityId, rating);
@@ -121,7 +112,7 @@ public class ActivityCompletionEndpointTest {
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_VOLUNTEER"})
     void completeActivity_invalid_credentials_Volunteer() throws Exception {
         Long activityId = 1L;
-        Rating rating = new Rating(5);
+        Rating rating = new RatingBuilder().setRatingValue(5).createRating();
 
         assert_completeActivity_IsForbidden(activityId, rating);
 
@@ -133,7 +124,7 @@ public class ActivityCompletionEndpointTest {
     void completeActivity_valid_credentials_Organization() throws Exception
     {
         Long activityId = 1L;
-        Rating rating = new Rating(5);
+        Rating rating = new RatingBuilder().setRatingValue(5).createRating();
 
         assert_completeActivity_IsOK(activityId, rating);
         Mockito.verify(activityCompletionService).completeActivity(activityId, rating);
@@ -145,7 +136,7 @@ public class ActivityCompletionEndpointTest {
     void completeActivity_valid_credentials_Multiple() throws Exception
     {
         Long activityId = 1L;
-        Rating rating = new Rating(5);
+        Rating rating = new RatingBuilder().setRatingValue(5).createRating();
 
         assert_completeActivity_IsOK(activityId, rating);
         Mockito.verify(activityCompletionService).completeActivity(activityId, rating);
@@ -157,7 +148,7 @@ public class ActivityCompletionEndpointTest {
     void completeActivity_invalid_credentials_NonExistingRole() throws Exception
     {
         Long activityId = 1L;
-        Rating rating = new Rating(5);
+        Rating rating = new RatingBuilder().setRatingValue(5).createRating();
 
         assert_completeActivity_IsForbidden(activityId, rating);
         Mockito.verifyNoInteractions(activityCompletionService);

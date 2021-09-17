@@ -1,10 +1,6 @@
 package academy.everyonecodes.java.controller;
 
-import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.Rating;
-import academy.everyonecodes.java.data.Role;
-import academy.everyonecodes.java.data.User;
-import academy.everyonecodes.java.data.dtos.VolunteerProfileDTO;
+import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.service.SearchService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -12,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -45,8 +40,8 @@ public class SearchEndpointTest {
         int ratingMax = 5;
 
         String url = "/search/activities/title?username=organization&startDate=2020-08-08&endDate=2022-08-08&ratingMin=1&ratingMax=5";
-        User organizer = new User("username", "first", "last", Set.of(new Role("ROLE_ORGANIZATION")));
-        Activity a1 = new Activity("title1", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
+        User organizer = new UserEntityBuilder().setUsername("username").setPassword("first").setEmailAddress("last").setRoles(Set.of(new Role("ROLE_ORGANIZATION"))).createUser();
+        Activity a1 = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
 
         List<Activity> expected = List.of(a1);
         Mockito.when(searchService.searchActivities(searchKeyword, Optional.of(organization), Optional.of(startDate), Optional.of(endDate), Optional.of(ratingMin), Optional.of(ratingMax))).thenReturn(expected);
@@ -66,8 +61,8 @@ public class SearchEndpointTest {
         int ratingMin = 1;
         int ratingMax = 5;
         String url = "/search/activities/title?username=organization&startDate=2020-08-08&endDate=2022-08-08&ratingMin=1&ratingMax=5";
-        User organizer = new User("username", "first", "last", Set.of(new Role("ROLE_ORGANIZATION")));
-        Activity a1 = new Activity("title1", "desc1", "skills1", List.of("categorie1"), LocalDateTime.now(), LocalDateTime.now(), false, organizer, Set.of(), Set.of());
+        User organizer = new UserEntityBuilder().setUsername("username").setPassword("first").setEmailAddress("last").setRoles(Set.of(new Role("ROLE_ORGANIZATION"))).createUser();
+        Activity a1 = new ActivityBuilder().setTitle("title1").setDescription("desc1").setRecommendedSkills("skills1").setCategories(List.of("categorie1")).setStartDateTime(LocalDateTime.now()).setEndDateTime(LocalDateTime.now()).setOpenEnd(false).setOrganizer(organizer).setApplicants(Set.of()).setParticipants(Set.of()).createActivity();
 
         List<Activity> expected = List.of(a1);
         Mockito.when(searchService.searchActivities(searchKeyword, Optional.of(organization), Optional.of(startDate), Optional.of(endDate), Optional.of(ratingMin), Optional.of(ratingMax))).thenReturn(expected);

@@ -1,7 +1,6 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.*;
-import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import academy.everyonecodes.java.service.email.EmailServiceImpl;
 import com.icegreen.greenmail.junit4.GreenMailRule;
 import com.icegreen.greenmail.util.ServerSetupTest;
@@ -71,49 +70,26 @@ public class ActivityCompletionServiceTest {
     }
 
     Set<Role> roles = new HashSet<>(List.of(new Role(2L, "ROLE_INDIVIDUAL")));
-    User organizer = new User(
-            "username",
-            "password",
-            "email@email.com",
-            roles
-    );
+    User organizer = new UserEntityBuilder().setUsername("username").setPassword("password").setEmailAddress("email@email.com").setRoles(roles).createUser();
     Set<User> applicants = new HashSet<>();
     Set<User> participants = new HashSet<>();
     String categories = "oneCategory";
     LocalDateTime startDateTime = LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10));
     LocalDateTime endDateTime = LocalDateTime.of(LocalDate.of(2100, 2, 1), LocalTime.of(10, 10, 10));
 
-    Activity activity = new Activity(
-            "title",
-            "descr",
-            "skills",
-            List.of(categories),
-            startDateTime,
-            endDateTime,
-            false,
-            organizer,
-            applicants,
-            participants);
+    Activity activity = new ActivityBuilder().setTitle("title").setDescription("descr").setRecommendedSkills("skills").setCategories(List.of(categories)).setStartDateTime(startDateTime).setEndDateTime(endDateTime).setOpenEnd(false).setOrganizer(organizer).setApplicants(applicants).setParticipants(participants).createActivity();
 
-    Draft draft = new Draft(
-            "title",
-            "descr",
-            "skills",
-            categories,
-            startDateTime,
-            endDateTime,
-            false,
-            organizer.getUsername());
+    Draft draft = new DraftBuilder().setTitle("title").setDescription("descr").setRecommendedSkills("skills").setCategories(categories).setStartDateTime(startDateTime).setEndDateTime(endDateTime).setOpenEnd(false).setOrganizerUsername(organizer.getUsername()).createDraft();
 
 
 
     @Test
     void completeActivity_User_isNot_Organizer() {
         Long activityId = 1L;
-        Activity activity = new Activity("title", "description", startDateTime, endDateTime, true, organizer);
+        Activity activity = new ActivityBuilder().setTitle("title").setDescription("description").setStartDateTime(startDateTime).setEndDateTime(endDateTime).setOpenEnd(true).setOrganizer(organizer).createActivity();
         activity.setId(activityId);
         activity.setOrganizer(organizer);
-        Rating rating = new Rating();
+        Rating rating = new RatingBuilder().createRating();
 
         Mockito.when(activityService.findActivityById(activityId)).thenReturn(activity);
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("noName");
@@ -131,10 +107,10 @@ public class ActivityCompletionServiceTest {
     @Test
     void completeActivity_Activity_already_Completed() {
         Long activityId = 1L;
-        Activity activity = new Activity("title", "description", startDateTime, endDateTime, true, organizer);
+        Activity activity = new ActivityBuilder().setTitle("title").setDescription("description").setStartDateTime(startDateTime).setEndDateTime(endDateTime).setOpenEnd(true).setOrganizer(organizer).createActivity();
         activity.setId(activityId);
         activity.setOrganizer(organizer);
-        Rating rating = new Rating();
+        Rating rating = new RatingBuilder().createRating();
 
         //Mockito.when(activityRepository.findById(activityId)).thenReturn(Optional.of(activity));
         Mockito.when(activityService.findActivityById(activityId)).thenReturn(activity);
@@ -157,11 +133,11 @@ public class ActivityCompletionServiceTest {
     @Test
     void completeActivity_Activity_had_no_Participants() {
         Long activityId = 1L;
-        Activity activity = new Activity("title", "description", startDateTime, endDateTime, true, organizer);
+        Activity activity = new ActivityBuilder().setTitle("title").setDescription("description").setStartDateTime(startDateTime).setEndDateTime(endDateTime).setOpenEnd(true).setOrganizer(organizer).createActivity();
         activity.setId(activityId);
         activity.setOrganizer(organizer);
         activity.setParticipants(Set.of());
-        Rating rating = new Rating();
+        Rating rating = new RatingBuilder().createRating();
 
         Mockito.when(activityService.findActivityById(activityId)).thenReturn(activity);
 
@@ -183,19 +159,14 @@ public class ActivityCompletionServiceTest {
     void completeActivity_success_NoFeedback() {
         // TODO: Include Check for sent Email when its done
         Long activityId = 1L;
-        Activity activity = new Activity("title", "description", startDateTime, endDateTime, true, organizer);
+        Activity activity = new ActivityBuilder().setTitle("title").setDescription("description").setStartDateTime(startDateTime).setEndDateTime(endDateTime).setOpenEnd(true).setOrganizer(organizer).createActivity();
         activity.setId(activityId);
         activity.setOrganizer(organizer);
-        User participant = new User(
-                "particpant",
-                "password",
-                "email@email.com",
-                Set.of(new Role("ROLE_VOLUNTEER"))
-        );
+        User participant = new UserEntityBuilder().setUsername("particpant").setPassword("password").setEmailAddress("email@email.com").setRoles(Set.of(new Role("ROLE_VOLUNTEER"))).createUser();
         participant.setId(activityId);
         participants.add(participant);
         activity.setParticipants(participants);
-        Rating rating = new Rating(5);
+        Rating rating = new RatingBuilder().setRatingValue(5).createRating();
         String[] activityCompletedMessageArray = activitycompletedmessage.split(";");
         String title = activityCompletedMessageArray[0] + activity.getTitle();
         String text = activityCompletedMessageArray[1] + participant.getUsername() + activityCompletedMessageArray[2] + activity.getTitle() + activityCompletedMessageArray[3] + rating.getRatingValue();
@@ -222,19 +193,14 @@ public class ActivityCompletionServiceTest {
     void completeActivity_success_WithFeedback() {
 
         Long activityId = 1L;
-        Activity activity = new Activity("title", "description", startDateTime, endDateTime, true, organizer);
+        Activity activity = new ActivityBuilder().setTitle("title").setDescription("description").setStartDateTime(startDateTime).setEndDateTime(endDateTime).setOpenEnd(true).setOrganizer(organizer).createActivity();
         activity.setId(activityId);
         activity.setOrganizer(organizer);
-        User participant = new User(
-                "particpant",
-                "password",
-                "email@email.com",
-                Set.of(new Role("ROLE_VOLUNTEER"))
-        );
+        User participant = new UserEntityBuilder().setUsername("particpant").setPassword("password").setEmailAddress("email@email.com").setRoles(Set.of(new Role("ROLE_VOLUNTEER"))).createUser();
         participant.setId(activityId);
         participants.add(participant);
         activity.setParticipants(participants);
-        Rating rating = new Rating(5);
+        Rating rating = new RatingBuilder().setRatingValue(5).createRating();
         rating.setFeedback("ich bin ein Feedback");
         String[] activityCompletedMessageArray = activitycompletedmessage.split(";");
         String title = activityCompletedMessageArray[0] + activity.getTitle();

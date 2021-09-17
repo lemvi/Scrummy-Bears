@@ -3,27 +3,23 @@ package academy.everyonecodes.java.service;
 import academy.everyonecodes.java.data.ForgottenPasswordMessages;
 import academy.everyonecodes.java.data.PasswordToken;
 import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.UserEntityBuilder;
 import academy.everyonecodes.java.data.dtos.PasswordDTO;
 import academy.everyonecodes.java.service.email.EmailServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.security.access.method.P;
 
 import javax.servlet.http.HttpServletRequest;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class ForgottenPasswordServiceTest {
@@ -54,7 +50,7 @@ class ForgottenPasswordServiceTest {
 		String testUsername = "Testy";
 		String testEmailAddress = "test@testmail.test";
 		String expectedMessage = "success";
-		User testUser = new User();
+		User testUser = new UserEntityBuilder().createUser();
 		testUser.setUsername(testUsername);
 		testUser.setEmailAddress(testEmailAddress);
 		HttpServletRequest mockRequest = new MockHttpServletRequest();
@@ -80,7 +76,7 @@ class ForgottenPasswordServiceTest {
 		String testUsername = "Testy";
 		String testEmailAddress = "test@testmail.test";
 		String expectedMessage = "success";
-		User testUser = new User();
+		User testUser = new UserEntityBuilder().createUser();
 		testUser.setUsername(testUsername);
 		testUser.setEmailAddress(testEmailAddress);
 		HttpServletRequest mockRequest = new MockHttpServletRequest();
@@ -106,7 +102,7 @@ class ForgottenPasswordServiceTest {
 		String testUsername = "Testy";
 		String testEmailAddress = "test@testmail.test";
 		String expectedMessage = "failure";
-		User testUser = new User();
+		User testUser = new UserEntityBuilder().createUser();
 		testUser.setUsername(testUsername);
 		testUser.setEmailAddress(testEmailAddress);
 		HttpServletRequest mockRequest = new MockHttpServletRequest();

@@ -1,8 +1,6 @@
 package academy.everyonecodes.java.service;
 
-import academy.everyonecodes.java.data.Activity;
-import academy.everyonecodes.java.data.ErrorMessage;
-import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.*;
 import academy.everyonecodes.java.data.repositories.ActivityRepository;
 import academy.everyonecodes.java.data.repositories.UserRepository;
 import academy.everyonecodes.java.service.email.EmailServiceImpl;
@@ -58,7 +56,7 @@ public class VolunteerAcceptanceService
     private User getUser(Long userId)
     {
         Optional<User> oUser = userRepository.findById(userId);
-        User user = new User();
+        User user = new UserEntityBuilder().createUser();
         if (oUser.isEmpty())
             ExceptionThrower.badRequest(ErrorMessage.USERNAME_NOT_FOUND);
         else
@@ -69,7 +67,7 @@ public class VolunteerAcceptanceService
     private Activity getActivity(Long activityId)
     {
         Optional<Activity> oActivity = activityRepository.findById(activityId);
-        Activity activity = new Activity();
+        Activity activity = new ActivityBuilder().createActivity();
         if (oActivity.isEmpty())
             ExceptionThrower.badRequest(ErrorMessage.NO_MATCHING_ACTIVITY_FOUND);
         else

@@ -34,6 +34,18 @@ public class Draft implements ActivityDraft
 
     private String organizerUsername;
 
+    public Draft(String title, String description, String recommendedSkills, String categories, LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean openEnd, String organizerUsername)
+    {
+        this.title = title;
+        this.description = description;
+        this.recommendedSkills = recommendedSkills;
+        this.categories = categories;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.openEnd = openEnd;
+        this.organizerUsername = organizerUsername;
+    }
+
     public Draft()
     {
     }
@@ -48,17 +60,7 @@ public class Draft implements ActivityDraft
         this.organizerUsername = organizerUsername;
     }
 
-    public Draft(String title, String description, String recommendedSkills, String categories, LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean openEnd, String organizerUsername)
-    {
-        this.title = title;
-        this.description = description;
-        this.recommendedSkills = recommendedSkills;
-        this.categories = categories;
-        this.startDateTime = startDateTime;
-        this.endDateTime = endDateTime;
-        this.openEnd = openEnd;
-        this.organizerUsername = organizerUsername;
-    }
+
 
     public Long getId()
     {

@@ -1,8 +1,8 @@
 package academy.everyonecodes.java.service;
 
 import academy.everyonecodes.java.data.Skill;
+import academy.everyonecodes.java.data.UserEntityBuilder;
 import academy.everyonecodes.java.data.dtos.SkillDTO;
-import academy.everyonecodes.java.data.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -27,7 +27,7 @@ public class SkillTranslatorTest {
     }
 
     private static Stream<Arguments> inputDataThree() {
-        return Stream.of(Arguments.of(new Skill(new User(), "test"), new SkillDTO("test")));
+        return Stream.of(Arguments.of(new Skill(new UserEntityBuilder().createUser(), "test"), new SkillDTO("test")));
     }
 
     @ParameterizedTest

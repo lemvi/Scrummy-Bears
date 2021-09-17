@@ -73,21 +73,6 @@ public class User
     private Set<Role> roles;
 
 
-
-    public User() {
-    }
-
-    public User(String username)
-    {
-        this.username = username;
-    }
-
-    public User(String username, LocalDate dateOfBirth)
-    {
-        this.username = username;
-        this.dateOfBirth = dateOfBirth;
-    }
-
     public User(String username, String password, String firstNamePerson, String lastNamePerson, String organizationName, LocalDate dateOfBirth, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
     {
         this.username = username;
@@ -106,68 +91,7 @@ public class User
         this.roles = roles;
     }
 
-    public User(String username, String password, String emailAddress, Set<Role> roles)
-    {
-        this.username = username;
-        this.password = password;
-        this.emailAddress = emailAddress;
-        this.roles = roles;
-    }
-
-    public User(String username, String password, String firstNamePerson, String lastNamePerson, LocalDate dateOfBirth, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
-    {
-        this.username = username;
-        this.password = password;
-        this.firstNamePerson = firstNamePerson;
-        this.lastNamePerson = lastNamePerson;
-        this.dateOfBirth = dateOfBirth;
-        this.postalCode = postalCode;
-        this.city = city;
-        this.street = street;
-        this.streetNumber = streetNumber;
-        this.emailAddress = emailAddress;
-        this.telephoneNumber = telephoneNumber;
-        this.description = description;
-        this.roles = roles;
-    }
-
-    public User(String username, String password, String organizationName, String emailAddress, Set<Role> roles)
-    {
-        this.username = username;
-        this.password = password;
-        this.organizationName = organizationName;
-        this.emailAddress = emailAddress;
-        this.roles = roles;
-    }
-
-    public User(String username, String password, String firstNamePerson, String lastNamePerson, String emailAddress, Set<Role> roles)
-    {
-        this.username = username;
-        this.password = password;
-        this.firstNamePerson = firstNamePerson;
-        this.lastNamePerson = lastNamePerson;
-        this.emailAddress = emailAddress;
-        this.roles = roles;
-    }
-
-    public User(LocalDate dateOfBirth)
-    {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public User(String username, String password, String organizationName, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
-    {
-        this.username = username;
-        this.password = password;
-        this.organizationName = organizationName;
-        this.postalCode = postalCode;
-        this.city = city;
-        this.street = street;
-        this.streetNumber = streetNumber;
-        this.emailAddress = emailAddress;
-        this.telephoneNumber = telephoneNumber;
-        this.description = description;
-        this.roles = roles;
+    public User() {
     }
 
     public Long getId()

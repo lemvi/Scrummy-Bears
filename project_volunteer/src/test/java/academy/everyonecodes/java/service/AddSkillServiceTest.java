@@ -53,7 +53,7 @@ public class AddSkillServiceTest {
         String username = "test";
         String skillToAdd = "skill";
         Long id = 1L;
-        User user = new User("test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
+        User user = new UserEntityBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setOrganizationName("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of()).createUser();
         user.setId(id);
 
         Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
@@ -80,7 +80,7 @@ public class AddSkillServiceTest {
         String username = "test";
         String skillToAdd = "34234*#3234";
         Long id = 1L;
-        User user = new User("test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
+        User user = new UserEntityBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setOrganizationName("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of()).createUser();
         user.setId(id);
 
         Mockito.when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
@@ -104,7 +104,7 @@ public class AddSkillServiceTest {
         String skillToAdd = "skill";
 
         Long id = 1L;
-        User user = new User("test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
+        User user = new UserEntityBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setOrganizationName("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of()).createUser();
         user.setId(id);
         Skill skill = new Skill(id, user, existingSkill);
         SkillDTO skilldto = new SkillDTO(skillToAdd);
@@ -133,7 +133,7 @@ public class AddSkillServiceTest {
         String username = "test";
         String skillToAdd = "34234*#3234";
         Long id = 1L;
-        User user = new User("test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
+        User user = new UserEntityBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setOrganizationName("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of()).createUser();
         user.setId(id);
         Skill skill = new Skill(id, user, skillToAdd);
         SkillDTO skilldto = new SkillDTO(skillToAdd);

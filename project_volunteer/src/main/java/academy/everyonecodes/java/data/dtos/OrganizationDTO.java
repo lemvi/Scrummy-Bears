@@ -52,15 +52,6 @@ public class OrganizationDTO
     {
     }
 
-    public OrganizationDTO(String username, String password, String organizationName, String emailAddress, Set<Role> roles)
-    {
-        this.username = username;
-        this.password = password;
-        this.organizationName = organizationName;
-        this.emailAddress = emailAddress;
-        this.roles = roles;
-    }
-
     public OrganizationDTO(String username, String password, String organizationName, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles)
     {
         this.username = username;

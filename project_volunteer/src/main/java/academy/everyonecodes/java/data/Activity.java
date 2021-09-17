@@ -63,38 +63,6 @@ public class Activity implements ActivityDraft {
 
     private boolean deleted = Boolean.FALSE;
 
-
-    public Activity(){
-    }
-
-    public Activity(Boolean openEnd)
-    {
-        this.openEnd = openEnd;
-    }
-
-    public Activity(String title, String description, LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean openEnd, User organizer)
-    {
-        this.title = title;
-        this.description = description;
-        this.startDateTime = startDateTime;
-        this.endDateTime = endDateTime;
-        this.openEnd = openEnd;
-        this.organizer = organizer;
-    }
-
-    public Activity(String title, String description, String recommendedSkills, List<String> categories, LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean openEnd, User organizer, Set<User> applicants, Set<User> participants) {
-        this.title = title;
-        this.description = description;
-        this.recommendedSkills = recommendedSkills;
-        this.categories = categories;
-        this.startDateTime = startDateTime;
-        this.endDateTime = endDateTime;
-        this.openEnd = openEnd;
-        this.organizer = organizer;
-        this.applicants = applicants;
-        this.participants = participants;
-    }
-
     public Activity(String title, String description, String recommendedSkills, List<String> categories, LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean openEnd, User organizer, Set<User> applicants, Set<User> participants, boolean deleted) {
         this.title = title;
         this.description = description;
@@ -107,6 +75,9 @@ public class Activity implements ActivityDraft {
         this.applicants = applicants;
         this.participants = participants;
         this.deleted = deleted;
+    }
+
+    public Activity(){
     }
 
     public Long getId() {

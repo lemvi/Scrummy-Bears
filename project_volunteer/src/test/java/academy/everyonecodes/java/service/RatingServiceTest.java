@@ -80,7 +80,7 @@ class RatingServiceTest {
 		Long userId = 1L;
 
 		List<Rating> ratings = List.of(
-				new Rating(3)
+				new RatingBuilder().setRatingValue(3).createRating()
 		);
 
 		double expected = 3;
@@ -100,9 +100,9 @@ class RatingServiceTest {
 		Long userId = 1L;
 
 		List<Rating> ratings = List.of(
-				new Rating(2),
-				new Rating(2),
-				new Rating(2)
+				new RatingBuilder().setRatingValue(2).createRating(),
+				new RatingBuilder().setRatingValue(2).createRating(),
+				new RatingBuilder().setRatingValue(2).createRating()
 		);
 
 		double expected = 2;
@@ -122,10 +122,10 @@ class RatingServiceTest {
 		Long userId = 1L;
 
 		List<Rating> ratings = List.of(
-				new Rating(2),
-				new Rating(2),
-				new Rating(3),
-				new Rating(3)
+				new RatingBuilder().setRatingValue(2).createRating(),
+				new RatingBuilder().setRatingValue(2).createRating(),
+				new RatingBuilder().setRatingValue(3).createRating(),
+				new RatingBuilder().setRatingValue(3).createRating()
 		);
 
 		double expected = 2.5;
@@ -142,8 +142,8 @@ class RatingServiceTest {
 
 	@Test
 	void findByActivityAndUser() {
-		Activity activity = new Activity();
-		User user = new User();
+		Activity activity = new ActivityBuilder().createActivity();
+		User user = new UserEntityBuilder().createUser();
 
 		ratingService.findByActivityAndUser(activity, user);
 
@@ -153,8 +153,8 @@ class RatingServiceTest {
 	@Test
 	void rateUserForActivity_noActivityStatusFound() {
 		Long activityId = 1L;
-		Activity activity = new Activity();
-		Rating rating = new Rating();
+		Activity activity = new ActivityBuilder().createActivity();
+		Rating rating = new RatingBuilder().createRating();
 		when(activityService.findActivityById(activityId)).thenReturn(activity);
 		when(activityStatusService.findByActivity_id(activityId)).thenReturn(Optional.empty());
 
@@ -165,8 +165,8 @@ class RatingServiceTest {
 	@Test
 	void rateUserForActivity_activityNotCompletedYet() {
 		Long activityId = 1L;
-		Activity activity = new Activity();
-		Rating rating = new Rating();
+		Activity activity = new ActivityBuilder().createActivity();
+		Rating rating = new RatingBuilder().createRating();
 		ActivityStatus activityStatus = new ActivityStatus();
 		activityStatus.setStatus(Status.ACTIVE);
 		when(activityService.findActivityById(activityId)).thenReturn(activity);
@@ -179,9 +179,9 @@ class RatingServiceTest {
 	@Test
 	void rateUserForActivity_loggedInUserNotFound() {
 		Long activityId = 1L;
-		Activity activity = new Activity();
-		Rating rating = new Rating();
-		User loggedInUser = new User();
+		Activity activity = new ActivityBuilder().createActivity();
+		Rating rating = new RatingBuilder().createRating();
+		User loggedInUser = new UserEntityBuilder().createUser();
 		String loggedInUsername = "username";
 		ActivityStatus activityStatus = new ActivityStatus();
 		activityStatus.setStatus(Status.COMPLETED);
@@ -198,11 +198,11 @@ class RatingServiceTest {
 	@Test
 	void rateUserForActivity_userToRateNotFound() {
 		Long activityId = 1L;
-		Activity activity = new Activity();
+		Activity activity = new ActivityBuilder().createActivity();
 		activity.setParticipants(Set.of());
-		Rating rating = new Rating();
-		activity.setOrganizer(new User());
-		User loggedInUser = new User();
+		Rating rating = new RatingBuilder().createRating();
+		activity.setOrganizer(new UserEntityBuilder().createUser());
+		User loggedInUser = new UserEntityBuilder().createUser();
 		String loggedInUsername = "username";
 		loggedInUser.setUsername(loggedInUsername);
 		ActivityStatus activityStatus = new ActivityStatus();
@@ -220,18 +220,18 @@ class RatingServiceTest {
 	@Test
 	void rateUserForActivity_valid() {
 		Long activityId = 1L;
-		User userToRate = new User();
+		User userToRate = new UserEntityBuilder().createUser();
 		String email = "email@email.com";
 		userToRate.setEmailAddress(email);
 		userToRate.setId(activityId);
 		userToRate.setUsername("organizer");
 
-		Rating rating = new Rating();
-		User loggedInUser = new User();
+		Rating rating = new RatingBuilder().createRating();
+		User loggedInUser = new UserEntityBuilder().createUser();
 		String loggedInUsername = "username";
 		loggedInUser.setUsername(loggedInUsername);
 
-		Activity activity = new Activity();
+		Activity activity = new ActivityBuilder().createActivity();
 		activity.setId(activityId);
 		activity.setParticipants(Set.of(loggedInUser));
 		activity.setOrganizer(userToRate);

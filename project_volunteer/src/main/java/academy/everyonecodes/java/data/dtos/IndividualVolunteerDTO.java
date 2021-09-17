@@ -63,16 +63,19 @@ public class IndividualVolunteerDTO {
     public IndividualVolunteerDTO() {
     }
 
-    public IndividualVolunteerDTO(String username, String password, String firstNamePerson, String lastNamePerson, String emailAddress, Set<Role> roles) {
-        this.username = username;
-        this.password = password;
-        this.firstNamePerson = firstNamePerson;
-        this.lastNamePerson = lastNamePerson;
-        this.emailAddress = emailAddress;
-        this.roles = roles;
-    }
-
-    public IndividualVolunteerDTO(String username, String password, String firstNamePerson, String lastNamePerson, LocalDate dateOfBirth, String postalCode, String city, String street, String streetNumber, String emailAddress, String telephoneNumber, String description, Set<Role> roles) {
+    public IndividualVolunteerDTO(String username,
+                                  String password,
+                                  String firstNamePerson,
+                                  String lastNamePerson,
+                                  LocalDate dateOfBirth,
+                                  String postalCode,
+                                  String city,
+                                  String street,
+                                  String streetNumber,
+                                  String emailAddress,
+                                  String telephoneNumber,
+                                  String description,
+                                  Set<Role> roles) {
         this.username = username;
         this.password = password;
         this.firstNamePerson = firstNamePerson;
@@ -87,6 +90,7 @@ public class IndividualVolunteerDTO {
         this.description = description;
         this.roles = roles;
     }
+
 
     public String getUsername() {
         return username;

@@ -1,8 +1,10 @@
 package academy.everyonecodes.java.service;
 
+import academy.everyonecodes.java.data.UserEntityBuilder;
 import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTO;
 import academy.everyonecodes.java.data.Role;
 import academy.everyonecodes.java.data.User;
+import academy.everyonecodes.java.data.dtos.IndividualVolunteerDTOBuilder;
 import academy.everyonecodes.java.data.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,8 +45,8 @@ public class ViewerEditorServiceTest {
     @Test
     void getAccountInfo_found_usernameISEqual_test() {
         String input = "test";
-        User user = new User( "test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
-        IndividualVolunteerDTO individualVolunteerDTO = new IndividualVolunteerDTO("test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
+        User user = new UserEntityBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setOrganizationName("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of()).createUser();
+        IndividualVolunteerDTO individualVolunteerDTO = new IndividualVolunteerDTOBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of()).createIndividualVolunteerDTO();
 
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
         Mockito.when(userToIndividualVolunteerDTOTranslator.translateToDTO(user)).thenReturn(individualVolunteerDTO);
@@ -61,8 +63,8 @@ public class ViewerEditorServiceTest {
     @Test
     void getAccountInfo_found_usernameISEqual_WrongAuthentication_test() {
         String input = "test";
-        User user = new User( "test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
-        IndividualVolunteerDTO userdto = new IndividualVolunteerDTO("test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
+        User user = new UserEntityBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setOrganizationName("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of()).createUser();
+        IndividualVolunteerDTO userdto = new IndividualVolunteerDTOBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of()).createIndividualVolunteerDTO();
 
 
 
@@ -94,8 +96,8 @@ public class ViewerEditorServiceTest {
     @Test
     void editAccountInfo_UserFOUND_usernameISEqual_test() {
         String input = "test";
-        User user = new User("test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role()));
-        IndividualVolunteerDTO individualVolunteerDTO = new IndividualVolunteerDTO("test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role()));
+        User user = new UserEntityBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setOrganizationName("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of(new Role())).createUser();
+        IndividualVolunteerDTO individualVolunteerDTO = new IndividualVolunteerDTOBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of(new Role())).createIndividualVolunteerDTO();
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
         Mockito.when(userToIndividualVolunteerDTOTranslator.translateToUser(individualVolunteerDTO)).thenReturn(user);
         Mockito.when(userToIndividualVolunteerDTOTranslator.translateToDTO(user)).thenReturn(individualVolunteerDTO);
@@ -114,8 +116,8 @@ public class ViewerEditorServiceTest {
     @Test
     void editAccountInfo_UserFOUND_usernameISEqual_WrongAuthentication_test() {
         String input = "test";
-        User user = new User("test", "test", "test", "test", "test", LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role()));
-        IndividualVolunteerDTO individualVolunteerDTO = new IndividualVolunteerDTO("test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of(new Role()));
+        User user = new UserEntityBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setOrganizationName("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of(new Role())).createUser();
+        IndividualVolunteerDTO individualVolunteerDTO = new IndividualVolunteerDTOBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of(new Role())).createIndividualVolunteerDTO();
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("Wrong");
 
@@ -132,7 +134,7 @@ public class ViewerEditorServiceTest {
     @Test
     void editAccountInfo_UserNotFOUND_editAccount_test() {
         String input = "test";
-        IndividualVolunteerDTO individualVolunteerDTO = new IndividualVolunteerDTO("test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
+        IndividualVolunteerDTO individualVolunteerDTO = new IndividualVolunteerDTOBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of()).createIndividualVolunteerDTO();
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.empty());
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(input);
 
@@ -146,8 +148,8 @@ public class ViewerEditorServiceTest {
     @Test
     void editAccount_usernameNotEqual() {
         String input = "test";
-        IndividualVolunteerDTO userFalseUsername = new IndividualVolunteerDTO("false", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
-        User user = new User("test", "test", "test", "test", "test",LocalDate.of(2021, 2, 2), "test", "test", "test", "test", "test", "test", "test", Set.of());
+        IndividualVolunteerDTO userFalseUsername = new IndividualVolunteerDTOBuilder().setUsername("false").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of()).createIndividualVolunteerDTO();
+        User user = new UserEntityBuilder().setUsername("test").setPassword("test").setFirstNamePerson("test").setLastNamePerson("test").setOrganizationName("test").setDateOfBirth(LocalDate.of(2021, 2, 2)).setPostalCode("test").setCity("test").setStreet("test").setStreetNumber("test").setEmailAddress("test").setTelephoneNumber("test").setDescription("test").setRoles(Set.of()).createUser();
 
         Mockito.when(userRepository.findByUsername(input)).thenReturn(Optional.of(user));
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(input);

@@ -1,7 +1,9 @@
 package academy.everyonecodes.java.controller;
 
 import academy.everyonecodes.java.data.Activity;
+import academy.everyonecodes.java.data.ActivityBuilder;
 import academy.everyonecodes.java.data.Draft;
+import academy.everyonecodes.java.data.DraftBuilder;
 import academy.everyonecodes.java.service.ActivityService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,15 +35,9 @@ public class ActivityEndpointTest
     @MockBean
     private ActivityService activityService;
 
-    Draft draft = new Draft(
-            "title",
-            "description",
-            LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10)),
-            LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10)),
-            true,
-            null);
+    Draft draft = new DraftBuilder().setTitle("title").setDescription("description").setStartDateTime(LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10))).setEndDateTime(LocalDateTime.of(LocalDate.of(2100, 1, 1), LocalTime.of(10, 10, 10))).setOpenEnd(true).setOrganizerUsername(null).createDraft();
 
-    Activity activity = new Activity();
+    Activity activity = new ActivityBuilder().createActivity();
 
     @Test
     @WithMockUser(username = "test", password = "test", authorities = {"ROLE_INDIVIDUAL"})
